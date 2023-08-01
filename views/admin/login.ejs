@@ -1,0 +1,48 @@
+<%- include('../layouts/header') %>
+
+    <style>
+        body {
+            background-image: url("/images/User Login.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+
+
+    <div class="row m-5 p-4">
+        <div class="col-12 col-md-4 p-4" style="background-color:rgba(251, 223, 220, 0.959); border-radius: 1.5em">
+            <div class="text-center">
+                <img class="ps-4 m-3" style="width: 60%;" src="images/Logo_full.png"></img>
+                <h5 class="pb-3 fw-bold text-danger">ADMIN <span class="text-success">LOGIN</span></h5>
+            </div>
+            <form action="/admin" method="post">
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Enter email ID"
+                        required>
+
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Enter password"
+                        id="password" required>
+                </div>
+                <br>
+                <% if(locals.message){%>
+
+                    <div class="alert alert-warning text-center">
+                        <%=locals.message%>
+                    </div>
+                    <% } %>
+                        <div class="text-center mb-3">
+                            <button type="submit" class="btn btn-danger w-50">Login</button>
+                        </div>
+                        <p>Not an admin ?<a href="/"> User Login</a></p>
+            </form>
+        </div>
+    </div>
+
+
+    <%- include('../layouts/footer') %>

@@ -1,0 +1,48 @@
+<div>
+  <hr>
+
+  <% if (locals.searchData){ %>
+    <a class="" href="/admin"><button class="btn btn-danger py-0 mb-3 px-1 ">x</button></a>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email Address</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Account type</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(i=0;i<locals.searchData.length;i++){ %>
+          <tr>
+            <th scope="row">
+              <%= (i+1) %>
+            </th>
+            <td>
+              <%=locals.searchData[i].name%>
+
+            </td>
+            <td>
+              <%=locals.searchData[i].email%>
+            </td>
+            <td>
+              <%=locals.searchData[i].phone%>
+            </td>
+            
+            <td>
+              <% if(locals.searchData[i].admin_status){ %>
+                <button type="submit" class="btn btn-success py-0 px-1 "> admin </button>
+                <% } else { %>
+                  <button type="submit" class="btn btn-danger py-0 px-2 ">user</button>
+                  <% } %>
+            </td>
+          </tr>
+          <% } } %>
+
+
+
+      </tbody>
+    </table>
+</div>
