@@ -1,0 +1,162 @@
+<%- include('../layouts/header') %>
+
+  <%- include('../layouts/adminHeader') %>
+
+    <style>
+      body {
+        background-color: #fbdfdc;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    </style>
+    <div class="row">
+      <div class="col-12 col-md-6 pt-4 text-center">
+
+        <button style="border: 0; background-color: transparent;" onclick="toggleVisibility()">
+          <img style="width: 5em" src="https://img.freepik.com/free-icon/user_318-180888.jpg"></img>
+          <br>
+          <label>User Database</label></button>
+
+        <br>
+
+        <!-- alert -->
+        <% if(locals.alert){%>
+          <div class="alert alert-warning text-center mb-0">
+            <%=locals.alert%>
+          </div>
+          <% } %>
+
+            <div id="content" class="hidden" style="display: none;">
+              <hr>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email Address</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <% if (users.length> 0){
+                    for(i=0;i<users.length;i++){ %>
+                      <tr>
+                        <th scope="row">
+                            <%= (i+1) %>
+                        </th>
+                        <td>
+                          <%=users[i].firstName%>
+                            <%=users[i].lastName%>
+                        </td>
+                        <td>
+                          <%=users[i].email%>
+                        </td>
+                        <td>
+                          <%=users[i].phone%>
+                        </td>
+                        <td>
+                          <% if(locals.users[i].is_blocked){ %>
+                            <p class="text-danger">Blocked</p>
+                            <% } else { %>
+                              <p class="text-success">Active</p>
+                              <% } %>
+                        </td>
+                      </tr>
+                      <% } } %>
+                </tbody>
+              </table>
+            </div>
+      </div>
+
+  
+      <div class="col-12 col-md-6  mt-5 text-center ">
+        <form action="/admin/search" method="post" class="d-flex">
+          <input class="form-control me-2 w-50 " name="search" type="search" placeholder="Search for users"
+              aria-label="Search">
+          <button class="btn btn-danger" type="submit">Search</button>
+      </form>
+        <div>
+          <hr>
+        
+          <% if (locals.searchData){ 
+            if (locals.searchData.length){ 
+            %>
+            <a class="" href="/admin/user_management"><button class="btn btn-danger py-0 mb-3 px-1 ">x</button></a>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email Address</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for(i=0;i<locals.searchData.length;i++){ %>
+                  <tr>
+                    <th scope="row">
+                      <%= (i+1) %>
+                    </th>
+                    <td>
+                      <%=locals.searchData[i].firstName%> <%=locals.searchData[i].lastName%>
+                    </td>
+                    <td>
+                      <%=locals.searchData[i].email%>
+                    </td>
+                    <td>
+                      <%=locals.searchData[i].phone%>
+                    </td>
+                    
+                    <td>
+                      <% if(locals.searchData[i].is_blocked){ %>
+                        <button type="submit" class="btn btn-danger py-0 px-1 "> Blocked </button>
+                        <% } else { %>
+                          <button type="submit" class="btn btn-success py-0 px-2 ">Active</button>
+                          <% } %>
+                    </td>
+                  </tr>
+                  <% } } else {%>
+                    <h6 class="text-start text-danger" >No user details found</h6>
+                  <%}   } %>
+        
+        
+        
+              </tbody>
+            </table>
+        </div>
+
+
+
+
+
+        <form action="/admin/editUser" method="post" class="mt-5">
+          <div class="col-6 px-5 mb-1  bg-light py-4 mt-1" style="border-radius: 2em;">
+            <div>
+              <div class="text-start">
+                <h6 class="text-center p-3">MANAGE USER STATUS</h6>
+                <label for="email" class="form-label pt-2 mb-1">Email address</label>
+
+                <input type="email" name="email" class="form-control" id="email" placeholder="Enter email ID">
+                </input>
+              </div>
+              <div class="text-start my-2">
+                <select class="my-2" name="is_blocked">
+                  <option value="1">Block</option>
+                  <option value="0">Unblock</option>
+                </select>
+              </div>
+              <div class="">
+                <button type="submit" class="btn btn-danger my-2">Update</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <%- include('../layouts/footer') %>

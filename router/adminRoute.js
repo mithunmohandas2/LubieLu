@@ -27,11 +27,11 @@ admin_route.post('/logout', adminController.logout);
 
 admin_route.post('/search',auth.isLogin, auth.cookieCheck, adminController.searchUser);
 
-admin_route.post('/deleteUser',auth.isLogin, auth.cookieCheck, adminController.deleteUser);
+admin_route.get('/user_management',auth.isLogin, auth.cookieCheck, adminController.userManagement);
 
-admin_route.post('/edit',auth.isLogin, auth.cookieCheck, adminController.modifyUser);  //edit user | modify
+admin_route.post('/editUser',auth.isLogin, auth.cookieCheck, adminController.editUser);  //edit user | modify
 
-admin_route.get('*',(req,res)=>{ res.redirect('/admin')})
+// admin_route.get('*',(req,res)=>{ res.redirect('/admin')})
 
 
 

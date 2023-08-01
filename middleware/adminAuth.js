@@ -1,9 +1,7 @@
 
 const isLogin = async (req,res,next)=>{
     try{
-        if(req.session.admin){
-           
-        } else {
+        if(!req.session.admin){
            return res.redirect('/admin')
         }
        return next();     
@@ -25,7 +23,7 @@ const isLogout = async (req,res,next)=>{
 
 const cookieCheck = async (req,res,next)=>{
     try{
-        if(!req.cookies.user_name || !req.session.admin){
+        if(!req.cookies.user_name){
            return res.redirect("/admin")
         } 
        return next();     

@@ -4,7 +4,7 @@ const User = require("../models/userModel");
 //loading the signup page
 const loadRegister = async (req, res) => {
     try {
-        res.render('signup');
+        res.render('signup', { title: "Lubie-Lu_SignUp" });
     } catch (error) {
         console.log(error.message)
     }
@@ -28,7 +28,7 @@ const insertUser = async (req, res) => {
 
                 const user = new User({
                     firstName: req.body.firstName,
-                    lastName : req.body.lastName,
+                    lastName: req.body.lastName,
                     email: req.body.email,
                     phone: req.body.phone,
                     password: req.body.password,
@@ -67,11 +67,15 @@ const verifyLogin = async (req, res) => {
 
         const userMatch = await User.findOne({ $and: [{ email: req.body.email }, { password: req.body.password }] })
         if (userMatch) { // if username and password combination exists
-            req.session.user_name = userMatch.firstName   // setting _id data to session
-            res.cookie('user_name', userMatch.firstName);
-            console.log(userMatch.name+" (user) logged in")     //
-            res.redirect("/home");
-            
+            if (userMatch.is_blocked === true) {
+                res.render('login', { message: 'User Blocked by admin' }); // blocked user
+            } else {
+
+                req.session.user_name = userMatch.firstName   // setting _id data to session
+                res.cookie('user_name', userMatch.firstName);
+                console.log(userMatch.firstName + " (user) logged in")     //
+                res.redirect("/home");
+            }
         } else {
             res.render('login', { message: 'Email or Password incorrect' });
         }
@@ -114,7 +118,7 @@ const loadWishlist = async (req, res) => {
 const logout = async (req, res) => {
     try {
         res.clearCookie("user_name");
-        console.log(req.session.user_name+" (user) logged out")  //
+        console.log(req.session.user_name + " (user) logged out")  //
         req.session.destroy()
         res.render('login', { message: 'Please login to continue' });
     } catch (error) {

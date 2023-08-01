@@ -1,8 +1,8 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid d-flex"> 
+        <div class="container-fluid d-flex">
             <div class="col-12 col-md-6 ">
-                <a href="/home"><img class="ps-4 my-3" style="width: 40%;" src="images/Logo_full.png"></img></a>
+                <a href="/admin/home"><img class="ps-4 my-3" style="width: 40%;" src="/images/Logo_full.png"></img></a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -10,20 +10,26 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-danger" type="submit">Search</button>
-                </form>
-                <div class="text-center mx-3">
+                
+                <div class="text-start mx-3">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/wishlist"><span
-                                    class="material-symbols-outlined"> favorite </span>WISHLIST</a>
+                            <a class="nav-link active" aria-current="page" href="/admin/user_management"><span
+                                    class="material-symbols-outlined"> <span class="material-symbols-outlined">
+                                        switch_account </span> </span>USER MANAGEMENT</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/cart"><span
-                                    class="material-symbols-outlined ">shopping_cart</span>CART</a>
+                            <a class="nav-link active" aria-current="page" href="/admin/product_management"><span
+                                    class="material-symbols-outlined ">storefront</span>PRODUCTS</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/admin/order_management"><span
+                                    class="material-symbols-outlined ">pending_actions</span>ORDERS</a>
+                        </li>
+
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false"><span class="material-symbols-outlined">
@@ -37,7 +43,10 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><form action="/logout" method="post"><button type="submit" class="dropdown-item">Logout</button></form></li>
+                                <li>
+                                    <form action="/admin/logout" method="post"><button type="submit"
+                                            class="dropdown-item">Logout</button></form>
+                                </li>
                             </ul>
                         </li>
 
