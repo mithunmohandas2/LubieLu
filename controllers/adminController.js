@@ -54,6 +54,7 @@ const userManagement = async (req, res) => {
 
 
 
+
 const logout = async (req, res) => {
     try {
         console.log(req.session.user_name + " (admin) logged out")          //
@@ -86,7 +87,7 @@ const searchUser = async (req, res) => {
     }
 }
 
-const editUser = async (req, res) => {
+const blockUser = async (req, res) => {
 
     try {
         // console.log(req.body);
@@ -95,12 +96,16 @@ const editUser = async (req, res) => {
             console.log("User records not found")
             res.redirect('/admin/user_management?alert=email not found in database')     // popup with email not found
         } else { // if email present in database
-            const userData = await User.updateOne({ email: req.body.email }, {
-                $set: {
-                    email: req.body.email,
-                    is_blocked: req.body.is_blocked
-                }
-            });
+            if(emailMatch.is_blocked===true){
+                var userData = await User.updateOne({ email: req.body.email }, {
+                    $set: {
+                       
+                        is_blocked: false
+                    }
+                });      
+            } else {
+                var userData = await User.updateOne({ email: req.body.email }, {$set: {is_blocked: true}}); 
+            }
             // console.log(userData)
             if (userData) {  // editing database success?
                 res.redirect('/admin/user_management?alert=User status modified successfully')   // popup success
@@ -121,5 +126,5 @@ module.exports = {
     logout,
     searchUser,
     userManagement,
-    editUser
+    blockUser
 }

@@ -3,6 +3,7 @@ const admin_route = express();
 const session = require("express-session")
 const config = require('../config/config')
 const adminController = require("../controllers/adminController");
+const productController = require("../controllers/productController");
 
 admin_route.use(session({
     secret: config.sessionSecret,
@@ -28,8 +29,9 @@ admin_route.post('/logout', adminController.logout);
 admin_route.post('/search',auth.isLogin, auth.cookieCheck, adminController.searchUser);
 
 admin_route.get('/user_management',auth.isLogin, auth.cookieCheck, adminController.userManagement);
+admin_route.post('/blockUser/',auth.isLogin, auth.cookieCheck, adminController.blockUser); //block/unblock
 
-admin_route.post('/editUser',auth.isLogin, auth.cookieCheck, adminController.editUser);  //edit user | modify
+admin_route.get('/product_management',auth.isLogin, auth.cookieCheck, productController.productManagement);
 
 // admin_route.get('*',(req,res)=>{ res.redirect('/admin')})
 

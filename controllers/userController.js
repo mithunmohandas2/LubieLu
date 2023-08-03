@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+
 // -----------------------------------------------
 
 //loading the signup page
@@ -60,7 +61,7 @@ const loginLoad = async (req, res) => {
     }
 }
 
-// ------------------------------------
+// --------verify Login----------------------------
 
 const verifyLogin = async (req, res) => {
     try {
@@ -95,6 +96,7 @@ const loadHome = async (req, res) => {
     }
 }
 
+// ...........Load Cart...........
 
 const loadCart = async (req, res) => {
     try {
@@ -104,6 +106,7 @@ const loadCart = async (req, res) => {
     }
 }
 
+// ...........Load wishlist...........
 
 const loadWishlist = async (req, res) => {
     try {
@@ -113,7 +116,7 @@ const loadWishlist = async (req, res) => {
     }
 }
 
-// -------------------------------------
+// -----------------logout--------------------
 
 const logout = async (req, res) => {
     try {
@@ -126,6 +129,12 @@ const logout = async (req, res) => {
     }
 }
 
+// --------------------------
+
+
+
+
+
 module.exports = {
     loadRegister,
     insertUser,
@@ -134,5 +143,5 @@ module.exports = {
     loadHome,
     loadCart,
     loadWishlist,
-    logout
+    logout,
 }

@@ -1,25 +1,59 @@
 <%- include('../layouts/header') %>
 
-<%- include('../layouts/userHeader') %>
+    <%- include('../layouts/userHeader') %>
 
-<div class="container-fluid" style="background-color: rgb(208,236,248);">
-    <div class="row text-center">
-        <div class="col-md-6">
 
-            <img class="w-75 "
-                src="https://static.vecteezy.com/system/resources/previews/001/950/076/original/online-shopping-concept-smartphone-online-store-free-vector.jpg"></img>
-        </div>
-        <div class="col-md-6 p-4">
-            <h3 class="pt-4 ">Welcome <%=locals.username? locals.username :'User' %></h3>
-            <hr>
-           
+        <div class="container">
             
-
-                
-                <!-- <img class="w-50 "
-                src="https://static.vecteezy.com/system/resources/previews/008/501/405/original/under-construction-barrier-clip-art-free-png.png"></img> -->
+            <h5 class="pt-4"><i>Welcome <%=locals.username? locals.username :'User' %></i></h5>
+            <img class="w-100" src="/images/baby-girl-her-crib.jpg"></img>
         </div>
-    </div>
-</div>
 
-<%- include('../layouts/footer') %>
+        <!-- shop_section -->
+        <br>
+
+        <section class="">
+            <div class="container">
+                <div class=" ">
+                    <h2>
+                        Latest Products
+                    </h2>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-lg-3 mb-2">
+                        <div class="box bg-info">
+                            <a href="">
+                                <div class="img-box">
+                                    <img src="images/p1.png" alt="">
+                                </div>
+                                <div class="detail-box">
+                                    <h6>
+                                       Sample product Name
+                                    </h6>
+                                    <h6>
+                                        Deal Price
+                                        <span>
+                                            Rs. 200/-
+                                        </span>
+                                    </h6>
+                                </div>
+                                <div class="new">
+                                    <span>
+                                        New
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                <div class="text-center">
+                    <a href="/all_products" ><button class="btn btn-danger mb-3">
+                        View All Products
+                    </button> </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- end shop section -->
+
+        <%- include('../layouts/footer') %>

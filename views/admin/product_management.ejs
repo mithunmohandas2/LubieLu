@@ -1,0 +1,133 @@
+<%- include('../layouts/header') %>
+
+  <%- include('../layouts/adminHeader') %>
+
+    <style>
+      body {
+        background-color: #fbdfdc;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    </style>
+
+    <!-- SEARCH BOX -->
+    <div class="mt-5 text-center container">
+      <form action="/admin/productSearch" method="post" class="d-flex">
+        <input class="form-control me-2 w-50 " name="search" type="search" placeholder="Search for Products"
+          aria-label="Search">
+        <button class="btn btn-danger" type="submit">Search</button>
+      </form>
+      <div>
+        <hr>
+
+        <!-- ADD PRODUCT -->
+        <h3 class="mb-4 pb-2">ADD PRODUCT</h3>
+        <div class="row">
+          <div class="col-md-3">
+            <form class="row g-3 text-start" action="/admin/addProduct" method="post">
+              <!-- image adding -->
+
+              <h5 class="mb-4 pb-2">Product image</h5>
+
+          </div>
+          <div class="col-md-9 text-start bg-light p-5 mb-4" style="border-radius: 2em;">
+            <h5 class="mb-4 pb-2 ">Product Details</h5>
+            <div class="col-12 mb-3">
+              <label for="product_name" class="form-label">Product Name</label>
+              <input type="text" class="form-control" name="product_name" placeholder="Enter the product name" required>
+            </div>
+
+            <div class="col-12">
+              <label for="description" class="form-label">Product Description</label>
+              <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 8em"
+                required></textarea>
+              <label for="floatingTextarea2"></label>
+            </div>
+
+            <div class="col-md-4 mb-4">
+              <label for="category_id" class="form-label">Product Category</label>
+              <select name="category_id" class="form-select" required>
+
+                <!-- array of categories ids -->
+                <option value="">ejs syntax loop </option>
+
+              </select>
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4 mb-4">
+                <label for="purchasePrice" class="form-label">Purchase price</label>
+                <input type="number" class="form-control" name="purchasePrice" placeholder="Purchase cost" required>
+              </div>
+
+              <div class="col-md-4 mb-4">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" class="form-control w-50" name="stock" value="0" required>
+              </div>
+
+              <div class="col-md-4 mb-4">
+                <label for="mrp" class="form-label">MRP</label>
+                <input type="number" class="form-control" name="mrp" placeholder="Maximum retail price" required>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-4 mb-4">
+                <label for="basePrice" class="form-label">Base price</label>
+                <input type="number" class="form-control" id="basePrice" name="basePrice" onchange=calculate() value=0 required>
+              </div>
+
+              <div class="col-md-2 mb-4">
+                <label for="gst" class="form-label">GST</label>
+                <select name="gst" id="gst" class="form-select" onchange=calculate() required>
+                  <option value=0>0%</option>
+                  <option value=3>3%</option>
+                  <option value=5>5%</option>
+                  <option value=12>12%</option>
+                  <option value=18>18%</option>
+                  <option value=28>28%</option>
+                </select>
+              </div>
+
+              <div class="col-md-2 mb-4">
+                <label for="discount" class="form-label">Discount</label>
+                <input type="number" id="discount" class="form-control" name="discount" onchange=calculate() value=0>
+              </div>
+
+              <div class="col-md-4 mb-4">
+                <label for="sellingPrice" class="form-label">Selling Price</label>
+                <input type="number" class="form-control" id="sellingPrice" name="sellingPrice" value=0 disabled>
+              </div>
+            </div>
+
+            <!-- <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck">
+              </div>
+            </div> -->
+            
+            <div class="col-12 pt-4 text-center">
+              <button type="submit" class="btn btn-danger px-5">Add Product</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script>
+      function calculate () {
+      const basePrice = document.getElementById("basePrice").value;
+      const gst = document.getElementById("gst").value;
+      const discount = document.getElementById("discount").value;
+      let result =(basePrice * (1 + (gst / 100))) - (basePrice * discount / 100)
+      document.getElementById("sellingPrice").value = result.toFixed(2)
+      }
+    </script>
+
+    <%- include('../layouts/footer') %>
