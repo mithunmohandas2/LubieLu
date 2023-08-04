@@ -13,7 +13,11 @@ const productSchema = new mongoose.Schema({
     },
     category_id: {
         type: ObjectId,
-        required: true
+        required: true,
+    },
+    brand: {
+        type: String,
+
     },
     purchasePrice: {
         type: Decimal128,
@@ -45,14 +49,28 @@ const productSchema = new mongoose.Schema({
     },
     is_published: {
         type: Boolean,
+        default: 1
+    },
+    product_image: {
+        type: Array,
+    },
+    feedback: [{
+        user: {
+            type: ObjectId,
+            required: true
+        },
+        rating: {
+            type: Number
+        },
+        review: {
+            type: String
+        }
+    }],
+    total_orders: {
+        type: Number,
         default: 0
     },
-    image: {
-        type: String,
-    },
-    feedback:{
-        
-    }
-})
+
+}, { timestamps: true })
 
 module.exports = mongoose.model("Product", productSchema);

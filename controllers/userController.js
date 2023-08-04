@@ -74,6 +74,8 @@ const verifyLogin = async (req, res) => {
 
                 req.session.user_name = userMatch.firstName   // setting _id data to session
                 res.cookie('user_name', userMatch.firstName);
+
+                // console.log(req.session)
                 console.log(userMatch.firstName + " (user) logged in")     //
                 res.redirect("/home");
             }

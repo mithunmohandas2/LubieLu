@@ -22,112 +22,195 @@
         <hr>
 
         <!-- ADD PRODUCT -->
-        <h3 class="mb-4 pb-2">ADD PRODUCT</h3>
-        <div class="row">
-          <div class="col-md-3">
-            <form class="row g-3 text-start" action="/admin/addProduct" method="post">
-              <!-- image adding -->
+        <h3 class="my-4 py-2">ADD PRODUCT</h3>
 
+        <div class="row">
+          <div class="col-md-4 row g-3 text-start">
+            <div class="col-md-9 text-center bg-light pt-5 mb-4" style="border-radius: 2em;">
+              <h5 class="pb-2">Manage Category</h5>
+              <!-- Category alert -->
+              <% if (locals.category_alert){ %>
+                <div class="alert alert-warning text-center mt-2">
+                  <%=locals.category_alert%>
+                </div>
+                <% } %>
+
+                  <select id="category" class="form-select mb-4" onchange=categoryFill()>
+                    <option value="" disabled>All Categories</option>
+                    <% if (locals.categories){ categories.forEach((name)=>{ %>
+
+                      <option value="<%=name.category_name%>">
+                        <%=name.category_name%>
+                      </option>
+
+                      <% }) } %>
+                  </select>
+
+
+
+                  <!-- add categories form -->
+                  <form action="/admin/addCategory" method="post">
+                    <input type="text" class="form-control mb-2" name="category_name" id="addCategory"
+                      onchange=categoryUpdate() placeholder="Enter the category" required />
+                    <div class=" d-flex m-2">
+                      <button type="submit" class="btn btn-outline-primary  mt-2 px-2"><span
+                          class="material-symbols-outlined">
+                          box_add
+                        </span>ADD</button>
+                  </form>
+
+                  <!-- EDIT categories form -->
+                  <form action="/admin/editCategory" method="post">
+                    <input type="text" class="form-control mb-2" id="originalCategory" name="originalCategory" hidden />
+                    <input type="text" class="form-control mb-2" id="editCategory" name="category_name" required hidden/>
+                    <button type="submit" class="btn btn-outline-success  mt-2 px-2"><span
+                        class="material-symbols-outlined">
+                        edit
+                      </span>EDIT</button>
+                  </form>
+
+                  <!-- Delete categories form -->
+                  <form action="/admin/deleteCategory" method="post">
+                    <input type="text" class="form-control mb-2" id="deleteCategory" name="category_name" required hidden />
+                    <button type="submit" class="btn btn-outline-danger  mt-2 px-2"><span
+                        class="material-symbols-outlined">
+                        delete
+                      </span>DELETE</button>
+                  </form>
+            </div>
+          </div>
+          <form class="row g-3 text-start" action="/admin/addProduct" method="post">
+            <!-- image adding -->
+            <div class="col-md-9 text-center bg-light py-5 mb-4" style="border-radius: 2em;">
               <h5 class="mb-4 pb-2">Product image</h5>
 
-          </div>
-          <div class="col-md-9 text-start bg-light p-5 mb-4" style="border-radius: 2em;">
-            <h5 class="mb-4 pb-2 ">Product Details</h5>
-            <div class="col-12 mb-3">
-              <label for="product_name" class="form-label">Product Name</label>
-              <input type="text" class="form-control" name="product_name" placeholder="Enter the product name" required>
-            </div>
+              <!-- <form action="/product_upload" method="post" enctype="multipart/form-data"> -->
+              <input type="file" class="form-control" name="product_image" />
+              <!-- <button class="btn btn-danger mt-4">upload images</button>
+                </form> -->
 
-            <div class="col-12">
-              <label for="description" class="form-label">Product Description</label>
-              <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 8em"
-                required></textarea>
-              <label for="floatingTextarea2"></label>
+            </div>
+        </div>
+        <div class="col-md-8 text-start bg-light p-5 mb-4" style="border-radius: 2em;">
+          <h5 class="mb-4 pb-2 ">Product Details</h5>
+          <div class="col-12 mb-3">
+            <label for="product_name" class="form-label">Product Name</label>
+            <input type="text" class="form-control" name="product_name" placeholder="Enter the product name" required>
+          </div>
+
+          <div class="col-12">
+            <label for="description" class="form-label">Product Description</label>
+            <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 8em"
+              required></textarea>
+            <label for="floatingTextarea2"></label>
+          </div>
+
+          <div class="col-md-4 mb-4">
+            <label for="category_id" class="form-label">Product Category</label>
+            <select name="category_id" class="form-select" required>
+              <!-- array of categories ids -->
+              <option value="" disabled>Available Categories</option>
+              <% if (locals.categories){ categories.forEach((name)=>{ %>
+
+                <option value="<%=name.category_name%>">
+                  <%=name.category_name%>
+                </option>
+
+                <% }) } %>
+
+            </select>
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-4 mb-4">
+              <label for="purchasePrice" class="form-label">Purchase price</label>
+              <input type="number" class="form-control" name="purchasePrice" placeholder="Purchase cost" required>
             </div>
 
             <div class="col-md-4 mb-4">
-              <label for="category_id" class="form-label">Product Category</label>
-              <select name="category_id" class="form-select" required>
+              <label for="stock" class="form-label">Stock</label>
+              <input type="number" class="form-control w-50" name="stock" value="0" required>
+            </div>
 
-                <!-- array of categories ids -->
-                <option value="">ejs syntax loop </option>
+            <div class="col-md-4 mb-4">
+              <label for="mrp" class="form-label">MRP</label>
+              <input type="number" class="form-control" name="mrp" placeholder="Maximum retail price" required>
+            </div>
+          </div>
 
+
+          <div class="row">
+            <div class="col-md-4 mb-4">
+              <label for="basePrice" class="form-label">Base price</label>
+              <input type="number" class="form-control" id="basePrice" name="basePrice" onchange=calculate() value=0
+                required>
+            </div>
+
+            <div class="col-md-2 mb-4">
+              <label for="gst" class="form-label">GST</label>
+              <select name="gst" id="gst" class="form-select" onchange=calculate() required>
+                <option value=0>0%</option>
+                <option value=3>3%</option>
+                <option value=5>5%</option>
+                <option value=12>12%</option>
+                <option value=18>18%</option>
+                <option value=28>28%</option>
               </select>
             </div>
 
-            <div class="row">
-
-              <div class="col-md-4 mb-4">
-                <label for="purchasePrice" class="form-label">Purchase price</label>
-                <input type="number" class="form-control" name="purchasePrice" placeholder="Purchase cost" required>
-              </div>
-
-              <div class="col-md-4 mb-4">
-                <label for="stock" class="form-label">Stock</label>
-                <input type="number" class="form-control w-50" name="stock" value="0" required>
-              </div>
-
-              <div class="col-md-4 mb-4">
-                <label for="mrp" class="form-label">MRP</label>
-                <input type="number" class="form-control" name="mrp" placeholder="Maximum retail price" required>
-              </div>
+            <div class="col-md-2 mb-4">
+              <label for="discount" class="form-label">Discount</label>
+              <input type="number" id="discount" class="form-control" name="discount" onchange=calculate() value=0>
             </div>
 
-
-            <div class="row">
-              <div class="col-md-4 mb-4">
-                <label for="basePrice" class="form-label">Base price</label>
-                <input type="number" class="form-control" id="basePrice" name="basePrice" onchange=calculate() value=0 required>
-              </div>
-
-              <div class="col-md-2 mb-4">
-                <label for="gst" class="form-label">GST</label>
-                <select name="gst" id="gst" class="form-select" onchange=calculate() required>
-                  <option value=0>0%</option>
-                  <option value=3>3%</option>
-                  <option value=5>5%</option>
-                  <option value=12>12%</option>
-                  <option value=18>18%</option>
-                  <option value=28>28%</option>
-                </select>
-              </div>
-
-              <div class="col-md-2 mb-4">
-                <label for="discount" class="form-label">Discount</label>
-                <input type="number" id="discount" class="form-control" name="discount" onchange=calculate() value=0>
-              </div>
-
-              <div class="col-md-4 mb-4">
-                <label for="sellingPrice" class="form-label">Selling Price</label>
-                <input type="number" class="form-control" id="sellingPrice" name="sellingPrice" value=0 disabled>
-              </div>
+            <div class="col-md-4 mb-4">
+              <label for="sellingPrice" class="form-label">Selling Price</label>
+              <input type="number" class="form-control" id="sellingPrice" name="sellingPrice" value="0" readonly>
             </div>
 
-            <!-- <div class="col-12">
+          </div>
+
+          <!-- <div class="col-12">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="gridCheck">
               </div>
             </div> -->
-            
-            <div class="col-12 pt-4 text-center">
-              <button type="submit" class="btn btn-danger px-5">Add Product</button>
-            </div>
-            </form>
+
+          <div class="col-12 pt-4 text-center">
+            <button type="submit" class="btn btn-danger px-5">Add Product</button>
           </div>
+          </form>
         </div>
       </div>
+    </div>
     </div>
 
 
 
     <script>
-      function calculate () {
-      const basePrice = document.getElementById("basePrice").value;
-      const gst = document.getElementById("gst").value;
-      const discount = document.getElementById("discount").value;
-      let result =(basePrice * (1 + (gst / 100))) - (basePrice * discount / 100)
-      document.getElementById("sellingPrice").value = result.toFixed(2)
+      function calculate() {
+        const basePrice = document.getElementById("basePrice").value;
+        const gst = document.getElementById("gst").value;
+        const discount = document.getElementById("discount").value;
+        let result = (basePrice * (1 + (gst / 100))) - (basePrice * discount / 100)
+        document.getElementById("sellingPrice").value = result.toFixed(2)
       }
+
+      function categoryFill() {
+        const fill = document.getElementById("category").value
+        document.getElementById("editCategory").value = fill
+        document.getElementById("originalCategory").value = fill
+        document.getElementById("deleteCategory").value = fill
+        document.getElementById("addCategory").value = fill
+      }
+
+      function categoryUpdate() {
+        const fill = document.getElementById("addCategory").value
+        document.getElementById("editCategory").value = fill
+        document.getElementById("deleteCategory").value = fill
+      }
+
     </script>
 
     <%- include('../layouts/footer') %>

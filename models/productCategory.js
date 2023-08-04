@@ -5,6 +5,10 @@ const productCategory = mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    is_delete:{
+        type  : Boolean,
+        default:0
     }
 })
 

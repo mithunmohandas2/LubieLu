@@ -32,6 +32,16 @@ admin_route.get('/user_management',auth.isLogin, auth.cookieCheck, adminControll
 admin_route.post('/blockUser/',auth.isLogin, auth.cookieCheck, adminController.blockUser); //block/unblock
 
 admin_route.get('/product_management',auth.isLogin, auth.cookieCheck, productController.productManagement);
+admin_route.post('/addCategory',auth.isLogin,productController.addCategory)
+admin_route.post('/editCategory',auth.isLogin,productController.editCategory)
+admin_route.post('/deleteCategory',auth.isLogin,productController.deleteCategory)
+
+
+admin_route.post('/addProduct',auth.isLogin,productController.addProduct)
+
+
+
+
 
 // admin_route.get('*',(req,res)=>{ res.redirect('/admin')})
 
