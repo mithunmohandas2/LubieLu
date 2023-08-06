@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
-const productCategory = mongoose.Schema({
-    category_name: {
+const productSubCategory = mongoose.Schema({
+    subCategory_name: {
         type: String,
         required: true,
         unique: true
@@ -12,4 +12,4 @@ const productCategory = mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("Category", productCategory);
+module.exports = mongoose.model("subCategory", productSubCategory);

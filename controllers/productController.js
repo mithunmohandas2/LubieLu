@@ -80,7 +80,7 @@ const deleteCategory = async (req, res) => {
     }
 }
 
-// -------------------------------------
+// ----------------MULTER---------------------
 
 const multer = require("multer")
 const storage = multer.diskStorage({
@@ -101,9 +101,12 @@ const upload = multer({ storage: storage }).array('product_image', 10);
 const addProduct = async (req, res) => {
     try {
         // upload(req,res,next)
-        // res.send(JSON.stringify(req.body))
+        res.send(JSON.stringify(req.body))
         // const product = new Product(req.body)
-        const productData = await Product.save(req.body);
+        const productData = new Product({
+
+        })
+
         if (productData) {  // adding to database success?
             res.render('product_management', { message: "Product Added succesfully" })
         } else {

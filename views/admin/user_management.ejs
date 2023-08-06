@@ -41,7 +41,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email Address</th>
                     <th scope="col">Phone</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -65,10 +65,10 @@
                         <td>
                           <% if(locals.searchData[i].is_blocked){ %>
                             <button name="email" type="submit" value="<%=locals.searchData[i].email%>"
-                              class="btn btn-danger py-0 px-1 "> Blocked </button>
+                              class="btn btn-outline-danger py-0 px-1 "> Unblock </button>
                             <% } else { %>
                               <button name="email" type="submit" value="<%=locals.searchData[i].email%>"
-                                class="btn btn-success py-0 px-2 ">Active</button>
+                                class="btn btn-danger py-0 px-2 ">Block</button>
                               <% } %>
                       </form>
                       </td>
@@ -97,7 +97,7 @@
                   <th scope="col">Name</th>
                   <th scope="col">Email Address</th>
                   <th scope="col">Phone</th>
-                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -122,10 +122,10 @@
                         <form action="/admin/blockUser" method="post">
                           <% if(locals.users[i].is_blocked){ %>
                             <button name="email" type="submit" value="<%=users[i].email%>"
-                              class="btn btn-danger py-0 px-1 "> Blocked </button>
+                              class="btn btn-outline-danger py-0 px-1 "> Unblock </button>
                             <% } else { %>
                               <button name="email" type="submit" value="<%=users[i].email%>"
-                                class="btn btn-success py-0 px-2 ">Active</button>
+                                class="btn btn-danger py-0 px-2 ">Block</button>
                               <% } %>
                         </form>
                       </td>

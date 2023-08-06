@@ -62,7 +62,8 @@
                   <!-- EDIT categories form -->
                   <form action="/admin/editCategory" method="post">
                     <input type="text" class="form-control mb-2" id="originalCategory" name="originalCategory" hidden />
-                    <input type="text" class="form-control mb-2" id="editCategory" name="category_name" required hidden/>
+                    <input type="text" class="form-control mb-2" id="editCategory" name="category_name" required
+                      hidden />
                     <button type="submit" class="btn btn-outline-success  mt-2 px-2"><span
                         class="material-symbols-outlined">
                         edit
@@ -71,7 +72,8 @@
 
                   <!-- Delete categories form -->
                   <form action="/admin/deleteCategory" method="post">
-                    <input type="text" class="form-control mb-2" id="deleteCategory" name="category_name" required hidden />
+                    <input type="text" class="form-control mb-2" id="deleteCategory" name="category_name" required
+                      hidden />
                     <button type="submit" class="btn btn-outline-danger  mt-2 px-2"><span
                         class="material-symbols-outlined">
                         delete
@@ -105,20 +107,27 @@
             <label for="floatingTextarea2"></label>
           </div>
 
-          <div class="col-md-4 mb-4">
-            <label for="category_id" class="form-label">Product Category</label>
-            <select name="category_id" class="form-select" required>
-              <!-- array of categories ids -->
-              <option value="" disabled>Available Categories</option>
-              <% if (locals.categories){ categories.forEach((name)=>{ %>
+          <div class="row">
+            <div class="col-md-4 mb-4">
+              <label for="category_id" class="form-label">Product Category</label>
+              <select name="category_id" class="form-select" required>
+                <!-- array of categories ids -->
+                <option value="" disabled>Available Categories</option>
+                <% if (locals.categories){ categories.forEach((name)=>{ %>
 
-                <option value="<%=name.category_name%>">
-                  <%=name.category_name%>
-                </option>
+                  <option value="<%=name._id%>">
+                    <%=name.category_name%>
+                  </option>
 
-                <% }) } %>
+                  <% }) } %>
 
-            </select>
+              </select>
+            </div>
+
+            <div class="col-md-4 mb-4">
+              <label for="subCategory" class="form-label">Sub Category</label>
+              <input type="text" class="form-control" name="subCategory" placeholder="Sub category" required>
+            </div>
           </div>
 
           <div class="row">
@@ -185,32 +194,5 @@
       </div>
     </div>
     </div>
-
-
-
-    <script>
-      function calculate() {
-        const basePrice = document.getElementById("basePrice").value;
-        const gst = document.getElementById("gst").value;
-        const discount = document.getElementById("discount").value;
-        let result = (basePrice * (1 + (gst / 100))) - (basePrice * discount / 100)
-        document.getElementById("sellingPrice").value = result.toFixed(2)
-      }
-
-      function categoryFill() {
-        const fill = document.getElementById("category").value
-        document.getElementById("editCategory").value = fill
-        document.getElementById("originalCategory").value = fill
-        document.getElementById("deleteCategory").value = fill
-        document.getElementById("addCategory").value = fill
-      }
-
-      function categoryUpdate() {
-        const fill = document.getElementById("addCategory").value
-        document.getElementById("editCategory").value = fill
-        document.getElementById("deleteCategory").value = fill
-      }
-
-    </script>
 
     <%- include('../layouts/footer') %>

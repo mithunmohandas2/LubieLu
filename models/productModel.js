@@ -15,6 +15,10 @@ const productSchema = new mongoose.Schema({
         type: ObjectId,
         required: true,
     },
+    subCategory: {
+        type: ObjectId,
+        required: true,
+    },
     brand: {
         type: String,
 
@@ -47,9 +51,9 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    is_published: {
+    is_blocked: {
         type: Boolean,
-        default: 1
+        default: 0
     },
     product_image: {
         type: Array,
