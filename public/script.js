@@ -39,7 +39,26 @@ function SubCategoryFill() {
 }
 
 function SubCategoryUpdate() {
-  const fill= document.getElementById("field").value
+  const fill = document.getElementById("field").value
   document.getElementById("editSubCategory").value = fill
   document.getElementById("deleteSubCategory").value = fill
 }
+
+// Preview Images
+document.addEventListener('DOMContentLoaded', function () {
+  const imageInput = document.getElementById('imageInput');
+  const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+  imageInput.addEventListener('change', function (event) {
+    imagePreviewContainer.innerHTML = ''; // Clear previous previews
+
+    const files = event.target.files;
+    for (const file of files) {
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.className = 'preview-image';
+      imagePreviewContainer.appendChild(img);
+    }
+  });
+});
+

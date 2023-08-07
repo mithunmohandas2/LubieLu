@@ -51,7 +51,8 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    product_image: [ ],
+    product_image:[String],
+    
     is_blocked: {
         type: Boolean,
         default: 0

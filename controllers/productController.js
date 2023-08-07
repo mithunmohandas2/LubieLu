@@ -3,12 +3,18 @@ const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
 
 
+
 // ==========VIEW PRODUCT MANAGEMENT PAGE============
 
 const productManagement = async (req, res) => {
     try {
-        // const categoryList = await Category.find({ is_delete: 0 })
-        res.render('product_management', { title: "Lubie-Lu : Product Management", alert:req.query.alert});
+        const allProducts = await Product.find({})
+        // console.log(allProducts);
+        res.render('product_management', { 
+            title: "Lubie-Lu : Product Management",
+            products: allProducts,
+            alert:req.query.alert,
+        });
     } catch (error) {
         console.log(error.message)
     }
@@ -90,7 +96,7 @@ const addSubCategory = async (req, res) => {
     console.log(req.body);
     const Match = await subCategory.findOne({ subCategoryName: req.body.subCategoryName}) //find duplicate
     if (Match) {
-        console.log("Match :"+Match);
+        // console.log("Match :"+Match);
         if (Match.isDelete === true) {
 
             await subCategory.updateOne({ subCategoryName: req.body.subCategoryName }, { $set: { isDelete: false } })
@@ -107,7 +113,7 @@ const addSubCategory = async (req, res) => {
         })
         const subCategories = await subcategory.save();
         const rootAdd = await Category.updateOne({_id:req.body.rootCategoryId},{$addToSet:{subCategories: subCategories._id,}})
-        if(rootAdd) console.log(rootAdd+"connected with root");
+        // if(rootAdd) console.log(rootAdd+"connected with root");
         if (subCategories) {  // adding to database success?
             res.redirect('/admin/addProduct?subCategory_alert=Sub category added succesfully')
         } else {
@@ -141,7 +147,7 @@ const editSubCategory = async (req, res) => {
 // -------------deleteCategory------------------
 
 const deleteSubCategory = async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const Match = await subCategory.findOne({subCategoryName: req.body.subCategory_name}) //find duplicate
     if (!Match) {
         res.redirect('/admin/addProduct?subCategory_alert=No sub category found')
@@ -183,10 +189,13 @@ const addProduct = async (req, res) => {
 
 const insertProduct = async (req, res) => {
 try {
+    const productImages = req.files;
+    const imagePaths = productImages.map(image => image.path);
+
     const product = new Product({
         product_name: req.body.product_name ,
         description: req.body.description ,
-        product_image: req.body.product_image,
+        product_image:  imagePaths, 
         category_id: req.body.category_id,
         subCategory_id: req.body.subCategory_id,
         brand: req.body.brand,
@@ -200,7 +209,7 @@ try {
     })
 
     const productData = await product.save();
-    console.log(productData);
+    // console.log(productData); 
 
     if (productData) {  // adding to database success?
         res.redirect('/admin/product_management?alert=Product added successfully')
@@ -212,9 +221,117 @@ try {
 }
 }
 
-//--------------------------
+//--------PRODUCT SEARCH------------------
 
+const productSearch = async (req, res) => {
 
+    try {
+        const keyword = req.body.search
+        const regex = new RegExp(`${keyword}`, 'i');
+        const searchProduct = await Product.find({ product_name: { $regex: regex } });   //find products with keyword
+        
+        // console.log("req.body.search ="+searchProduct);
+
+        if(searchProduct){
+        res.render('product_management', { 
+            title: "Lubie-Lu : Product Management",
+            alert:req.query.alert,
+            searchData:searchProduct,
+        });
+        }else{
+            res.redirect('/admin/product_management?alert=searched product not found')
+        }
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+// -------------------------------------------
+
+const editProductLoad = async (req, res) => {
+    try {
+        const categoryList = await Category.find({ is_delete: 0 })
+        const subCategoryList = await subCategory.find({ isDelete: 0 })
+        const productfill = await Product.find({_id : req.body.product_id})
+            //    console.log(productfill); 
+        res.render('editProduct', { 
+            title: "Lubie-Lu : Product Management", 
+            categories: categoryList, 
+            subCategories:subCategoryList,
+            category_alert: req.query.category_alert,
+            subCategory_alert:req.query.subCategory_alert,
+            data:productfill
+        });
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+// -------------------------------
+
+const deleteProduct = async (req, res) => {
+    try {
+        console.log(req.body);
+    const Match = await Product.findOne({ _id: req.body.product_id }) //find product
+    if (Match) {
+        if(Match.is_blocked===false) {
+            const deleted = await Product.updateOne({ _id: req.body.product_id }, { $set: { is_blocked: true } });
+            if (deleted) { 
+                res.redirect('/admin/product_management?alert=Product deleted successfully')
+            } else {
+                res.redirect('/admin/product_management?alert=Failed to delete product')
+            }
+        } else {
+            const reverted = await Product.updateOne({ _id: req.body.product_id }, { $set: { is_blocked: false } });
+            if (reverted) { 
+                res.redirect('/admin/product_management?alert=Product re-activated successfully')
+            } else {
+                res.redirect('/admin/product_management?alert=Failed to re-activare product')
+            }
+        }
+    }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// ------EDIT PRODUCT------------------pending--------------
+
+const editProduct = async (req, res) => {
+    try {
+        console.log(req.body);
+        // const productImages = req.files;
+        // const imagePaths = productImages.map(image => image.path);
+    
+        // const product = ({
+        //     product_name: req.body.product_name ,
+        //     description: req.body.description ,
+        //     product_image:  imagePaths, 
+        //     category_id: req.body.category_id,
+        //     subCategory_id: req.body.subCategory_id,
+        //     brand: req.body.brand,
+        //     purchasePrice: req.body.purchasePrice ,
+        //     stock:req.body.stock,
+        //     basePrice:req.body.basePrice ,
+        //     gst: req.body.gst,
+        //     discount: req.body.discount,
+        //     mrp:req.body.mrp,
+        //     sellingPrice:req.body.sellingPrice,
+        // })
+    
+        // const productData = await product.updateOne({});
+        // console.log(productData); 
+    
+        // if (productData) {  // adding to database success?
+        //     res.redirect('/admin/product_management?alert=Product added successfully')
+        // } else {
+        //     res.redirect('/admin/product_management?alert=Failed to add product')
+        // }
+    } catch (error) {
+        console.log(error.message)
+    }
+    }
 
 // -------------------------
 
@@ -228,4 +345,8 @@ module.exports = {
     deleteSubCategory,
     addProduct,
     insertProduct,
+    productSearch,
+    editProductLoad,
+    deleteProduct,
+    editProduct,
 }

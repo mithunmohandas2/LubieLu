@@ -31,13 +31,137 @@
       </div>
     </div>
 
-       <!-- alert -->
+    <!-- alert -->
     <% if(locals.alert){%>
       <div class="alert alert-warning text-center my-2">
         <%=locals.alert%>
       </div>
       <% } %>
 
-    <hr>
 
-    <%- include('../layouts/footer') %>
+        <section class="container">
+          <hr>
+
+          <% if (locals.searchData){ if (locals.searchData.length){ %>
+
+            <h3>Search result</h3>
+
+            <a class="" href="/admin/product_management/"><button class="btn btn-danger py-0 mb-3 px-1 ">x</button></a>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Product Details</th>
+                  <th scope="col">Stock</th>
+                  <th scope="col">Last Updated</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for(i=0;i<locals.searchData.length;i++){ %>
+                  <tr>
+                    <th scope="row">
+                      <%= (i+1) %>
+                    </th>
+                    <td>
+                     
+                        <%=locals.searchData[i].product_name%>
+                          <%=locals.searchData[i].product_name%>
+                    </td>
+                    <td>
+                      <%=locals.searchData[i].stock%>
+                    </td>
+                    <td>
+                      <%=locals.searchData[i].updatedAt%>
+                    </td>
+
+                    <td>
+                      <% if(locals.searchData[i].is_blocked){ %>
+                        <p class="text-danger">Deleted</p>
+                        <% } else { %>
+                          <p class="text-success">Active</p>
+                          <% } %>
+                    </td>
+
+                    <td>
+                      <form action="/admin/editProductLoad" method="post">
+                        <input type="text" name="product_id" value="<%=locals.searchData[i]._id%>" hidden required/>
+                        <button type="submit" class="btn btn-warning py-0 px-1">Edit </button>
+                        </form>
+                    </td>
+                  </tr>
+                  <% } } else {%>
+                    <h5 class="text-start text-danger">No product details found</h5>
+                    <%} } %>
+
+
+
+              </tbody>
+            </table>
+            </div>
+
+            <!-- Listing all products when no search data -->
+
+            <% if (!locals.searchData){ %>
+
+
+              <h3>PRODUCT LIST</h3>
+
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col text-center">Product Details</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Last Updated</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <% if (products.length> 0){
+                    for(i=0;i<products.length;i++){ %>
+                      <tr>
+                        <th scope="row">
+                          <%= (i+1) %>
+                        </th>
+                        <td>
+                          <%=locals.products[i].product_name%>
+                        </td>
+                        <td>
+                          <%=locals.products[i].stock%>
+                        </td>
+                        <td>
+                          <%=locals.products[i].updatedAt%>
+                        </td>
+
+                        <td>
+                          <% if(locals.products[i].is_blocked){ %>
+                            <p class="text-danger">Deleted</p>
+                            <% } else { %>
+                              <p class="text-success">Active</p>
+                              <% } %>
+                        </td>
+
+                        <td>
+                          <form action="/admin/editProductLoad" method="post">
+                            <input type="text" name="product_id" value="<%=locals.products[i]._id%>" hidden required/>
+                            <button type="submit" class="btn btn-warning py-0 px-1">Edit </button>
+                            </form>
+
+                          </form>
+                        </td>
+                      </tr>
+                      <% } } %>
+
+                </tbody>
+              </table>
+
+              <%} %>
+
+        </section>
+
+
+        <%- include('../layouts/footer') %>

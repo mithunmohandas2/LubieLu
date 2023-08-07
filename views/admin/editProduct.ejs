@@ -1,0 +1,191 @@
+<%- include('../layouts/header') %>
+
+    <%- include('../layouts/adminHeader') %>
+
+        <style>
+            body {
+                background-color: #fbdfdc;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        </style>
+
+        <div class="mt-5 text-center container">
+            <div>
+
+                <!-- EDIT PRODUCT -->
+                <h3 class="my-4 py-2">EDIT PRODUCT</h3>
+
+                <!-- Category management -->
+                <%- include('./manageCategory') %>
+
+            </div>
+
+            <!-- EDIT product section -->
+            <div class="col-md-8 text-start bg-light p-5 mb-4" style="border-radius: 2em;">
+                <h5 class="mb-4 pb-2 ">Product Details</h5>
+                <form class="row g-3 text-start" action="/admin/editProduct" method="post"
+                    enctype="multipart/form-data">
+
+                    <input type="text" class="form-control" name="product_id"
+                            value="<%= locals.data ? locals.data[0]._id : '' %>" hidden required>
+
+                    <div class="col-12 mb-3">
+                        <label for="product_name" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" name="product_name"
+                            value="<%= locals.data ? locals.data[0].product_name : '' %>" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="description" class="form-label">Product Description</label>
+                        <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 8em"
+                            required> <%= locals.data ? locals.data[0].description : '' %> </textarea>
+                        <label for="floatingTextarea2"></label>
+                    </div>
+
+                    <% if (locals.data){ data[0].product_image.forEach((img)=>{ %>
+                        <%=img%>
+                            <% }) } %>
+
+
+                                <div id="imagePreviewContainer"></div>
+
+                                <div class="col-12 mb-4">
+                                    <label for="product_image" class="form-label">Product Images</label>
+                                    <input type="file" class="form-control" name="product_image" multiple
+                                        id="imageInput">
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 mb-4">
+                                        <label for="category_id" class="form-label">Product Category</label>
+                                        <select name="category_id" class="form-select"
+                                            value="<%= locals.data ? locals.data[0].category_id : '' %>" required>
+                                            <!-- array of categories ids -->
+                                            <option value="" disabled>Available Categories</option>
+                                            <% if (locals.categories){ categories.forEach((name)=>{ %>
+
+                                                <option value="<%=name._id%>">
+                                                    <%=name.category_name%>
+                                                </option>
+
+                                                <% }) } %>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4 mb-4">
+                                        <label for="subCategory" class="form-label">Sub Category</label>
+                                        <select name="subCategory_id" class="form-select" required>
+                                            <!-- array of sub categories ids -->
+                                            <option value="" disabled>Available Sub Categories</option>
+                                            <% if (locals.subCategories){ subCategories.forEach((name)=>{ %>
+
+                                                <option value="<%=name.subCategoryName%>">
+                                                    <%=name.subCategoryName%>
+                                                </option>
+
+                                                <% }) } %>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <label for="purchasePrice" class="form-label">Brand</label>
+                                        <input type="text" class="form-control" name="brand"
+                                            value="<%= locals.data ? locals.data[0].brand : '' %>" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-4 mb-4">
+                                        <label for="purchasePrice" class="form-label">Purchase price</label>
+                                        <input type="number" step="0.01" class="form-control" name="purchasePrice"
+                                            value="<%= locals.data ? locals.data[0].purchasePrice : '' %>" required>
+                                    </div>
+
+                                    <div class="col-md-4 mb-4">
+                                        <label for="stock" class="form-label">Stock</label>
+                                        <input type="number" class="form-control w-50" name="stock"
+                                            value="<%= locals.data ? locals.data[0].stock : '' %>" required>
+                                    </div>
+
+                                    <div class="col-md-4 mb-4">
+                                        <label for="mrp" class="form-label">MRP</label>
+                                        <input type="number" step="0.01" class="form-control" name="mrp"
+                                            value="<%= locals.data ? locals.data[0].mrp : '' %>" required>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-4 mb-4">
+                                        <label for="basePrice" class="form-label">Base price</label>
+                                        <input type="number" step="0.01" class="form-control" id="basePrice"
+                                            name="basePrice" onchange=calculate()
+                                            value="<%= locals.data ? locals.data[0].basePrice : '' %>" required>
+                                    </div>
+
+                                    <div class="col-md-2 mb-4">
+                                        <label for="gst" class="form-label">GST</label>
+                                        <select name="gst" id="gst" class="form-select" onchange=calculate()
+                                            aria-valuetext="<%= locals.data ? locals.data[0].gst : '' %>" required>
+                                            <option value=value="<%= locals.data ? locals.data[0].gst : '' %>">
+                                                <%= locals.data ? locals.data[0].gst : '' %> %
+                                            </option>
+                                            <option value=0>0%</option>
+                                            <option value=3>3%</option>
+                                            <option value=5>5%</option>
+                                            <option value=12>12%</option>
+                                            <option value=18>18%</option>
+                                            <option value=28>28%</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2 mb-4">
+                                        <label for="discount" class="form-label">Discount</label>
+                                        <input type="number" step="0.01" id="discount" class="form-control"
+                                            name="discount" onchange=calculate()
+                                            value="<%= locals.data ? locals.data[0].discount : '' %>">
+                                    </div>
+
+                                    <div class="col-md-4 mb-4">
+                                        <label for="sellingPrice" class="form-label">Selling Price</label>
+                                        <input type="number" step="0.01" class="form-control" id="sellingPrice"
+                                            name="sellingPrice"
+                                            value="<%= locals.data ? locals.data[0].sellingPrice : '' %>" readonly>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 pt-4 text-center">
+                                    <button type="submit" class="btn btn-danger px-5">Edit Product</button>
+                                </div>
+                </form>
+
+                <form class="row g-3 text-start" action="/admin/deleteProduct" method="post">
+                    <div class="col-12 pt-4 text-start">
+
+                        <div class="form-check">
+                            <input type="text" class="form-control" value="<%= locals.data ? locals.data[0]._id : '' %>"
+                                name="product_id" hidden>
+                            <label for="delete" class="form-label">please tick to confirm</label>
+                            <input class="form-check-input" type="checkbox" name="gridCheck" required>
+                        </div>
+
+                        <% if(locals.data){ if(locals.data[0].is_blocked ==false){ %>
+                            <button type="submit" class="btn btn-outline-danger px-2">Delete Product</button>
+                            <% } else { %>
+                                <button type="submit" class="btn btn-outline-success px-2">Re-activate Product</button>
+                              <% }} %>
+
+                </form>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+
+        <%- include('../layouts/footer') %>

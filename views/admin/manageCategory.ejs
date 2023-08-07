@@ -1,0 +1,156 @@
+<div class="row">
+
+    <!-- Manage Category Box -->
+    <div class="col-md-4 row g-3 text-start">
+        <div class="col-md-9 text-center bg-light pt-5 mb-4" style="border-radius: 2em;">
+            <h5 class="pb-2">Manage Category</h5>
+            <!-- Category alert -->
+            <% if (locals.category_alert){ %>
+                <div class="alert alert-warning text-center mt-2">
+                    <%=locals.category_alert%>
+                </div>
+                <% } %>
+
+                    <!-- show available categories -->
+                    <select id="category" class="form-select mb-4" onchange=categoryFill()>
+                        <option value="" disabled>All Categories</option>
+                        <% if (locals.categories){ categories.forEach((name)=>{ %>
+
+                            <option value="<%=name.category_name%>">
+                                <%=name.category_name%>
+                            </option>
+
+                            <% }) } %>
+                    </select>
+
+                    <!-- add categories form -->
+                    <form action="/admin/addCategory" method="post">
+                        <input type="text" class="form-control mb-2" name="category_name"
+                            id="addCategory" onchange=categoryUpdate() placeholder="Enter the category"
+                            required />
+                        <div class=" d-flex m-2">
+                            <button type="submit" class="btn btn-outline-primary  mt-2 px-2"><span
+                                    class="material-symbols-outlined">
+                                    box_add
+                                </span>ADD</button>
+                    </form>
+
+                    <!-- EDIT categories form -->
+                    <form action="/admin/editCategory" method="post">
+                        <input type="text" class="form-control mb-2" id="originalCategory"
+                            name="originalCategory" hidden />
+                        <input type="text" class="form-control mb-2" id="editCategory"
+                            name="category_name" required hidden />
+                        <button type="submit" class="btn btn-outline-success  mt-2 px-2"><span
+                                class="material-symbols-outlined">
+                                edit
+                            </span>EDIT</button>
+                    </form>
+
+                    <!-- Delete categories form -->
+                    <form action="/admin/deleteCategory" method="post">
+                        <input type="text" class="form-control mb-2" id="deleteCategory"
+                            name="category_name" required hidden />
+                        <button type="submit" class="btn btn-outline-danger  mt-2 px-2"><span
+                                class="material-symbols-outlined">
+                                delete
+                            </span>DELETE</button>
+                    </form>
+
+        </div>
+
+
+
+        <!-- Sub Category  -->
+        <div class="col-md-12 text-center bg-light py-5 mb-4" style="border-radius: 2em;">
+            <h5 class="pb-2">Manage Sub Category</h5>
+
+            <!-- Sub Category alert -->
+            <% if (locals.subCategory_alert){ %>
+                <div class="alert alert-warning text-center mt-2">
+                    <%=locals.subCategory_alert%>
+                </div>
+                <% } %>
+                    <!-- show available root categories -->
+                    <label class="pb-1">Select Category</label>
+                    <select id="rootCategory" class="form-select mb-4" onchange=rootCategoryFill()>
+                        <option disabled>Main categories</option>
+                        <% if (locals.categories){categories.forEach((name)=>{ %>
+
+                            <option value="<%=name._id%>">
+                                <%=name.category_name%>
+                            </option>
+
+                            <% }) } %>
+                    </select>
+
+                    <!-- show available sub categories -->
+                    <label class="pb-1">Select Sub Category</label>
+                    <select id="subCategory" class="form-select mb-4" onchange=SubCategoryFill()>
+                        <option disabled>Available Sub Categories</option>
+                        <% if (locals.subCategories){ subCategories.forEach((name)=>{ %>
+
+                            <option value="<%=name.subCategoryName%>">
+                                <%=name.subCategoryName%>
+                            </option>
+
+                            <% }) } %>
+                    </select>
+
+                    <!-- add Sub Categories form -->
+                    <form action="/admin/addSubCategory" method="post">
+                        <input type="text" class="form-control mb-2" name="rootCategoryId"
+                            id="rootCategoryId1"
+                            value="<%= locals.categories.length ? locals.categories[0]._id : '' %>"
+                            hidden required />
+
+                        <input type="text" class="form-control mb-2"
+                            placeholder="Enter the sub category" onchange=SubCategoryUpdate()
+                            name="subCategoryName" id="field" required />
+
+                        <div class=" d-flex m-2">
+                            <button type="submit" class="btn btn-outline-primary  mt-2 px-2"><span
+                                    class="material-symbols-outlined">
+                                    box_add
+                                </span>ADD</button>
+                    </form>
+                    <!-- EDIT Sub categories form -->
+                    <form action="/admin/editSubCategory" method="post">
+                        <input type="text" class="form-control mb-2" name="rootCategoryId"
+                            id="rootCategoryId2"
+                            value="<%= locals.categories.length ? locals.categories[0]._id : '' %>"
+                            hidden required />
+
+                        <input type="text" class="form-control mb-2 MainCategoryId"
+                            id="originalSubCategory1" name="subCategoryOG_name"
+                            value="<%= locals.subCategories.length ? locals.subCategories[0].subCategoryName : '' %>"
+                            hidden required />
+
+                        <input type="text" class="form-control mb-2" id="editSubCategory"
+                            name="subCategory_name" hidden required />
+                        <button type="submit" class="btn btn-outline-success  mt-2 px-2"><span
+                                class="material-symbols-outlined">
+                                edit
+                            </span>EDIT</button>
+                    </form>
+
+                    <!-- Delete Sub categories form -->
+                    <form action="/admin/deleteSubCategory" method="post">
+
+                        <input type="text" class="form-control mb-2" name="rootCategoryId"
+                            id="rootCategoryId3"
+                            value="<%= locals.categories.length ? locals.categories[0]._id : '' %>"
+                            hidden required />
+
+                        <input type="text" class="form-control mb-2" id="deleteSubCategory"
+                            name="subCategory_name" hidden required />
+
+                        <button type="submit" class="btn btn-outline-danger  mt-2 px-2"><span
+                                class="material-symbols-outlined">
+                                delete
+                            </span>DELETE</button>
+                    </form>
+        </div>
+
+    </div>
+</div>
