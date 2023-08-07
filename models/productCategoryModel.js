@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose")
 
 const productCategory = mongoose.Schema({
@@ -10,6 +11,8 @@ const productCategory = mongoose.Schema({
         type: Boolean,
         default: 0
     },
+    subCategories:[],
+
 })
 
 module.exports = mongoose.model("Category", productCategory);

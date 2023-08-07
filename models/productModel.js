@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
         type: ObjectId,
         required: true,
     },
-    subCategory: {
+    subCategory_id: {
         type: ObjectId,
         required: true,
     },
@@ -51,13 +51,12 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    product_image: [ ],
     is_blocked: {
         type: Boolean,
         default: 0
     },
-    product_image: {
-        type: Array,
-    },
+    
     feedback: [{
         user: {
             type: ObjectId,

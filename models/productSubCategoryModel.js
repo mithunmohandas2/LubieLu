@@ -1,12 +1,19 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose")
 
 const productSubCategory = mongoose.Schema({
-    subCategory_name: {
+
+    rootCategoryId: {
+        type: ObjectId,
+        required: true,
+    },
+
+    subCategoryName: {
         type: String,
         required: true,
         unique: true
     },
-    is_delete: {
+    isDelete: {
         type: Boolean,
         default: 0
     },
