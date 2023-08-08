@@ -14,35 +14,47 @@
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-danger" type="submit">Search</button>
                 </form>
-                <div class="text-start mx-3 text-center">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item ">
-                            <a class="nav-link active" aria-current="page" href="/wishlist"><span
-                                    class="material-symbols-outlined"> favorite </span>WISHLIST</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/cart"><span
-                                    class="material-symbols-outlined ">shopping_cart</span>CART</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false"><span class="material-symbols-outlined">
-                                    manage_accounts
-                                </span> SETTINGS
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Edit Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Order History</a></li>
-                                <li><a class="dropdown-item" href="#">Manage Account</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><form action="/logout" method="post"><button type="submit" class="dropdown-item">Logout</button></form></li>
-                            </ul>
-                        </li>
+                
+                <% if(username){ %>
+                    <div class="text-start mx-3 text-center">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item ">
+                                <a class="nav-link active" aria-current="page" href="/wishlist"><span
+                                        class="material-symbols-outlined"> favorite </span>WISHLIST</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/cart"><span
+                                        class="material-symbols-outlined ">shopping_cart</span>CART</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false"><span class="material-symbols-outlined">
+                                        manage_accounts
+                                    </span> SETTINGS
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                                    <li><a class="dropdown-item" href="#">Order History</a></li>
+                                    <li><a class="dropdown-item" href="#">Manage Account</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><form action="/logout" method="post"><button type="submit" class="dropdown-item">Logout</button></form></li>
+                                </ul>
+                            </li>
+    
+                        </ul>
+                    </div>
 
-                    </ul>
-                </div>
+               <% } else { %>
+
+               <div class="text-center m-4">
+                <a href="/login">LOGIN</a>
+                |
+                <a href="/register"> REGISTER </a>
+               </div>
+
+                <% } %>
 
             </div>
         </div>

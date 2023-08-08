@@ -3,7 +3,7 @@ const isLogin = async (req, res, next) => {
     try {
         if (!req.session.user_name) { //if user not logged in
             res.clearCookie();
-            return res.redirect('/')
+            return res.redirect('/login')
         }
 
         return next();

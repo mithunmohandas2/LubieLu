@@ -20,121 +20,124 @@
       <% } %> -->
 
 
-        <!-- SEARCH BOX -->
-        <div class="mt-5 text-center container">
-          <form action="/admin/search" method="post" class="d-flex">
-            <input class="form-control me-2 w-50 " name="search" type="search" placeholder="Search for users"
-              aria-label="Search">
-            <button class="btn btn-danger" type="submit">Search</button>
-          </form>
-          <div>
+    <!-- SEARCH BOX -->
+    <div class="mt-5 text-center container pb-4 mb-4">
+      <form action="/admin/search" method="post" class="d-flex">
+        <input class="form-control me-2 w-50 " name="search" type="search" placeholder="Search for users"
+          aria-label="Search">
+        <button class="btn btn-danger" type="submit">Search</button>
+      </form>
+      <div>
 
-            <% if (locals.searchData){ if (locals.searchData.length){ %>
-              <hr>
-              <h3>Search result</h3>
-
-              <a class="" href="/admin/user_management/"><button class="btn btn-danger py-0 mb-3 px-1 ">x</button></a>
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email Address</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for(i=0;i<locals.searchData.length;i++){ %>
-                    <tr>
-                      <th scope="row">
-                        <%= (i+1) %>
-                      </th>
-                      <td>
-                        <%=locals.searchData[i].firstName%>
-                          <%=locals.searchData[i].lastName%>
-                      </td>
-                      <form action="/admin/blockUser" method="post">
-                        <td>
-                          <%=locals.searchData[i].email%>
-                        </td>
-                        <td>
-                          <%=locals.searchData[i].phone%>
-                        </td>
-
-                        <td>
-                          <% if(locals.searchData[i].is_blocked){ %>
-                            <button name="email" type="submit" value="<%=locals.searchData[i].email%>"
-                              class="btn btn-outline-danger py-0 px-1 "> Unblock </button>
-                            <% } else { %>
-                              <button name="email" type="submit" value="<%=locals.searchData[i].email%>"
-                                class="btn btn-danger py-0 px-2 ">Block</button>
-                              <% } %>
-                      </form>
-                      </td>
-                    </tr>
-                    <% } } else {%>
-                      <h5 class="text-start text-danger">No user details found</h5>
-                      <%} } %>
-
-
-
-                </tbody>
-              </table>
-          </div>
-
+        <% if (locals.searchData){ if (locals.searchData.length){ %>
           <hr>
-          <!-- Listing all Users when no search data -->
+          <h3>Search result</h3>
 
-          <% if (!locals.searchData){ %>
-
-            <h3>All users</h3>
-
-            <table class="table table-striped">
-              <thead>
+          <a class="" href="/admin/user_management/"><button class="btn btn-danger py-0 mb-3 px-1 ">x</button></a>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(i=0;i<locals.searchData.length;i++){ %>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Email Address</th>
-                  <th scope="col">Phone</th>
-                  <th scope="col">Action</th>
+                  <th scope="row">
+                    <%= (i+1) %>
+                  </th>
+                  <td>
+                    <%=locals.searchData[i].firstName%>
+                      <%=locals.searchData[i].lastName%>
+                  </td>
+                  <form action="/admin/blockUser" method="post">
+                    <td>
+                      <%=locals.searchData[i].email%>
+                    </td>
+                    <td>
+                      <%=locals.searchData[i].phone%>
+                    </td>
+
+                    <td>
+                      <% if(locals.searchData[i].is_blocked){ %>
+                        <button name="email" type="submit" value="<%=locals.searchData[i].email%>"
+                          class="btn btn-outline-danger py-0 px-1 "> Unblock </button>
+                        <% } else { %>
+                          <button name="email" type="submit" value="<%=locals.searchData[i].email%>"
+                            class="btn btn-danger py-0 px-2 ">Block</button>
+                          <% } %>
+                  </form>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
+                <% } } else {%>
+                  <h5 class="text-start text-danger">No user details found</h5>
+                  <%} } %>
 
-                <% if (users.length> 0){
-                  for(i=0;i<users.length;i++){ %>
-                    <tr>
-                      <th scope="row">
-                        <%= (i+1) %>
-                      </th>
-                      <td>
-                        <%=users[i].firstName%>
-                          <%=users[i].lastName%>
-                      </td>
-                      <td>
-                        <%=users[i].email%>
-                      </td>
-                      <td>
-                        <%=users[i].phone%>
-                      </td>
-                      <td>
-                        <form action="/admin/blockUser" method="post">
-                          <% if(locals.users[i].is_blocked){ %>
-                            <button name="email" type="submit" value="<%=users[i].email%>"
-                              class="btn btn-outline-danger py-0 px-1 "> Unblock </button>
-                            <% } else { %>
-                              <button name="email" type="submit" value="<%=users[i].email%>"
-                                class="btn btn-danger py-0 px-2 ">Block</button>
-                              <% } %>
-                        </form>
-                      </td>
-                    </tr>
-                    <% } } %>
 
-              </tbody>
-            </table>
 
-            <%} %>
+            </tbody>
+          </table>
+      </div>
 
-              <%- include('../layouts/footer') %>
+      <hr>
+      <!-- Listing all Users when no search data -->
+
+      <% if (!locals.searchData){ %>
+
+        <h3>All users</h3>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email Address</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <% if (users.length> 0){
+              for(i=0;i<users.length;i++){ %>
+                <tr>
+                  <th scope="row">
+                    <%= (i+1) %>
+                  </th>
+                  <td>
+                    <%=users[i].firstName%>
+                      <%=users[i].lastName%>
+                  </td>
+                  <td>
+                    <%=users[i].email%>
+                  </td>
+                  <td>
+                    <%=users[i].phone%>
+                  </td>
+                  <td>
+                    <form action="/admin/blockUser" method="post">
+                      <% if(locals.users[i].is_blocked){ %>
+                        <button name="email" type="submit" value="<%=users[i].email%>"
+                          class="btn btn-outline-danger py-0 px-1 "> Unblock </button>
+                        <% } else { %>
+                          <button name="email" type="submit" value="<%=users[i].email%>"
+                            class="btn btn-danger py-0 px-2 ">Block</button>
+                          <% } %>
+                    </form>
+                  </td>
+                </tr>
+                <% } } %>
+
+          </tbody>
+        </table>
+
+        <%} %>
+
+    </div>
+          <%- include('../layouts/footerlinks') %>
+
+            <%- include('../layouts/footer') %>

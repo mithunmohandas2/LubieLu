@@ -1,5 +1,7 @@
 const User = require("../models/userModel");
-
+const Product = require("../models/productModel");
+const Category = require("../models/productCategoryModel");
+const subCategory = require("../models/productSubCategoryModel");
 // -----------------------------------------------
 
 //loading the signup page
@@ -92,7 +94,11 @@ const verifyLogin = async (req, res) => {
 
 const loadHome = async (req, res) => {
     try {
-        res.render('home', { username: req.session.user_name });
+        const products = await Product.find({ is_blocked: 0 })
+        res.render('home', {
+            products: products,
+            username: req.session.user_name,
+        });
     } catch (error) {
         console.log(error.message)
     }
@@ -146,4 +152,5 @@ module.exports = {
     loadCart,
     loadWishlist,
     logout,
+   
 }

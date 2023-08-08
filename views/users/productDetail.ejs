@@ -1,0 +1,63 @@
+<%- include('../layouts/header') %>
+
+    <%- include('../layouts/userHeader') %>
+
+        <section class="container m-4">
+            <div class="row">
+                <div class="col-md-6">
+                    
+                    <div class="col-12">
+                        <img class="w-100" src="/productImages/product_image-1691410200891-.png"></img>
+                    </div>
+                    
+                   <div class="d-flex">
+                    <div class="col-4">
+                        <img class="w-100" src="/productImages/product_image-1691410200889-.png"></img>
+                    </div>
+                    <div class="col-4">
+                        <img class="w-100" src="/productImages/product_image-1691410200866-.png"></img>
+                    </div>
+                    <div class="col-4">
+                        <img class="w-100" src="/productImages/product_image-1691410200763-.png"></img>
+                    </div>
+                   </div>
+                    
+                </div>
+                <div class="col-md-6 p-4">
+                    <h2>
+                        <%=locals.product[0].product_name%>
+                    </h2>
+                    <hr>
+                    Description :
+                    <%=locals.product[0].description%>
+                        <p>Brand : <%=locals.product[0].brand%></p>
+                            <hr>
+                            <h3>
+                                <span class="fw-bold text-dark">
+                                    Offer Price : <%=locals.product[0].sellingPrice%>
+                                </span>
+                            </h3>
+                            <h5 class="text-success fw-bold">
+                                Discount : <%=locals.product[0].discount%>%
+                            </h5>
+                            <h5>
+                                <span class="text-decoration-line-through">
+                                    MRP : <%=locals.product[0].mrp%>
+                                </span>
+                            </h5>
+                            <hr>
+
+                            <div class="text-center my-4">
+                                <a href="/cart"><button class="btn btn-danger px-4 mb-3">
+                                       Buy Now
+                                    </button> </a>
+                            </div>
+                </div>
+
+            </div>
+
+
+        </section>
+
+        <%- include('../layouts/footerlinks') %>
+        <%- include('../layouts/footer') %>
