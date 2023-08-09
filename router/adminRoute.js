@@ -6,6 +6,7 @@ const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const path = require('path')
 
+
 admin_route.use(session({
     secret: config.sessionSecret,
     resave: true,

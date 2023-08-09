@@ -44,9 +44,12 @@
                         <label for="floatingTextarea2"></label>
                     </div>
 
-                    <% if (locals.data){ data[0].product_image.forEach((img)=>{ %>
-                        <%=img%>
-                            <% }) } %>
+                    <div>
+                        <% if (locals.data){ data[0].product_image.forEach((img)=>{ %>
+                          <img id="prd_img" src="<%=img%>"> 
+                          <%=img%>
+                                <% }) } %>
+                    </div>
 
 
                                 <div id="imagePreviewContainer"></div>

@@ -10,6 +10,7 @@ const loadRegister = async (req, res) => {
         res.render('signup', { title: "Lubie-Lu_SignUp" });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 // ---------------------------------------------------
@@ -48,6 +49,7 @@ const insertUser = async (req, res) => {
             }
         } catch (error) {
             console.log(error.message)
+            res.render('error',{error :error.message})
         }
     }
 
@@ -60,6 +62,7 @@ const loginLoad = async (req, res) => {
         res.render('login');
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -75,6 +78,7 @@ const verifyLogin = async (req, res) => {
             } else {
 
                 req.session.user_name = userMatch.firstName   // setting _id data to session
+                req.session._id= userMatch._id;
                 res.cookie('user_name', userMatch.firstName);
 
                 // console.log(req.session)
@@ -87,6 +91,7 @@ const verifyLogin = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -101,6 +106,7 @@ const loadHome = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -111,6 +117,7 @@ const loadCart = async (req, res) => {
         res.render('cart', { username: req.session.user_name });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -121,6 +128,7 @@ const loadWishlist = async (req, res) => {
         res.render('wishlist', { username: req.session.user_name });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -134,6 +142,7 @@ const logout = async (req, res) => {
         res.render('login', { message: 'Please login to continue' });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 

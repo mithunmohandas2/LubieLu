@@ -17,6 +17,7 @@ const productManagement = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -47,6 +48,7 @@ const addCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('error',{error :error.message})
     }
 }
 
@@ -67,6 +69,7 @@ const editCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('error',{error :error.message})
     }
 }
 
@@ -87,13 +90,14 @@ const deleteCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('error',{error :error.message})
     }
 }
 
 // ---------------addSubCategory------------------------
 
 const addSubCategory = async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const Match = await subCategory.findOne({ subCategoryName: req.body.subCategoryName }) //find duplicate
     if (Match) {
         // console.log("Match :"+Match);
@@ -121,6 +125,7 @@ const addSubCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('error',{error :error.message})
     }
 }
 
@@ -141,6 +146,7 @@ const editSubCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('error',{error :error.message})
     }
 }
 
@@ -161,6 +167,7 @@ const deleteSubCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('error',{error :error.message})
     }
 }
 
@@ -181,6 +188,7 @@ const addProduct = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -219,6 +227,7 @@ const insertProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -245,6 +254,7 @@ const productSearch = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -266,6 +276,7 @@ const editProductLoad = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -273,7 +284,7 @@ const editProductLoad = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        console.log(req.body);
+        // console.log(req.body);
         const Match = await Product.findOne({ _id: req.body.product_id }) //find product
         if (Match) {
             if (Match.is_blocked === false) {
@@ -294,6 +305,7 @@ const deleteProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('error',{error :error.message})
     }
 }
 
@@ -332,6 +344,7 @@ const editProduct = async (req, res) => {
         // }
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -339,7 +352,7 @@ const productDetail = async (req, res) => {
     try {
         // console.log(req.body.product_id);
         const product = await Product.find({ $and: [{ _id: req.body.product_id }, { is_blocked: false }] })
-        console.log("product :" + product);
+        // console.log("product :" + product);
 
         res.render('productDetail', {
             product: product,
@@ -347,6 +360,7 @@ const productDetail = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 

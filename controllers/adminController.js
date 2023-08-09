@@ -7,6 +7,7 @@ const loginLoad = async (req, res) => {
         res.render('login', { title: "Lubie-Lu : Admin Login" });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -26,6 +27,7 @@ const verifyLogin = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -38,6 +40,7 @@ const loadDashboard = async (req, res) => {
         res.render('home', { username: req.session.user_name, users: all_users, alert: req.query.alert });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -49,6 +52,7 @@ const userManagement = async (req, res) => {
         res.render('user_management', { title: "Lubie-Lu : User Management", users: all_users, alert: req.query.alert });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -63,6 +67,7 @@ const logout = async (req, res) => {
         res.render('login', { message: 'Please login to continue' });
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -84,6 +89,7 @@ const searchUser = async (req, res) => {
         
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 
@@ -115,6 +121,7 @@ const blockUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
+        res.render('error',{error :error.message})
     }
 }
 

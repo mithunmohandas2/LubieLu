@@ -62,3 +62,9 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+
+// changing static path to load product image
+var imgElement = document.getElementById('prd_img');
+var currentSrc = imgElement.getAttribute('src');
+var newSrc = currentSrc.replace('public', '');
+imgElement.setAttribute('src', newSrc);
