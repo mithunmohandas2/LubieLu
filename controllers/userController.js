@@ -99,7 +99,7 @@ const verifyLogin = async (req, res) => {
 
 const loadHome = async (req, res) => {
     try {
-        const products = await Product.find({ is_blocked: 0 })
+        const products = await Product.find({ is_blocked: 0 }).sort({updatedAt:-1}).limit(6)
         res.render('home', {
             products: products,
             username: req.session.user_name,
@@ -109,6 +109,27 @@ const loadHome = async (req, res) => {
         res.render('error',{error :error.message})
     }
 }
+
+// ==============LOAD PRODUCTS==============
+
+const loadAllProducts = async (req, res) => {
+    try {
+        const products = await Product.find({ is_blocked: 0 }).sort({updatedAt:-1})
+        res.render('allProducts', {
+            title : "Product Inventory",
+            products: products,
+            username: req.session.user_name,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error',{error :error.message})
+    }
+}
+
+
+
+
+
 
 // ...........Load Cart...........
 
@@ -158,6 +179,7 @@ module.exports = {
     loginLoad,
     verifyLogin,
     loadHome,
+    loadAllProducts,
     loadCart,
     loadWishlist,
     logout,

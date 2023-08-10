@@ -8,7 +8,7 @@ const subCategory = require("../models/productSubCategoryModel");
 
 const productManagement = async (req, res) => {
     try {
-        const allProducts = await Product.find({})
+        const allProducts = await Product.find({}).sort({updatedAt:-1})
         // console.log(allProducts);
         res.render('product_management', {
             title: "Lubie-Lu : Product Management",
@@ -27,24 +27,27 @@ const productManagement = async (req, res) => {
 
 const addCategory = async (req, res) => {
     // console.log(req.body);
-    const Match = await Category.findOne({ category_name: req.body.category_name }) //find duplicate
-    if (Match) {
-        if (Match.is_delete === true) {
-            await Category.updateOne({ category_name: req.body.category_name }, { $set: { is_delete: false } })
-            res.redirect('/admin/addProduct?category_alert=Category reset')
-        } else {
-            res.redirect('/admin/addProduct?category_alert=Duplicate category')
-        }
-    }
     try {
-        const category = new Category({
-            category_name: req.body.category_name
-        })
-        const Categories = await category.save();
-        if (Categories) {  // adding to database success?
-            res.redirect('/admin/addProduct?category_alert=Product category added succesfully')
+        const keyword = req.body.category_name
+        const Match = await Category.findOne({ category_name: { $regex: new RegExp(`^${keyword}$`, 'i') } });
+
+        if (Match) {
+            if (Match.is_delete === true) {
+                await Category.updateOne({ category_name: req.body.category_name }, { $set: { is_delete: false } })
+                res.redirect('/admin/addProduct?category_alert=Category reset')
+            } else if (Match.is_delete === false) {
+                res.redirect('/admin/addProduct?category_alert=Duplicate category')
+            }
         } else {
-            res.redirect('/admin/addProduct?category_alert=Failed to add product category')
+            const category = new Category({
+                category_name: req.body.category_name
+            })
+            const Categories = await category.save();
+            if (Categories) {  // adding to database success?
+                res.redirect('/admin/addProduct?category_alert=Product category added succesfully')
+            } else {
+                res.redirect('/admin/addProduct?category_alert=Failed to add product category')
+            }
         }
     } catch (error) {
         console.log(error.message);
@@ -56,16 +59,17 @@ const addCategory = async (req, res) => {
 
 const editCategory = async (req, res) => {
     // console.log(req.body);
-    const Match = await Category.findOne({ $and: [{ category_name: req.body.originalCategory }, { is_delete: false }] }) //find duplicate
-    if (!Match) {
-        res.redirect('/admin/addProduct?category_alert=No category found')
-    }
     try {
-        const Categories = await Category.updateOne({ category_name: req.body.originalCategory }, { $set: { category_name: req.body.category_name } })
-        if (Categories) {  // editing database success?
-            res.redirect('/admin/addProduct?category_alert=Product category edited succesfully')
+        const Match = await Category.findOne({ $and: [{ category_name: req.body.originalCategory }, { is_delete: false }] }) //find duplicate
+        if (!Match) {
+            res.redirect('/admin/addProduct?category_alert=No category found')
         } else {
-            res.redirect('/admin/addProduct?category_alert=Failed to edit product category')
+            const Categories = await Category.updateOne({ category_name: req.body.originalCategory }, { $set: { category_name: req.body.category_name } })
+            if (Categories) {  // editing database success?
+                res.redirect('/admin/addProduct?category_alert=Product category edited succesfully')
+            } else {
+                res.redirect('/admin/addProduct?category_alert=Failed to edit product category')
+            }
         }
     } catch (error) {
         console.log(error.message);
@@ -77,16 +81,17 @@ const editCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
     // console.log(req.body);
-    const Match = await Category.findOne({ $and: [{ category_name: req.body.category_name }, { is_delete: false }] }) //find duplicate
-    if (!Match) {
-        return res.redirect('/admin/addProduct?category_alert=Category not found')
-    }
     try {
-        const Categories = await Category.updateOne({ category_name: req.body.category_name }, { $set: { is_delete: true } })
-        if (Categories) {  // deleting from database success?
-            res.redirect('/admin/addProduct?category_alert=Product category deleted succesfully')
+        const Match = await Category.findOne({ $and: [{ category_name: req.body.category_name }, { is_delete: false }] }) //find duplicate
+        if (!Match) {
+            return res.redirect('/admin/addProduct?category_alert=Category not found')
         } else {
-            res.redirect('/admin/addProduct?category_alert=Failed to delete product category')
+            const Categories = await Category.updateOne({ category_name: req.body.category_name }, { $set: { is_delete: true } })
+            if (Categories) {  // deleting from database success?
+                res.redirect('/admin/addProduct?category_alert=Product category deleted succesfully')
+            } else {
+                res.redirect('/admin/addProduct?category_alert=Failed to delete product category')
+            }
         }
     } catch (error) {
         console.log(error.message);
@@ -98,31 +103,34 @@ const deleteCategory = async (req, res) => {
 
 const addSubCategory = async (req, res) => {
     // console.log(req.body);
-    const Match = await subCategory.findOne({ subCategoryName: req.body.subCategoryName }) //find duplicate
-    if (Match) {
-        // console.log("Match :"+Match);
-        if (Match.isDelete === true) {
-
-            await subCategory.updateOne({ subCategoryName: req.body.subCategoryName }, { $set: { isDelete: false } })
-            return res.redirect('/admin/addProduct?subCategory_alert= Sub category reset')
+    try {
+        const keyword = req.body.subCategoryName
+        const Match = await subCategory.findOne({ subCategoryName: { $regex: new RegExp(`^${keyword}$`, 'i') } });
+        // const Match = await subCategory.findOne({ subCategoryName: req.body.subCategoryName }) //find duplicate
+        if (Match) {
+            if (Match.isDelete === true) {
+                await subCategory.updateOne({ subCategoryName: Match.subCategoryName }, { $set: { isDelete: false } })
+                res.redirect('/admin/addProduct?subCategory_alert= Sub category reset')
+            } else {
+                res.redirect('/admin/addProduct?subCategory_alert=Duplicate sub category')
+            }
         } else {
-            return res.redirect('/admin/addProduct?subCategory_alert=Duplicate sub category')
+
+            const subcategory = new subCategory({
+                subCategoryName: req.body.subCategoryName,
+                rootCategoryId: req.body.rootCategoryId
+            })
+            const subCategories = await subcategory.save();
+            const rootAdd = await Category.updateOne({ _id: req.body.rootCategoryId }, { $addToSet: { subCategories: subCategories._id, } })
+            // if(rootAdd) console.log(rootAdd+"connected with root");
+            if (subCategories) {  // adding to database success?
+                res.redirect('/admin/addProduct?subCategory_alert=Sub category added succesfully')
+            } else {
+                res.redirect('/admin/addProduct?subCategory_alert=Failed to add Sub category')
+            }
         }
     }
-    try {
-        const subcategory = new subCategory({
-            subCategoryName: req.body.subCategoryName,
-            rootCategoryId: req.body.rootCategoryId
-        })
-        const subCategories = await subcategory.save();
-        const rootAdd = await Category.updateOne({ _id: req.body.rootCategoryId }, { $addToSet: { subCategories: subCategories._id, } })
-        // if(rootAdd) console.log(rootAdd+"connected with root");
-        if (subCategories) {  // adding to database success?
-            res.redirect('/admin/addProduct?subCategory_alert=Sub category added succesfully')
-        } else {
-            res.redirect('/admin/addProduct?subCategory_alert=Failed to add Sub category')
-        }
-    } catch (error) {
+    catch (error) {
         console.log(error.message);
         res.render('error', { error: error.message })
     }
@@ -315,12 +323,14 @@ const editProduct = async (req, res) => {
         console.log(req.body);
         // const productImages = req.files;
         // const imagePaths = productImages.map(image => image.path);
+        // const imagePath = imagePaths.replace('public\\', '');
         // const SP = Math.round(req.body.sellingPrice)
-
+        // console.log(imagePaths);
+        // console.log(imagePath);
         // const product = ({
-        //     product_name: req.body.product_name ,
-        //     description: req.body.description ,
-        //     product_image:  imagePaths, 
+        //     product_name: req.body.product_name,
+        //     description: req.body.description,
+        //     product_image:  imagePath, 
         //     category_id: req.body.category_id,
         //     subCategory_id: req.body.subCategory_id,
         //     brand: req.body.brand,
@@ -332,7 +342,7 @@ const editProduct = async (req, res) => {
         //     mrp:req.body.mrp,
         //     sellingPrice:SP,
         // })
-
+        // console.log("product ="+product); 
         // const productData = await product.updateOne({});
         // console.log(productData); 
 
@@ -349,8 +359,8 @@ const editProduct = async (req, res) => {
 
 const productDetail = async (req, res) => {
     try {
-        // console.log(req.body.product_id);
-        const product = await Product.find({ $and: [{ _id: req.body.product_id }, { is_blocked: false }] })
+        // console.log(req.query);
+        const product = await Product.find({ $and: [{ _id: req.query.product_id }, { is_blocked: false }] })
         // console.log("product :" + product);
 
         res.render('productDetail', {
@@ -364,13 +374,11 @@ const productDetail = async (req, res) => {
 }
 
 // Load sub category in form
-const loadSubCat =async (req,res)=>{
+const loadSubCat = async (req, res) => {
     try {
-        const subCat = await subCategory.find({rootCategoryId:req.body.catID})
-       
-console.log(subCat);
+        const subCat = await subCategory.find({ rootCategoryId: req.body.catID })
         res.json(subCat);
-   
+
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })

@@ -53,7 +53,7 @@ admin_route.get('/addProduct',auth.isLogin,productController.addProduct)
 admin_route.post('/insertProduct',auth.isLogin, upload.array('product_image', 6),productController.insertProduct)
 admin_route.get('/editProduct',auth.isLogin, auth.cookieCheck, productController.productManagement)
 admin_route.post('/editProductLoad',auth.isLogin,productController.editProductLoad)
-admin_route.post('/editProduct',auth.isLogin, auth.cookieCheck, productController.editProduct)
+admin_route.post('/editProduct',auth.isLogin, productController.editProduct)
 admin_route.post('/deleteProduct',auth.isLogin,productController.deleteProduct)
 
 admin_route.post('/addCategory',auth.isLogin,productController.addCategory)

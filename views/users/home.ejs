@@ -22,101 +22,56 @@
 
                 <div class="row">
                     <% if (locals.products){ products.forEach((item)=>{ %>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="box p-4 m-2" style="background-color: #edf1ff; border-radius: 1.5em;">
-                                
-                            <div class="img-box">
-                                <img class="w-100" src="productImages/product_image-1691410200889-.png" alt="">
-                               
-                            </div>
-                            <div class="detail-box">
-                                <p>
-                                    <hr>
+                        <div class="col-md-6 col-lg-4 my-3">
+                            <div class="h-100 p-4 m-2" style="background-color: #edf1ff; border-radius: 1.5em;">
+
+                                <div class="w-100">
+                                    <img class="w-100" src="productImages/product_image-1691410200889-.png" alt="">
+                                    <!-- <img src="<%= item.product_image[0]%>" alt="Product Image"> -->
                                     
-                                    <%=item.product_name%>
-                                </p>
-                                <h5>
-                                    Offer Price : 
-                                    <span>
-                                        ₹ <%=item.sellingPrice%> /-
-                                    </span>
-                                </h5>
-
-                                <h6>
-                                    
-                                    <span class="text-decoration-line-through">
-                                       Price : ₹ <%=item.mrp%> /-
-                                    </span>
-                                </h6>
-                            </div>
-                            
-                            <div class="text-center my-3">
-                                <form action="/productDetail" method="post">
-                                    <input type="text" name="product_id" value="<%=item._id%>" hidden required/>
-                                    <button type="submit" class="btn btn-outline-danger w-50">View Details</button>
-                                </form>
-                            </div>
-                        
-                    </div>
-                    </div>
-                    <% }) } %>
-                </div>
-
-
-                
-                <!-- <% if (locals.products){ products.forEach((item)=>{ %>
-                <div class="row">
-                        <div class="col-sm-6 col-md-4 mb-2">
-                            <div class="box p-4 m-2" style="background-color: #edf1ff;  border-radius: 1.5em;">
-                                
-                                    <div class="img-box">
-                                        <img class="w-100" src="productImages/product_image-1691410200889-.png" alt="">
-                                       
-                                    </div>
-                                    <div class="detail-box">
-                                        <p>
-                                            <hr>
-                                            
+                                </div>
+                                <hr>
+                                <div class="detail-box">
+                                    <div>
+                                        <p class="text-non-wrap">
                                             <%=item.product_name%>
                                         </p>
-                                        <h5>
-                                            Offer Price : 
-                                            <span>
-                                                ₹ <%=item.sellingPrice%> /-
-                                            </span>
-                                        </h5>
+                                    </div>
+                                    <h5>
+                                        Offer Price :
+                                        <span>
+                                            ₹ <%=item.sellingPrice%> /-
+                                        </span>
+                                    </h5>
 
-                                        <h6>
-                                            
-                                            <span class="text-decoration-line-through">
-                                               Price : ₹ <%=item.mrp%> /-
-                                            </span>
-                                        </h6>
-                                    </div>
-                                    
-                                    <div class="text-center my-3">
-                                        <form action="/productDetail" method="post">
-                                            <input type="text" name="product_id" value="<%=item._id%>" hidden required/>
-                                            <button type="submit" class="btn btn-outline-danger w-50">View Details</button>
-                                        </form>
-                                    </div>
+                                    <h6>
+
+                                        <span class="text-decoration-line-through">
+                                            Price : ₹ <%=item.mrp%> /-
+                                        </span>
+                                    </h6>
+                                </div>
+
+                                <div class="text-center my-3">
+                                    <a href="/productDetail?product_id=<%=item._id%>"><button class="btn btn-outline-danger w-50">View Details</button></a>
                                 
+                                </div>
+
                             </div>
                         </div>
-                    </div>
-                    <% }) } %> -->
+                        <% }) } %>
+                </div>
 
-
-                        <div class="text-center my-4">
-                            <a href=""><button class="btn btn-outline-danger mb-3">
-                                    View All Products
-                                </button> </a>
-                        </div>
+                <div class="text-center my-4">
+                    <a href="/allProducts"><button class="btn btn-outline-danger mb-3">
+                            View All Products
+                        </button> </a>
+                </div>
             </div>
         </section>
 
         <!-- end shop section -->
-    <%- include('../layouts/footerlinks') %>
+        <%- include('../layouts/footerlinks') %>
 
 
-        <%- include('../layouts/footer') %>
+            <%- include('../layouts/footer') %>

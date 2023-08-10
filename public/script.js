@@ -1,5 +1,3 @@
-const { options } = require("nodemon/lib/config");
-
 // ======== PRICE CALCULATION (add product)================
 function calculate() {
   const basePrice = document.getElementById("basePrice").value;
@@ -46,32 +44,8 @@ function SubCategoryUpdate() {
   document.getElementById("deleteSubCategory").value = fill
 }
 
-// Preview Images
-document.addEventListener('DOMContentLoaded', function () {
-  const imageInput = document.getElementById('imageInput');
-  const imagePreviewContainer = document.getElementById('imagePreviewContainer');
 
-  imageInput.addEventListener('change', function (event) {
-    imagePreviewContainer.innerHTML = ''; // Clear previous previews
-
-    const files = event.target.files;
-    for (const file of files) {
-      const img = document.createElement('img');
-      img.src = URL.createObjectURL(file);
-      img.className = 'preview-image';
-      imagePreviewContainer.appendChild(img);
-    }
-  });
-});
-
-
-// changing static path to load product image
-var imgElement = document.getElementById('prd_img');
-var currentSrc = imgElement.getAttribute('src');
-var newSrc = currentSrc.replace('public', '');
-imgElement.setAttribute('src', newSrc);
-
-
+// Sub-Category name populate in add/edit product form
 async function loadSubCategory(id){
   const subCategoryList = await fetch('/admin/loadSubCat',{
   method :'post',
@@ -85,19 +59,17 @@ async function loadSubCategory(id){
     console.log(err.message)
   })
  
-  console.log(subCategoryList)
-
   document.getElementById("subCat").innerHTML= ""
   for (let i=0; i<subCategoryList.length;i++){
     let option = document.createElement("option");
     option.value = subCategoryList[i]._id;
     option.text = subCategoryList[i].subCategoryName;
-    console.log(subCategoryList[i]._id+"Understand")
     document.getElementById("subCat").appendChild(option);
   }
 }
 
 
+// Sub-Category name populate in manage category form
 async function loadSubCat(id){
   const subCategoryList = await fetch('/admin/loadSubCat',{
   method :'post',
@@ -111,14 +83,13 @@ async function loadSubCat(id){
     console.log(err.message)
   })
  
-  console.log(subCategoryList)
+  // console.log(subCategoryList)
 
-  document.getElementById("subCat").innerHTML= ""
+  document.getElementById("subCategory").innerHTML= ""
   for (let i=0; i<subCategoryList.length;i++){
     let option = document.createElement("option");
-    option.value = subCategoryList[i]._id;
+    option.value = subCategoryList[i].subCategoryName;
     option.text = subCategoryList[i].subCategoryName;
-    console.log(subCategoryList[i]._id+"Understand")
-    document.getElementById("subCat").appendChild(option);
+    document.getElementById("subCategory").appendChild(option);
   }
 }

@@ -38,9 +38,9 @@
                     <!-- EDIT categories form -->
                     <form action="/admin/editCategory" method="post">
                         <input type="text" class="form-control mb-2" id="originalCategory"
-                            name="originalCategory" hidden />
+                            name="originalCategory" value="<%=locals.categories[0].category_name%>" hidden/>
                         <input type="text" class="form-control mb-2" id="editCategory"
-                            name="category_name" required hidden />
+                            name="category_name" hidden required  />
                         <button type="submit" class="btn btn-outline-success  mt-2 px-2"><span
                                 class="material-symbols-outlined">
                                 edit
@@ -61,7 +61,8 @@
 
 
 
-        <!-- Sub Category  -->
+        <!-- Manage Sub Category  -->
+
         <div class="col-md-12 text-center bg-light py-5 mb-4" style="border-radius: 2em;">
             <h5 class="pb-2">Manage Sub Category</h5>
 
@@ -73,7 +74,7 @@
                 <% } %>
                     <!-- show available root categories -->
                     <label class="pb-1">Select Category</label>
-                    <select id="rootCategory" class="form-select mb-4" onchange=rootCategoryFill()>
+                    <select id="rootCategory" class="form-select mb-4" onclick="loadSubCat(value)" onchange="rootCategoryFill(),loadSubCat(value)">
                         <option disabled>Main categories</option>
                         <% if (locals.categories){categories.forEach((name)=>{ %>
 
@@ -86,15 +87,8 @@
 
                     <!-- show available sub categories -->
                     <label class="pb-1">Select Sub Category</label>
-                    <select id="subCategory" class="form-select mb-4" onchange=SubCategoryFill()>
+                    <select id="subCategory" class="form-select mb-4" onclick=SubCategoryFill()>
                         <option disabled>Available Sub Categories</option>
-                        <% if (locals.subCategories){ subCategories.forEach((name)=>{ %>
-
-                            <option value="<%=name.subCategoryName%>">
-                                <%=name.subCategoryName%>
-                            </option>
-
-                            <% }) } %>
                     </select>
 
                     <!-- add Sub Categories form -->
@@ -122,9 +116,7 @@
                             hidden required />
 
                         <input type="text" class="form-control mb-2 MainCategoryId"
-                            id="originalSubCategory1" name="subCategoryOG_name"
-                            value="<%= locals.subCategories.length ? locals.subCategories[0].subCategoryName : '' %>"
-                            hidden required />
+                            id="originalSubCategory1" name="subCategoryOG_name" hidden required />
 
                         <input type="text" class="form-control mb-2" id="editSubCategory"
                             name="subCategory_name" hidden required />
@@ -143,7 +135,7 @@
                             hidden required />
 
                         <input type="text" class="form-control mb-2" id="deleteSubCategory"
-                            name="subCategory_name" hidden required />
+                            name="subCategory_name"  hidden required />
 
                         <button type="submit" class="btn btn-outline-danger  mt-2 px-2"><span
                                 class="material-symbols-outlined">

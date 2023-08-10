@@ -32,7 +32,8 @@ user_route.post('/login', userController.verifyLogin);
 user_route.get('/cart', auth.isLogin, userController.loadCart);
 user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 
-user_route.post('/productDetail', productController.productDetail);
+user_route.get('/allProducts', userController.loadAllProducts);
+user_route.get('/productDetail', productController.productDetail);
 
 //logout
 user_route.post('/logout', userController.logout);
