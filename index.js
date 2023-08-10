@@ -1,11 +1,15 @@
 const express = require("express");
 const app = express();
+const dotenv = require("dotenv").config();
+
 const mongoose = require("mongoose")
-mongoose.connect("mongodb://127.0.0.1:27017/LubieLu").then(() => { console.log("DB connected successfully") }).catch(() => { console.log('DB not connected') });
+mongoose.connect(process.env.MongoDB_Link).then(() => { console.log("DB connected successfully") }).catch(() => { console.log('DB not connected') });
+
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
 
 app.use(express.static('public'));
 
@@ -25,4 +29,5 @@ const adminRoute = require("./router/adminRoute")
 app.use("/admin",adminRoute)
 
 
-app.listen(3000, () => { console.log("server started successfully at : http://localhost:3000") });
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => { console.log(`server started successfully at : http://localhost:${PORT}`) });
