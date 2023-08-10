@@ -1,3 +1,5 @@
+const { options } = require("nodemon/lib/config");
+
 // ======== PRICE CALCULATION (add product)================
 function calculate() {
   const basePrice = document.getElementById("basePrice").value;
@@ -68,3 +70,55 @@ var imgElement = document.getElementById('prd_img');
 var currentSrc = imgElement.getAttribute('src');
 var newSrc = currentSrc.replace('public', '');
 imgElement.setAttribute('src', newSrc);
+
+
+async function loadSubCategory(id){
+  const subCategoryList = await fetch('/admin/loadSubCat',{
+  method :'post',
+  headers : {
+    "Content-Type" : 'application/json'
+  },
+  body : JSON.stringify({catID: id})
+  })
+  .then((value) =>{ return value.json()} )
+  .catch((err) =>{
+    console.log(err.message)
+  })
+ 
+  console.log(subCategoryList)
+
+  document.getElementById("subCat").innerHTML= ""
+  for (let i=0; i<subCategoryList.length;i++){
+    let option = document.createElement("option");
+    option.value = subCategoryList[i]._id;
+    option.text = subCategoryList[i].subCategoryName;
+    console.log(subCategoryList[i]._id+"Understand")
+    document.getElementById("subCat").appendChild(option);
+  }
+}
+
+
+async function loadSubCat(id){
+  const subCategoryList = await fetch('/admin/loadSubCat',{
+  method :'post',
+  headers : {
+    "Content-Type" : 'application/json'
+  },
+  body : JSON.stringify({catID: id})
+  })
+  .then((value) =>{ return value.json()} )
+  .catch((err) =>{
+    console.log(err.message)
+  })
+ 
+  console.log(subCategoryList)
+
+  document.getElementById("subCat").innerHTML= ""
+  for (let i=0; i<subCategoryList.length;i++){
+    let option = document.createElement("option");
+    option.value = subCategoryList[i]._id;
+    option.text = subCategoryList[i].subCategoryName;
+    console.log(subCategoryList[i]._id+"Understand")
+    document.getElementById("subCat").appendChild(option);
+  }
+}

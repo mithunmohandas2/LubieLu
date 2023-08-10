@@ -17,7 +17,7 @@ const productManagement = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -48,7 +48,7 @@ const addCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -69,7 +69,7 @@ const editCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -90,7 +90,7 @@ const deleteCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -104,10 +104,9 @@ const addSubCategory = async (req, res) => {
         if (Match.isDelete === true) {
 
             await subCategory.updateOne({ subCategoryName: req.body.subCategoryName }, { $set: { isDelete: false } })
-
-            res.redirect('/admin/addProduct?subCategory_alert= Sub category reset')
+            return res.redirect('/admin/addProduct?subCategory_alert= Sub category reset')
         } else {
-            res.redirect('/admin/addProduct?subCategory_alert=Duplicate sub category')
+            return res.redirect('/admin/addProduct?subCategory_alert=Duplicate sub category')
         }
     }
     try {
@@ -125,7 +124,7 @@ const addSubCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -146,7 +145,7 @@ const editSubCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -167,7 +166,7 @@ const deleteSubCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -188,7 +187,7 @@ const addProduct = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -227,7 +226,7 @@ const insertProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -254,7 +253,7 @@ const productSearch = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -276,7 +275,7 @@ const editProductLoad = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -305,7 +304,7 @@ const deleteProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -344,7 +343,7 @@ const editProduct = async (req, res) => {
         // }
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -356,13 +355,28 @@ const productDetail = async (req, res) => {
 
         res.render('productDetail', {
             product: product,
-            username : req.session.username
+            username: req.session.username
         });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
+
+// Load sub category in form
+const loadSubCat =async (req,res)=>{
+    try {
+        const subCat = await subCategory.find({rootCategoryId:req.body.catID})
+       
+console.log(subCat);
+        res.json(subCat);
+   
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
 
 // -------------------------
 
@@ -381,4 +395,5 @@ module.exports = {
     deleteProduct,
     editProduct,
     productDetail,
+    loadSubCat
 }

@@ -64,7 +64,7 @@
                                 <div class="row">
                                     <div class="col-md-4 mb-4">
                                         <label for="category_id" class="form-label">Product Category</label>
-                                        <select name="category_id" class="form-select"
+                                        <select name="category_id" class="form-select" id="catSelection" onchange="loadSubCategory(value)"  
                                             value="<%= locals.data ? locals.data[0].category_id : '' %>" required>
                                             <!-- array of categories ids -->
                                             <option value="" disabled>Available Categories</option>
@@ -81,16 +81,9 @@
 
                                     <div class="col-md-4 mb-4">
                                         <label for="subCategory" class="form-label">Sub Category</label>
-                                        <select name="subCategory_id" class="form-select" required>
+                                        <select name="subCategory_id" class="form-select" id="subCat" required>
                                             <!-- array of sub categories ids -->
                                             <option value="" disabled>Available Sub Categories</option>
-                                            <% if (locals.subCategories){ subCategories.forEach((name)=>{ %>
-
-                                                <option value="<%=name.subCategoryName%>">
-                                                    <%=name.subCategoryName%>
-                                                </option>
-
-                                                <% }) } %>
                                         </select>
 
                                     </div>
