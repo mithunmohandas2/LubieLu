@@ -93,3 +93,4 @@ async function loadSubCat(id){
     document.getElementById("subCategory").appendChild(option);
   }
 }
+

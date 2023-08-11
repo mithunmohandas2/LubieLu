@@ -4,9 +4,14 @@
 
 
         <div class="container">
-
             <h5 class="pt-4"><i>Welcome <%=locals.username? locals.username :'User' %></i></h5>
-            <img class="w-100" src="/images/baby-girl-her-crib.jpg"></img>
+            <img class="w-100 curv" src="/images/baby-girl-her-crib.jpg"></img>
+            <div class="w-100 text-center" style="z-index: 2; position: absolute; left: 20%; top: 50%;">
+                <h2 class="mt-2">Explore the collection</h2>
+                <a href="/allProducts"><button class="btn btn-danger mb-3">
+                    View All Products
+                </button> </a>
+            </div>
         </div>
 
         <!-- shop_section -->
@@ -26,9 +31,17 @@
                             <div class="h-100 p-4 m-2" style="background-color: #edf1ff; border-radius: 1.5em;">
 
                                 <div class="w-100">
-                                    <img class="w-100" src="productImages/product_image-1691410200889-.png" alt="">
-                                    <!-- <img src="<%= item.product_image[0]%>" alt="Product Image"> -->
-                                    
+                                    <% if (item.product_image[0]){ %>
+                                        <a href="/productDetail?product_id=<%=item._id%>">
+                                            <img class="w-100 curv" src="<%= item.product_image[0]%>" alt="Product Image">
+                                        </a>
+                                        <% } else { %>
+                                            <a href="/productDetail?product_id=<%=item._id%>">
+                                                <img class="w-100 curv"
+                                                    src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg" alt="Product Image"></img>
+                                                </a>
+                                                    <% } %>
+        
                                 </div>
                                 <hr>
                                 <div class="detail-box">
@@ -53,8 +66,9 @@
                                 </div>
 
                                 <div class="text-center my-3">
-                                    <a href="/productDetail?product_id=<%=item._id%>"><button class="btn btn-outline-danger w-50">View Details</button></a>
-                                
+                                    <a href="/productDetail?product_id=<%=item._id%>"><button
+                                            class="btn btn-outline-danger w-50">View Details</button></a>
+
                                 </div>
 
                             </div>

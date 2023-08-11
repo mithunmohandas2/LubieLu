@@ -39,7 +39,7 @@
       <% } %>
 
 
-      <!-- SEARCH DATA BOX -->
+        <!-- SEARCH DATA BOX -->
         <section class="container pb-4 mb-4">
           <hr>
 
@@ -50,8 +50,9 @@
             <a class="" href="/admin/product_management/"><button class="btn btn-danger py-0 mb-3 px-1 ">x</button></a>
             <table class="table table-striped">
               <thead>
-                <tr>
+                <tr class="text-center">
                   <th scope="col">#</th>
+                  <th scope="col">Display Pic</th>
                   <th scope="col">Product Details</th>
                   <th scope="col">Stock</th>
                   <th scope="col">Last Updated</th>
@@ -59,16 +60,19 @@
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="text-center">
                 <% for(i=0;i<locals.searchData.length;i++){ %>
                   <tr>
                     <th scope="row">
                       <%= (i+1) %>
                     </th>
                     <td>
-                     
-                        <%=locals.searchData[i].product_name%>
-                          <%=locals.searchData[i].product_name%>
+                      <div>
+                        <img class="w-100 curv" src="<%=locals.searchData[i].product_image[0] %>" alt="">
+                      </div>
+                    </td>
+                    <td>
+                      <%=locals.searchData[i].product_name%>
                     </td>
                     <td>
                       <%=locals.searchData[i].stock%>
@@ -87,9 +91,9 @@
 
                     <td>
                       <form action="/admin/editProductLoad" method="post">
-                        <input type="text" name="product_id" value="<%=locals.searchData[i]._id%>" hidden required/>
+                        <input type="text" name="product_id" value="<%=locals.searchData[i]._id%>" hidden required />
                         <button type="submit" class="btn btn-warning py-0 px-1">Edit </button>
-                        </form>
+                      </form>
                     </td>
                   </tr>
                   <% } } else {%>
@@ -111,16 +115,17 @@
 
               <table class="table table-striped">
                 <thead>
-                  <tr>
+                  <tr class="text-center">
                     <th scope="col">#</th>
-                    <th scope="col text-center">Product Details</th>
+                    <th scope="col">Display Pic</th>
+                    <th scope="col">Product Details</th>
                     <th scope="col">Stock</th>
                     <th scope="col">Last Updated</th>
                     <th scope="col">Status</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center">
 
                   <% if (products.length> 0){
                     for(i=0;i<products.length;i++){ %>
@@ -128,6 +133,11 @@
                         <th scope="row">
                           <%= (i+1) %>
                         </th>
+                        <td>
+                          <div>
+                            <img class="w-100 curv" src="<%=locals.products[i].product_image[0] %>" alt="">
+                          </div>
+                        </td>
                         <td>
                           <%=locals.products[i].product_name%>
                         </td>
@@ -148,9 +158,9 @@
 
                         <td>
                           <form action="/admin/editProductLoad" method="post">
-                            <input type="text" name="product_id" value="<%=locals.products[i]._id%>" hidden required/>
+                            <input type="text" name="product_id" value="<%=locals.products[i]._id%>" hidden required />
                             <button type="submit" class="btn btn-warning py-0 px-1">Edit </button>
-                            </form>
+                          </form>
 
                           </form>
                         </td>
@@ -166,4 +176,4 @@
 
         <%- include('../layouts/footerlinks') %>
 
-        <%- include('../layouts/footer') %>
+          <%- include('../layouts/footer') %>
