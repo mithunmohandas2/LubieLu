@@ -6,6 +6,7 @@ const config = require('../config/config')
 const auth = require("../middleware/auth");
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
+const nodemailer=require('nodemailer');
 
 user_route.use(session({
     secret: config.sessionSecret,
@@ -28,12 +29,16 @@ user_route.post('/register', userController.insertUser);
 user_route.get('/login', auth.isLogout, userController.loginLoad);
 user_route.post('/login', userController.verifyLogin);
 
-
-user_route.get('/cart', auth.isLogin, userController.loadCart);
-user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
+//otp Login
+user_route.get('/otpLogin', auth.isLogout, userController.loadOtpLogin);
+user_route.post('/otpLogin', auth.isLogout, userController.otpLogin);
 
 user_route.get('/allProducts', userController.loadAllProducts);
 user_route.get('/productDetail', productController.productDetail);
+user_route.post('/searchResult', productController.userSearchResult);
+
+user_route.get('/cart', auth.isLogin, userController.loadCart);
+user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 
 //logout
 user_route.post('/logout', userController.logout);

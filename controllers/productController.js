@@ -232,12 +232,10 @@ const insertProduct = async (req, res) => {
         const imgPaths = Match.product_image
         let temp2=[]
         for(i=0;i<imgPaths.length;i++){
-            // let temp = imgPaths[i].split("public\\");
-            // temp2[i]= temp.slice(2).join("\\")
-            let temp2 = imgPaths[i].replace("public",'');
+            let temp = imgPaths[i].split("\\");
+            temp2[i]= "\\productImages\\"+temp.slice(2).join("\\")
         }
-        console.log(temp2)
-        // const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
+        const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
         
         if (productData) {  // adding to database success?
             res.redirect('/admin/product_management?alert=Product added successfully')
@@ -269,6 +267,32 @@ const productSearch = async (req, res) => {
             });
         } else {
             res.redirect('/admin/product_management?alert=searched product not found')
+        }
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+// ---------------user search ----------------------------
+const userSearchResult = async (req,res)=>{
+    try {
+        // console.log(req.body)
+        const keyword = req.body.search
+        const regex = new RegExp(`${keyword}`, 'i');
+        const searchProduct = await Product.find({ product_name: { $regex: regex } }).sort({updatedAt:-1});   //find products with keyword
+
+        // console.log(searchProduct);
+
+        if (searchProduct) {
+            res.render('searchResult', {
+                title: "Lubie-Lu : Search Result",
+                alert: req.query.alert,
+                username : req.body.session,
+                products: searchProduct,
+            });
+        } else {
+            res.redirect('/searchResult?alert=searched product not found')
         }
 
     } catch (error) {
@@ -413,6 +437,7 @@ module.exports = {
     addProduct,
     insertProduct,
     productSearch,
+    userSearchResult,
     editProductLoad,
     deleteProduct,
     editSingleProduct,

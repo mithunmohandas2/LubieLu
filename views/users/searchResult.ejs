@@ -1,0 +1,84 @@
+<%- include('../layouts/header') %>
+
+    <%- include('../layouts/userHeader') %>
+
+        <div class="container my-5">
+            <div class=" ">
+                <h2>
+                    Search Result
+                </h2>
+            </div>
+
+            <div class="row">
+                <% if (locals.products){ products.forEach((item)=>{ %>
+                    <div class="col-md-6 col-lg-4 my-3">
+                        <div class="h-100 p-4 m-2" style="background-color: #edf1ff; border-radius: 1.5em;">
+
+                            <div class="w-100">
+                                <% if (item.product_image[0]){ %>
+                                <a href="/productDetail?product_id=<%=item._id%>">
+                                    <img class="w-100 curv" src="<%= item.product_image[0]%>" alt="Product Image">
+                                </a>
+                                <% } else { %>
+                                    <a href="/productDetail?product_id=<%=item._id%>">
+                                        <img class="w-100 curv"
+                                            src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg" alt="Product Image"></img>
+                                        </a>
+                                            <% } %>
+
+                            </div>
+                            <hr>
+                            <div class="detail-box">
+                                <div>
+                                    <p class="text-non-wrap">
+                                        <%=item.product_name%>
+                                    </p>
+                                </div>
+                                <h5>
+                                    Offer Price :
+                                    <span>
+                                        ₹ <%=item.sellingPrice%> /-
+                                    </span>
+                                </h5>
+
+                                <h6>
+
+                                    <span class="text-decoration-line-through">
+                                        Price : ₹ <%=item.mrp%> /-
+                                    </span>
+                                </h6>
+                            </div>
+
+                            <div class="text-center my-3">
+                                <a href="/productDetail?product_id=<%=item._id%>"><button
+                                        class="btn btn-outline-danger w-50">View Details</button></a>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <% }) } %>
+            </div>
+
+        </div>
+
+        <% if (!locals.products.length){ %>
+
+            <div class="container text-start">
+                <h6 class="alert alert-danger ">No products found based on search</h6>
+            </div>
+            <div class="text-center my-4">
+                <a href="/allProducts"><button class="btn btn-outline-danger mb-3">
+                        View All Products
+                    </button> </a>
+            </div>
+
+        <% } %>
+
+
+
+        <!-- end shop section -->
+        <%- include('../layouts/footerlinks') %>
+
+
+            <%- include('../layouts/footer') %>

@@ -19,7 +19,8 @@
                         <% for (i=1; i<locals.product[0].product_image.length;i++){ %>
 
                             <div class="col-3 px-3">
-                                <img class="product_img w-100 curv" src=" <%=locals.product[0].product_image[i]%>"></img>
+                                <img class="product_img w-100 curv"
+                                    src=" <%=locals.product[0].product_image[i]%>"></img>
                             </div>
 
                             <% } %>
@@ -64,7 +65,7 @@
                                     </span>
                                 </button> </a>
 
-                            <a href="/cart"><button class="btn btn-danger me-4 py-2  px-4 mb-3">
+                            <a href="/checkout?product_id=<%=locals.product[0]._id%>"><button class="btn btn-danger me-4 py-2  px-4 mb-3">
                                     BUY NOW
                                 </button> </a>
                         </div>
@@ -74,6 +75,7 @@
 
         </section>
 
+        <!-- =================Latest Products======================= -->
 
         <section class="">
             <div class="container">
@@ -83,14 +85,20 @@
                     </h2>
                 </div>
 
-                <div class="row">
+                <div class="row mb-4">
                     <% if (locals.products){ products.forEach((item)=>{ %>
                         <div class="col-md-6 col-lg-3 my-3">
                             <div class="h-100 p-4 m-2" style="background-color: #edf1ff; border-radius: 1.5em;">
 
                                 <div class="w-100">
-                                    <a href="/productDetail?product_id=<%=item._id%>"><img class="w-100 curv"
-                                            src="<%= item.product_image[0]%>" alt="Product Image"></a>
+
+                                    <% if (item.product_image[0]){ %>
+                                        <a href="/productDetail?product_id=<%=item._id%>"><img class="w-100 curv"
+                                                src="<%= item.product_image[0]%>" alt="Product Image"></a>
+                                        <% } else { %>
+                                            <a href="/productDetail?product_id=<%=item._id%>"> <img class="w-100 curv"
+                                                    src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"></img></a>
+                                            <% } %>
 
                                 </div>
                                 <hr>

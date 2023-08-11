@@ -1,36 +1,36 @@
 <%- include('../layouts/header') %>
 
-<style>
-    body {
-        background-image: url("/images/User Login.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-</style>
+    <style>
+        body {
+            background-image: url("/images/User Login.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
 
     <div class="row m-5 p-4">
-        <div class="col-12 col-md-4 p-4"  style="background-color:rgba(251, 223, 220, 0.959); border-radius: 1.5em">
+        <div class="col-12 col-md-4 p-4" style="background-color:rgba(251, 223, 220, 0.959); border-radius: 1.5em">
             <div class="text-center">
-                <h5 class="p-3">LOG IN</h5>
+                <h5 class="p-3">OTP LOGIN</h5>
             </div>
-            
+
             <div class="p-3">
-                <form class="formData" action="/login" method="post">
+                <form class="formData" action="/otpLogin" method="post">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
                         <input type="email" name="email" class="form-control" id="email" placeholder="Enter email ID"
                             required>
-    
+
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="password"
-                            placeholder="Enter password" required>
+                        <label for="otp" class="form-label">OTP</label>
+                        <input type="number" name="otp" class="form-control" id="otp" placeholder="Enter email OTP"
+                            required>
                     </div>
                     <br>
                     <% if(locals.message){%>
-    
+
                         <div class="alert alert-warning text-center">
                             <%=locals.message%>
                         </div>
@@ -38,16 +38,15 @@
                             <div class="text-center mb-3">
                                 <button type="submit" class="btn btn-danger w-50">Login</button>
                             </div>
-                            <p>Don't have an account? <a href="/register">Signup</a></p>
-
-                            <a href="/otpLogin">Login with Email OTP</a></p> 
-                            <!-- TestMode Link -->
-                            <a href="/admin">Admin Login</a></p> 
                 </form>
+                <p>Don't have an account? <a href="/register">Signup</a></p>
+
+                <a href="/login">Login with Password</a></p>
+
             </div>
 
         </div>
-      
+
 
     </div>
     <%- include('../layouts/footer') %>

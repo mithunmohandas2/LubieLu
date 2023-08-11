@@ -95,6 +95,30 @@ const verifyLogin = async (req, res) => {
     }
 }
 
+// ----------OTP LOGIN LOAD----------------------------
+const loadOtpLogin =async (req, res) => {
+    try {
+        res.render('otpLogin', { title: "OTP Login" });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error',{error :error.message})
+    }
+}
+
+// ====================================
+
+const otpLogin =async (req, res) => {
+    try {
+       const email = req.body.email
+        console.log(req.body);
+        res.send(req.body)
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error',{error :error.message})
+    }
+}
+
 // -------------------------------------
 
 const loadHome = async (req, res) => {
@@ -178,6 +202,8 @@ module.exports = {
     insertUser,
     loginLoad,
     verifyLogin,
+    loadOtpLogin,
+    otpLogin,
     loadHome,
     loadAllProducts,
     loadCart,
