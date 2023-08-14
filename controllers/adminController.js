@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-
+const Product = require("../models/productModel");
 // -------------------------------------------------
 // loading the login page
 const loginLoad = async (req, res) => {
@@ -7,7 +7,7 @@ const loginLoad = async (req, res) => {
         res.render('login', { title: "Lubie-Lu : Admin Login" });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -27,7 +27,7 @@ const verifyLogin = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -35,12 +35,22 @@ const verifyLogin = async (req, res) => {
 const loadDashboard = async (req, res) => {
 
     try {
-        const all_users = await User.find()
+        const userTotal = await User.countDocuments()
+        const productTotal = await Product.countDocuments()
+        const userActive = await User.find({ is_blocked: false }).countDocuments()
+        const productActive = await Product.find({ is_blocked: false }).countDocuments()
         // console.log(all_users)
-        res.render('home', { username: req.session.user_name, users: all_users, alert: req.query.alert });
+        res.render('home', {
+            username: req.session.user_name,
+            userTotal: userTotal,
+            productTotal: productTotal,
+            productActive: productActive,
+            userActive: userActive,
+            alert: req.query.alert
+        });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -52,7 +62,7 @@ const userManagement = async (req, res) => {
         res.render('user_management', { title: "Lubie-Lu : User Management", users: all_users, alert: req.query.alert });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -67,7 +77,7 @@ const logout = async (req, res) => {
         res.render('login', { message: 'Please login to continue' });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -77,19 +87,19 @@ const searchUser = async (req, res) => {
         const all_users = await User.find({ admin_status: false })
         const startLetter = req.body.search
         const regex = new RegExp(`^${startLetter}`, 'i');
-        const search_user = await User.find({$and :[{ firstName: { $regex: regex } },{admin_status:0}]});   //find user with starting letter
-        
+        const search_user = await User.find({ $and: [{ firstName: { $regex: regex } }, { admin_status: 0 }] });   //find user with starting letter
+
         // console.log("req.body.search ="+search_user);
 
-        if(search_user){
-            res.render('user_management', { title: "Lubie-Lu : User Management", users: all_users, searchData : search_user});
-        }else{
+        if (search_user) {
+            res.render('user_management', { title: "Lubie-Lu : User Management", users: all_users, searchData: search_user });
+        } else {
             res.redirect('/admin/user_management?alert=user not found')
         }
-        
+
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -97,20 +107,20 @@ const blockUser = async (req, res) => {
 
     try {
         // console.log(req.body);
-        const emailMatch = await User.findOne({$and : [{ email: req.body.email }, {admin_status:0}]})
+        const emailMatch = await User.findOne({ $and: [{ email: req.body.email }, { admin_status: 0 }] })
         if (!emailMatch) {
             console.log("User records not found")
             res.redirect('/admin/user_management?alert=email not found in database')     // popup with email not found
         } else { // if email present in database
-            if(emailMatch.is_blocked===true){
+            if (emailMatch.is_blocked === true) {
                 var userData = await User.updateOne({ email: req.body.email }, {
                     $set: {
-                       
+
                         is_blocked: false
                     }
-                });      
+                });
             } else {
-                var userData = await User.updateOne({ email: req.body.email }, {$set: {is_blocked: true}}); 
+                var userData = await User.updateOne({ email: req.body.email }, { $set: { is_blocked: true } });
             }
             // console.log(userData)
             if (userData) {  // editing database success?
@@ -121,7 +131,7 @@ const blockUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 

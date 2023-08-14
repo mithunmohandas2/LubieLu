@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose")
 
-const productSubCategory = mongoose.Schema({
+const productSubCategory = new mongoose.Schema({
 
     rootCategoryId: {
         type: ObjectId,

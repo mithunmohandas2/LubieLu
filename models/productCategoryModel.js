@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose")
 
-const productCategory = mongoose.Schema({
+const productCategory = new mongoose.Schema({
     category_name: {
         type: String,
         required: true,

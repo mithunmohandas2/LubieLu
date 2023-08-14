@@ -94,3 +94,7 @@ async function loadSubCat(id){
   }
 }
 
+function qtyUpdate() {
+  const fill = document.getElementById("qty").value
+  document.getElementById("qtyCheckout").value = fill
+}

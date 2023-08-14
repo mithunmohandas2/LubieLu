@@ -1,36 +1,90 @@
 <%- include('../layouts/header') %>
 
-<%- include('../layouts/adminHeader') %>
+  <%- include('../layouts/adminHeader') %>
 
     <div class="container-fluid" style="background-color: rgb(208,236,248);">
- 
-        <div class="row text-center">
-            <div class="col-md-6">
-                <img class="w-75 "
-                    src="https://thumbs.dreamstime.com/b/admin-office-binder-wooden-desk-table-colored-pencil-pencils-pen-notebook-paper-79046621.jpg"></img>
 
-                <div class="text-center px-5 pt-5">
-                    
-                    <div class="pb-1 pt-3">
+      <div class="row text-center">
+        <div class="col-md-6">
+          <h3 class="pt-4 ">Welcome <%=locals.username? locals.username :'Admin' %>
+          </h3>
+          <img class="w-75 mt-4 "
+            src="https://thumbs.dreamstime.com/b/admin-office-binder-wooden-desk-table-colored-pencil-pencils-pen-notebook-paper-79046621.jpg"></img>
 
-
-                    </div>
-                </div>
-               
-            </div>
-            <div class="col-md-6 p-4">
-                <h3 class="pt-4 ">Welcome <%=locals.username? locals.username :'Admin' %>
-                </h3>
-              
-                <div class="d-flex p-1 " style="border-radius: 2em; background-color: rgb(138,184,225)">
-                   
-                </div>
-            </div>
         </div>
+
+        <div class="col-md-6">
+
+          <!-- Product Table -->
+          <div class="col-md-6 bg-light py-3 m-1 curv">
+            <table class="table">
+              <thead>
+                <tr class="text-center">
+                  <th scope="col" colspan="2">
+                    <h5>Products</h5>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Total</th>
+                  <td>
+                    <%=locals.productTotal? locals.productTotal :'0'%> nos
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-success">Active</th>
+                  <td class="text-success">
+                    <%=locals.productActive? locals.productActive :'0'%> nos
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-danger">Blocked</th>
+                  <td class="text-danger">
+                    <%=locals.productActive? locals.productTotal-locals.productActive :'0'%> nos
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- User Table -->
+          <div class="col-md-6 py-3 m-1 bg-light curv">
+            <table class="table">
+              <thead>
+                <tr class="text-center">
+                  <th scope="col" colspan="2">
+                    <h5>Users</h5>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Total</th>
+                  <td>
+                    <%=locals.productTotal? locals.userTotal :'0'%> nos
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-success">Active</th>
+                  <td class="text-success">
+                    <%=locals.userActive? locals.userActive :'0'%> nos
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-danger">Blocked</th>
+                  <td class="text-danger">
+                    <%=locals.userActive? locals.userTotal-locals.userActive :'0'%> nos
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 
-    
-   
+
+
     <%- include('../layouts/footerlinks') %>
 
-    <%- include('../layouts/footer') %>
+      <%- include('../layouts/footer') %>

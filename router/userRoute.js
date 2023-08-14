@@ -6,7 +6,8 @@ const config = require('../config/config')
 const auth = require("../middleware/auth");
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
-const nodemailer=require('nodemailer');
+const OTPVerification = require("../controllers/OTPverification")
+
 
 user_route.use(session({
     secret: config.sessionSecret,
@@ -31,13 +32,14 @@ user_route.post('/login', userController.verifyLogin);
 
 //otp Login
 user_route.get('/otpLogin', auth.isLogout, userController.loadOtpLogin);
-user_route.post('/otpLogin', auth.isLogout, userController.otpLogin);
+user_route.post('/otpLogin', auth.isLogout,OTPVerification.requestOTP);
 
 user_route.get('/allProducts', userController.loadAllProducts);
 user_route.get('/productDetail', productController.productDetail);
 user_route.post('/searchResult', productController.userSearchResult);
 
 user_route.get('/cart', auth.isLogin, userController.loadCart);
+user_route.post('/cart', auth.isLogin, userController.addToCart);
 user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 
 //logout

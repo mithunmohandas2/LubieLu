@@ -264,6 +264,7 @@ const productSearch = async (req, res) => {
                 title: "Lubie-Lu : Product Management",
                 alert: req.query.alert,
                 searchData: searchProduct,
+                username: req.session.user_name,
             });
         } else {
             res.redirect('/admin/product_management?alert=searched product not found')
@@ -288,7 +289,7 @@ const userSearchResult = async (req,res)=>{
             res.render('searchResult', {
                 title: "Lubie-Lu : Search Result",
                 alert: req.query.alert,
-                username : req.body.session,
+                username: req.session.user_name,
                 products: searchProduct,
             });
         } else {
@@ -403,7 +404,7 @@ const productDetail = async (req, res) => {
         res.render('productDetail', {
             product: product,
             products: otherProducts,
-            username: req.session.username
+            username: req.session.user_name,
         });
     } catch (error) {
         console.log(error.message)

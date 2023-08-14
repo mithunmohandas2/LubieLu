@@ -2,6 +2,8 @@ const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
+const {sendVerificationEmail} = require("../config/config")
+
 // -----------------------------------------------
 
 //loading the signup page
@@ -10,7 +12,7 @@ const loadRegister = async (req, res) => {
         res.render('signup', { title: "Lubie-Lu_SignUp" });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 // ---------------------------------------------------
@@ -49,7 +51,7 @@ const insertUser = async (req, res) => {
             }
         } catch (error) {
             console.log(error.message)
-            res.render('error',{error :error.message})
+            res.render('error', { error: error.message })
         }
     }
 
@@ -62,7 +64,7 @@ const loginLoad = async (req, res) => {
         res.render('login');
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -78,7 +80,7 @@ const verifyLogin = async (req, res) => {
             } else {
 
                 req.session.user_name = userMatch.firstName   // setting _id data to session
-                req.session._id= userMatch._id;
+                req.session._id = userMatch._id;
                 res.cookie('user_name', userMatch.firstName);
 
                 // console.log(req.session)
@@ -91,31 +93,38 @@ const verifyLogin = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
 // ----------OTP LOGIN LOAD----------------------------
-const loadOtpLogin =async (req, res) => {
+const loadOtpLogin = async (req, res) => {
     try {
         res.render('otpLogin', { title: "OTP Login" });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
-// ====================================
+// ===============1:40 minutes=====================
 
-const otpLogin =async (req, res) => {
+const verifyOtpLogin = async (req, res) => {
     try {
-       const email = req.body.email
-        console.log(req.body);
-        res.send(req.body)
+        const email = req.body.email
+        const Match = await User.findOne({ email})
+        if (!Match) {
+            res.render('otpLogin', { message: 'No user found with provided email' }); // find user
+        } else {
+
+            // const {email, subject, message, duration} = req.body
+            // const createdVerificationOTP =  await sendVerificationEmail(email)
+            // res.status(200).json(createdVerificationOTP)
+        }
 
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -123,14 +132,14 @@ const otpLogin =async (req, res) => {
 
 const loadHome = async (req, res) => {
     try {
-        const products = await Product.find({ is_blocked: 0 }).sort({updatedAt:-1}).limit(6)
+        const products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(6)
         res.render('home', {
             products: products,
             username: req.session.user_name,
         });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -138,15 +147,15 @@ const loadHome = async (req, res) => {
 
 const loadAllProducts = async (req, res) => {
     try {
-        const products = await Product.find({ is_blocked: 0 }).sort({updatedAt:-1})
+        const products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 })
         res.render('allProducts', {
-            title : "Product Inventory",
+            title: "Product Inventory",
             products: products,
             username: req.session.user_name,
         });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -162,8 +171,13 @@ const loadCart = async (req, res) => {
         res.render('cart', { username: req.session.user_name });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
+}
+
+const addToCart = async (req,res)=>{
+    console.log(req.body)
+    res.send(req.session._id)
 }
 
 // ...........Load wishlist...........
@@ -173,7 +187,7 @@ const loadWishlist = async (req, res) => {
         res.render('wishlist', { username: req.session.user_name });
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -184,10 +198,10 @@ const logout = async (req, res) => {
         res.clearCookie("user_name");
         console.log(req.session.user_name + " (user) logged out")  //
         req.session.destroy()
-        res.render('login', { message: 'Please login to continue' });
+        res.redirect("/")
     } catch (error) {
         console.log(error.message)
-        res.render('error',{error :error.message})
+        res.render('error', { error: error.message })
     }
 }
 
@@ -203,11 +217,12 @@ module.exports = {
     loginLoad,
     verifyLogin,
     loadOtpLogin,
-    otpLogin,
+    verifyOtpLogin,
     loadHome,
     loadAllProducts,
     loadCart,
+    addToCart,
     loadWishlist,
     logout,
-   
+
 }
