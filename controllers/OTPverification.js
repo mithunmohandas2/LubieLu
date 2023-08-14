@@ -1,6 +1,7 @@
 const OTP = require("../models/otpModel")
 const nodemailer =require('nodemailer');
 const hash = require("../middleware/hashData")
+const User = require("../models/userModel")
 
 const auth_email =process.env.auth_email
 const auth_password = process.env.auth_pass
@@ -28,14 +29,16 @@ const requestOTP = async (req,res)=>{
     try {
         const {email} =req.body;
         const Match = await User.findOne({email})
-        if (!Match) {
-           return res.render('otpLogin', { message: 'No user found with provided email' }); // find exisitng user or not
+        if (!Match) { // find exisitng user or not
+           return res.render('otpLogin', { 
+            message: 'No user found with provided email',
+         }); 
         } 
         const createdOTP = await sendOTP({
             email, 
         })
         res.render('otpLogin',{
-            message : "OTP send to Email"
+            message : "OTP send to Email",
         })
         // res.status(200).json(createdOTP);
     } catch (error) {

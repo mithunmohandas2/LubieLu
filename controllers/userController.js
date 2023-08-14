@@ -2,8 +2,7 @@ const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
-const {sendVerificationEmail} = require("../config/config")
-
+const Cart = require("../models/cartModel")
 // -----------------------------------------------
 
 //loading the signup page
@@ -107,28 +106,7 @@ const loadOtpLogin = async (req, res) => {
     }
 }
 
-// ===============1:40 minutes=====================
-
-const verifyOtpLogin = async (req, res) => {
-    try {
-        const email = req.body.email
-        const Match = await User.findOne({ email})
-        if (!Match) {
-            res.render('otpLogin', { message: 'No user found with provided email' }); // find user
-        } else {
-
-            // const {email, subject, message, duration} = req.body
-            // const createdVerificationOTP =  await sendVerificationEmail(email)
-            // res.status(200).json(createdVerificationOTP)
-        }
-
-    } catch (error) {
-        console.log(error.message)
-        res.render('error', { error: error.message })
-    }
-}
-
-// -------------------------------------
+// -------------------------------
 
 const loadHome = async (req, res) => {
     try {
@@ -168,16 +146,78 @@ const loadAllProducts = async (req, res) => {
 
 const loadCart = async (req, res) => {
     try {
-        res.render('cart', { username: req.session.user_name });
+        let productData = []
+        const cartData = await Cart.findOne({ userID: req.session._id })
+        if (cartData) {
+            for (i = 0; i < cartData.items.length; i++) {
+                let data = await Product.findOne({ _id: cartData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1 })
+                productData.push(data)
+            }
+        }
+        // res.send(productData)
+        // console.log(cartData);
+
+        res.render('cart', {
+            username: req.session.user_name,
+            cart: cartData,
+            products: productData,
+        });
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
     }
 }
 
-const addToCart = async (req,res)=>{
-    console.log(req.body)
-    res.send(req.session._id)
+const addToCart = async (req, res) => {
+    try {
+
+        const cartEntry = await Cart.updateOne({ userID: req.session._id }, { $addToSet: { items: { productID: req.body.product_id, qty: req.body.qty } } }, { upsert: true })
+
+        if (cartEntry) res.redirect("/cart")
+        else throw Error
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+const removeCart = async (req, res) => {
+    try {
+        const cartRemove = await Cart.updateOne({ userID: req.session._id }, { $pull: { items: { productID: req.body.product_id } } })
+        if (cartRemove) res.redirect("/cart")
+        else throw Error
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// ===============Load checkout============
+
+const loadCheckout = async (req, res) => {
+    try {
+        let productData = []
+        const cartData = await Cart.findOne({ userID: req.session._id })
+        if (cartData) {
+            for (i = 0; i < cartData.items.length; i++) {
+                let data = await Product.findOne({ _id: cartData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1 })
+                productData.push(data)
+            }
+        }
+        // res.send(productData)
+        // console.log(cartData);
+
+        res.render('checkout', {
+            username: req.session.user_name,
+            cart: cartData,
+            products: productData,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
 }
 
 // ...........Load wishlist...........
@@ -217,11 +257,12 @@ module.exports = {
     loginLoad,
     verifyLogin,
     loadOtpLogin,
-    verifyOtpLogin,
     loadHome,
     loadAllProducts,
     loadCart,
     addToCart,
+    removeCart,
+    loadCheckout,
     loadWishlist,
     logout,
 

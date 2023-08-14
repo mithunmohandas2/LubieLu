@@ -96,5 +96,11 @@ async function loadSubCat(id){
 
 function qtyUpdate() {
   const fill = document.getElementById("qty").value
-  document.getElementById("qtyCheckout").value = fill
+  document.getElementById("qtyCart").value = fill
+  document.getElementById("qtyWishlist").value = fill
+  // document.getElementById("qtyCheckout").value = fill
+}
+
+function sendOTPbutton(){
+ document.getElementById("sendOTPbutton").innerHTML = "Re-send OTP"
 }

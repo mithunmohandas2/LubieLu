@@ -14,48 +14,44 @@
             <div class="text-center">
                 <h5 class="p-3">OTP LOGIN</h5>
             </div>
-            
+
             <div class="p-3">
                 <form action="/otpLogin" method="post">
-                    
+
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
-                        <input type="email" name="email" class="form-control" id="emailForOTP" placeholder="Enter email ID"
-                        required>
-                        
-                        <button class="btn p-1 mt-2 btn-light" type="submit">send OTP</button>
-                    </form>
+                        <input type="email" name="email" class="form-control" id="emailForOTP"
+                            placeholder="Enter email ID"  required>
 
-                </div>
-                <form class="formData" action="/otpLogin" method="post"></form>
-
-                <label for="otp" class="form-label">OTP</label>
-                <input type="email" name="email" class="form-control" id="emailFill" placeholder="Enter email ID"
-                 required>
-
-                <div class="mb-3">
-                    <input type="number" name="otp" class="form-control" id="otp" placeholder="Enter email OTP"
-                        required>
-                </div>
-                <br>
-                <% if(locals.message){%>
-
-                    <div class="alert alert-warning text-center">
-                        <%=locals.message%>
-                    </div>
-                    <% } %>
-                        <div class="text-center mb-3">
-                            <button type="submit" class="btn btn-danger w-50">Login</button>
-                        </div>
-                        </form>
-                        <p>Don't have an account? <a href="/register">Signup</a></p>
-
-                        <a href="/login">Login with Password</a></p>
+                        <button class="btn p-1 mt-2 btn-light" id="sendOTPbutton" onclick=sendOTPbutton() type="submit">send OTP</button>
+                </form>
 
             </div>
+            <form class="formData" action="/otpLoginVerify" method="post"></form>
+
+            <label for="otp" class="form-label">OTP</label>
+            <input type="email" name="email" class="form-control" id="emailFill" placeholder="Enter email ID" required>
+
+            <div class="mb-3">
+                <input type="number" name="otp" class="form-control" id="otp" placeholder="Enter email OTP" required>
+            </div>
+            <br>
+            <% if(locals.message){%>
+
+                <div class="alert alert-warning text-center">
+                    <%=locals.message%>
+                </div>
+                <% } %>
+                    <div class="text-center mb-3">
+                        <button type="submit" class="btn btn-danger w-50">Login</button>
+                    </div>
+                    </form>
+                    <p>Don't have an account? <a href="/register">Signup</a></p>
+
+                    <a href="/login">Login with Password</a></p>
 
         </div>
 
-
+    </div>
     </div>
     <%- include('../layouts/footer') %>

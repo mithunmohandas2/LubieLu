@@ -1,0 +1,121 @@
+<%- include('../layouts/header') %>
+
+  <%- include('../layouts/userHeader') %>
+
+    <h3 class="text-center my-4">
+      Checkout
+    </h3>
+    <section class="container">
+    <hr>
+    
+    <div class="row ">
+        <!-- Products Preview -->
+        <div class="col-md-9">
+        
+    <% if (locals.cart){ %>
+
+        <section class="container pb-4 my-4">
+          <table class="table table-striped">
+            <thead>
+              <tr class="text-center">
+                <th scope="col">#</th>
+                <th scope="col" colspan="2">Product</th>
+                <th scope="col">Rate</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Amount</th>
+                <th scope="col"> </th>
+                <!-- <th scope="col">Actions</th> -->
+              </tr>
+            </thead>
+            <tbody class="text-center">
+  
+              <% if (locals.products.length> 0){
+                for(i=0;i<products.length;i++){ %>
+                  <tr>
+                    <th scope="row">
+                      <%= (i+1) %>
+                    </th>
+                    <td>
+                      <div>
+                        <a href="/productDetail?product_id=<%=locals.products[i]._id%>">
+                        <img class="w-100 curv" src="<%=locals.products[i].product_image[0] %>" alt="product image">
+                        </a>
+                      </div>
+                    </td>
+                    <td>
+                      <%=locals.products[i].product_name%>
+                    </td>
+                    <td>
+                      <%=locals.products[i].sellingPrice%>
+                    </td>
+                    <td>
+                      <%=locals.cart.items[i].qty%>
+                    </td>
+                    <td>
+                      <%=locals.cart.items[i].qty * locals.products[i].sellingPrice %>
+                    </td>
+                    <td>
+                        <h1 class="text-light">|</h1>
+                      <!-- <form action="/removeCart" method="post">
+                        <input type="text" name="product_id" value="<%=locals.products[i]._id%>" hidden required />
+                        <button type="submit" class="btn btn-warning py-0 px-1">Remove</button>
+                      </form> -->
+                    </td>
+                  </tr>
+                  <% } } %>
+                    <tr>
+                      <th scope="col" colspan="5" class="text-end">
+                        <h5>Sub-Total</h5>
+                      </th>
+                      <th scope="col" colspan="2" class="text-start">
+                        <h5>
+                          <% let sum=0; for (let i=0; i < locals.cart.items.length; i++) { %>
+                            <% sum=sum + locals.cart.items[i].qty * locals.products[i].sellingPrice %>
+                              <% } %>
+                              ₹ <%= sum %> /-
+                        </h5>
+                      </th>
+                    </tr>
+  
+            </tbody>
+          </table>
+        </section>
+  
+          <% } else { %>
+            <div class="container text-start">
+              <h6 class="alert alert-danger ">No products added to cart</h6>
+            </div>
+            <div class="text-center my-4">
+              <a href="/allProducts"><button class="btn btn-outline-danger mb-3">
+                  Browse Products
+                </button> </a>
+            </div>
+            <% } %>
+  
+
+        </div>
+
+        <!-- Summary Section -->
+        <div class="col-md-3 py-3 text-center bg-info curv">
+
+          <h5>Summary</h5>
+            <div class="container text-end mb-4">
+                <hr>
+                <a href="/checkout">
+                <button class="btn btn-danger me-4 py-2  px-4 mb-3">
+                  PROCEED TO BUY
+              </button>
+              </a>
+              </div>
+        </div>
+
+
+
+    </div>
+
+
+</section>c
+
+
+          <%- include('../layouts/footerlinks') %>
+            <%- include('../layouts/footer') %>
