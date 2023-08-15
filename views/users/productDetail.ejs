@@ -51,46 +51,56 @@
                             </span>
                         </h5>
                         <hr>
-
+                        
+                        <% if (locals.product[0].stock <= 10) { %>
+                            <h6 class="text-danger">Hurry !!! Only <%= locals.product[0].stock %> nos left in Stock </h6>
+                        <% } %>
+                        
                         <div>
                             <div class="mb-3">
                                 <label for="qty" class="form-label">Quantity</label>
-                                <input type="number" name="qty" class="form-control w-25" id="qty" value=1 min="0"
-                                    onchange="qtyUpdate()" required>
+                                <input type="number" name="qty" class="form-control w-25" id="qty" value=1 min="1"
+                                    max="<%=locals.product[0].stock %>" onchange="qtyUpdate()" required>
                             </div>
                         </div>
 
 
-                        <div class="text-center my-4 d-flex ">
+                        
 
-                            <form action="/wishlist" method="post">
-                            <input type="text" name="product_id" value="<%=locals.product[0]._id%>" hidden/>
-                            <input type="number" name="qty" id="qtyWishlist" value=1 hidden required>
-                            <button class="btn btn-outline-danger me-4  px-4 mb-3">
-                                <span class="material-symbols-outlined">
-                                    favorite
-                                </span> ADD TO WISHLIST
-                            </button>
-                        </form>
 
-                            <form action="/cart" method="post">
-                            <input type="text" name="product_id" value="<%=locals.product[0]._id%>" hidden />
-                            <input type="number" name="qty" id="qtyCart" value=1 required hidden>
-                            <button type="submit" class="btn btn-outline-danger me-4  px-4 mb-3">
-                                <span class="material-symbols-outlined">
-                                    add_shopping_cart
-                                </span> ADD TO CART
-                            </button>
-                        </form>
+                                <div class="text-center my-4 d-flex ">
 
-                            <!-- <form action="/checkout" method="post">
+                                    <form action="/wishlist" method="post">
+                                        <input type="text" name="product_id" value="<%=locals.product[0]._id%>"
+                                            hidden />
+                                        <input type="number" name="qty" id="qtyWishlist" value=1 hidden required>
+                                        <button class="btn btn-outline-danger me-4  px-4 mb-3">
+                                            <span class="material-symbols-outlined">
+                                                favorite
+                                            </span> ADD TO WISHLIST
+                                        </button>
+                                    </form>
+
+                                    <form action="/cart" method="post">
+                                        <input type="text" name="product_id" value="<%=locals.product[0]._id%>"
+                                            hidden />
+                                        <input type="number" name="qty" id="qtyCart" value=1 min="1"
+                                            max="<%=locals.product[0].stock %>" required hidden>
+                                        <button type="submit" class="btn btn-outline-danger me-4  px-4 mb-3">
+                                            <span class="material-symbols-outlined">
+                                                add_shopping_cart
+                                            </span> ADD TO CART
+                                        </button>
+                                    </form>
+
+                                    <!-- <form action="/checkout" method="post">
                                 <input type="text" name="product_id" value="<%=locals.product[0]._id%>" hidden />
                                 <input type="number" name="qty" id="qtyCheckout" value=1 hidden required>
                                 <button class="btn btn-danger me-4 py-2  px-4 mb-3">
                                     BUY NOW
                                 </button>
                             </form> -->
-                        </div>
+                                </div>
                 </div>
 
             </div>

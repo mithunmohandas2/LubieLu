@@ -1,24 +1,24 @@
 <%- include('../layouts/header') %>
 
-<style>
-    body {
-        background-image: url("/images/User Login.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-</style>
+    <style>
+        body {
+            background-image: url("/images/User Login.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
 
     <!-- <div class="col-12 col-md-6 ">
         <img class="ps-4 m-3" style="width: 40%;" src="images/Logo_full.png"></img>
     </div> -->
 
     <div class="row mx-5 p-4">
-        <div class="col-12 col-md-4 p-4"  style="background-color:rgba(251, 223, 220, 0.959); border-radius: 1.5em">
+        <div class="col-12 col-md-4 p-4" style="background-color:rgba(251, 223, 220, 0.959); border-radius: 1.5em">
             <div class="text-center">
                 <h5 class="pt-3">SIGN UP</h5>
             </div>
-            
+
             <div class="p-3">
                 <form class="formData" action="/register" method="post">
                     <div class="col-12 px-2">
@@ -27,35 +27,41 @@
                             <label for="text" class="form-label">First Name</label>
                             <input type="text" placeholder="Enter your first name" pattern="[A-Za-z ]*"
                                 oninvalid="setCustomValidity('Please enter alphabetic characters only')"
-                                oninput="setCustomValidity('')" name="firstName" class="form-control" id="firstName" required>
+                                oninput="setCustomValidity('')" name="firstName" class="form-control" id="firstName"
+                                required>
                         </div>
 
                         <div class="mb-3">
                             <label for="text" class="form-label">Last Name</label>
                             <input type="text" placeholder="Enter your last name" pattern="[A-Za-z ]*"
                                 oninvalid="setCustomValidity('Please enter alphabetic characters only')"
-                                oninput="setCustomValidity('')" name="lastName" class="form-control" id="lastName" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter email ID"
+                                oninput="setCustomValidity('')" name="lastName" class="form-control" id="lastName"
                                 required>
                         </div>
 
                         <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" name="email" class="form-control" id="email"
+                                placeholder="Enter email ID" required>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="number" class="form-label">Phone number</label>
-                            <input type="number" name="phone" class="form-control" id="phone" min=1000000000 placeholder="Enter contact number" required>
+                            <input type="number" name="phone" class="form-control" id="phone" min=1000000000
+                                oninvalid="setCustomValidity('Please enter a valid mobile number')"
+                                placeholder="Enter contact number" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="Enter password" id="password" required>
+                            <input type="password" name="password" class="form-control" placeholder="Enter password"
+                                id="password" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">ConfirmPassword</label>
-                            <input type="password" name="password2" placeholder="Re-enter password" class="form-control" id="password2" required>
+                            <input type="password" name="password2" placeholder="Re-enter password" class="form-control"
+                                id="password2" required>
                         </div>
 
                         <% if(locals.message){%>
@@ -72,13 +78,10 @@
             </div>
 
         </div>
-      
+
 
     </div>
 
 
 
     <%- include('../layouts/footer') %>
-
-
-

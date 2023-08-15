@@ -6,7 +6,7 @@
       <%=username%>'s Shopping Cart
     </h3>
 
-    <% if (locals.cart){ %>
+    <% if (locals.products.length){ %>
 
       <section class="container pb-4 my-4">
         <hr>
@@ -32,11 +32,11 @@
                   <td>
                     <div>
                       <a href="/productDetail?product_id=<%=locals.products[i]._id%>">
-                      <img class="w-100 curv" src="<%=locals.products[i].product_image[0] %>" alt="product image">
+                      <img class="w-50 curv" src="<%=locals.products[i].product_image[0] %>" alt="product image">
                       </a>
                     </div>
                   </td>
-                  <td>
+                  <td class="text-start">
                     <%=locals.products[i].product_name%>
                   </td>
                   <td>
@@ -58,7 +58,7 @@
                 <% } } %>
                   <tr>
                     <th scope="col" colspan="5" class="text-end">
-                      <h4>Total</h4>
+                      <h4>Cart value : </h4>
                     </th>
                     <th scope="col" colspan="2" class="text-start">
                       <h4>

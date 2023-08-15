@@ -3,6 +3,8 @@ const Product = require("../models/productModel");
 const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
 const Cart = require("../models/cartModel")
+const Address = require("../models/userAddress")
+const Order = require("../models/ordersModel")
 // -----------------------------------------------
 
 //loading the signup page
@@ -220,6 +222,82 @@ const loadCheckout = async (req, res) => {
     }
 }
 
+// ===============checkout=====incomplete=======
+
+const checkout = async (req, res) => {
+    try {
+        if (req.body.saveAddress) {
+            const newAddress = new Address({
+                userID: req.session._id,
+                addressName: req.body.addressName,
+                phone: req.body.phone,
+                address1: req.body.address1,
+                address2: req.body.address2,
+                district: req.body.district,
+                state: req.body.state,
+                country: req.body.country,
+                pincode: req.body.pincode,
+            })
+            const addressData = await newAddress.save();
+            if(addressData)console.log("New Address added");
+            else throw Error //
+        }
+
+        const cartData = await Cart.findOne({ userID: req.session._id })
+
+        const newOrder = new Order ({
+            userID: req.session._id,
+           items: cartData.items,
+           amount: req.body.amount,
+        })
+        //save new order placed
+        const orderData = await newOrder.save()
+        //decrease qty from stock
+        if(orderData) {
+            for (i = 0; i < orderData.items.length; i++) {
+                let data = await Product.updateOne({ _id: orderData.items[i].productID },{$inc :{stock: -orderData.items[i].qty} })
+            }
+        }
+        else throw Error
+       
+        //Reset cart
+       const cartReset = await Cart.deleteOne({ userID: req.session._id })
+       if(cartReset) console.log("Cart reset");
+       else throw Error
+        
+        res.render("orderSuccess",{
+            username: req.session.user_name,
+        })
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+// ===========order History==============
+
+const orderHistory = async (req, res) => {
+    try {
+        const OrderData = await Order.find({ userID: req.session._id })
+        // let productData = []
+        // if (OrderData) {
+        //     for (i = 0; i < OrderData.items.length; i++) {
+        //         let data = await Product.findOne({ _id: OrderData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1 })
+        //         productData.push(data)
+        //     }
+        // }
+        res.render('orderHistory', {
+            username: req.session.user_name,
+            orders: OrderData,
+        });
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+
 // ...........Load wishlist...........
 
 const loadWishlist = async (req, res) => {
@@ -263,6 +341,8 @@ module.exports = {
     addToCart,
     removeCart,
     loadCheckout,
+    checkout,
+    orderHistory,
     loadWishlist,
     logout,
 

@@ -42,6 +42,9 @@ user_route.get('/cart', auth.isLogin, userController.loadCart);
 user_route.post('/cart', auth.isLogin, userController.addToCart);
 user_route.post('/removeCart', auth.isLogin, userController.removeCart);
 user_route.get('/checkout', auth.isLogin, userController.loadCheckout);
+user_route.post('/checkout', auth.isLogin, userController.checkout);
+
+user_route.get('/orderHistory', auth.isLogin, userController.orderHistory);
 
 
 

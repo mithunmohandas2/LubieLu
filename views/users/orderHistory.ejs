@@ -1,0 +1,64 @@
+<%- include('../layouts/header') %>
+
+  <%- include('../layouts/userHeader') %>
+
+    <h3 class="text-center my-4">
+      <%=username%>'s Order History
+    </h3>
+
+    <% if (locals.orders.length){ %>
+
+      <section class="container pb-4 my-4">
+        <hr>
+        <table class="table table-striped">
+          <thead>
+            <tr class="text-center">
+              <th scope="col">Order Date</th>
+              <th scope="col">Order ID</th>
+              <th scope="col">No.of items</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Options</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+
+            <% if (locals.orders.length> 0){
+              for(i=0;i<orders.length;i++){ %>
+                <tr>
+                  <td scope="row">
+                    <%=locals.orders[i].createdAt.getDate()%> / <%=locals.orders[i].createdAt.getMonth()%> / <%=locals.orders[i].createdAt.getFullYear()%>
+                  </td>
+                  <td>
+                    <%=locals.orders[i]._id%>
+                  </td>
+                  <td>
+                    <%=locals.orders[i].items.length%>
+                  </td>
+                  
+                  <td>
+                    <%=locals.orders[i].amount%>
+                  </td>
+                  <td>
+                   <button class="btn btn-outline-danger">Return</button>
+                  </td>
+                  
+                </tr>
+                <% } } %>
+          </tbody>
+        </table>
+      </section>
+
+      <%- include('../layouts/footerlinks') %>
+
+        <% } else { %>
+          <div class="container text-start">
+            <h6 class="alert alert-danger ">No order history available</h6>
+          </div>
+          <div class="text-center my-4">
+            <a href="/allProducts"><button class="btn btn-outline-danger mb-3">
+                Browse Products
+              </button> </a>
+          </div>
+          <% } %>
+
+            <%- include('../layouts/footer') %>
