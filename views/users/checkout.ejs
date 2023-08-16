@@ -151,7 +151,17 @@
 
                                     <div class="col-md-6 px-4 bg-info">
                                         <% if(locals.address){ %>
-                                            <h4 class="text-center">Saved addresses</h4>
+                                            <h4 class="text-center my-4">Saved addresses</h4>
+                                          <button type="button" class="btn btn-light w-100">
+                                            <%= locals.address.addressName%>
+                                            <%= locals.address.phone%>
+                                            <%= locals.address.address1%>
+                                            <%= locals.address.address2%>
+                                            <%= locals.address.district%>
+                                            <%= locals.address.state%>
+                                            <%= locals.address.country%>
+                                            <%= locals.address.pincode%>
+                                        </button>
 
                                        <% } %>
 

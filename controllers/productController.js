@@ -228,15 +228,15 @@ const insertProduct = async (req, res) => {
         // console.log(productData); 
 
         // =========Change Product Image path ==========
-        const Match = await Product.findOne({ _id: productData._id }) 
+        const Match = await Product.findOne({ _id: productData._id })
         const imgPaths = Match.product_image
-        let temp2=[]
-        for(i=0;i<imgPaths.length;i++){
+        let temp2 = []
+        for (i = 0; i < imgPaths.length; i++) {
             let temp = imgPaths[i].split("\\");
-            temp2[i]= "\\productImages\\"+temp.slice(2).join("\\")
+            temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
         }
         const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
-        
+
         if (productData) {  // adding to database success?
             res.redirect('/admin/product_management?alert=Product added successfully')
         } else {
@@ -255,7 +255,7 @@ const productSearch = async (req, res) => {
     try {
         const keyword = req.body.search
         const regex = new RegExp(`${keyword}`, 'i');
-        const searchProduct = await Product.find({ product_name: { $regex: regex } }).sort({updatedAt:-1});   //find products with keyword
+        const searchProduct = await Product.find({ product_name: { $regex: regex } }).sort({ updatedAt: -1 });   //find products with keyword
 
         // console.log("req.body.search ="+searchProduct);
 
@@ -276,12 +276,12 @@ const productSearch = async (req, res) => {
     }
 }
 // ---------------user search ----------------------------
-const userSearchResult = async (req,res)=>{
+const userSearchResult = async (req, res) => {
     try {
         // console.log(req.body)
         const keyword = req.body.search
         const regex = new RegExp(`${keyword}`, 'i');
-        const searchProduct = await Product.find({ product_name: { $regex: regex } }).sort({updatedAt:-1});   //find products with keyword
+        const searchProduct = await Product.find({ product_name: { $regex: regex } }).sort({ updatedAt: -1 });   //find products with keyword
 
         // console.log(searchProduct);
 
@@ -356,39 +356,50 @@ const deleteProduct = async (req, res) => {
 // ------EDIT PRODUCT------------------pending--------------
 
 const editSingleProduct = async (req, res) => {
-    console.log(req.body);
-    console.log(req.files);
     try {
         // const productImages = req.files;
         // const imagePaths = productImages.map(image => image.path);
-        // const imagePath = imagePaths.replace('public\\', '');
-        // const SP = Math.round(req.body.sellingPrice)
-        // console.log(imagePaths);
-        // console.log(imagePath);
-        // const product = ({
-        //     product_name: req.body.product_name,
-        //     description: req.body.description,
-        //     product_image:  imagePath, 
-        //     category_id: req.body.category_id,
-        //     subCategory_id: req.body.subCategory_id,
-        //     brand: req.body.brand,
-        //     purchasePrice: req.body.purchasePrice ,
-        //     stock:req.body.stock,
-        //     basePrice:req.body.basePrice ,
-        //     gst: req.body.gst,
-        //     discount: req.body.discount,
-        //     mrp:req.body.mrp,
-        //     sellingPrice:SP,
-        // })
-        // console.log("product ="+product); 
-        // const productData = await product.updateOne({});
-        // console.log(productData); 
 
-        // if (productData) {  // adding to database success?
-        //     res.redirect('/admin/product_management?alert=Product added successfully')
-        // } else {
-        //     res.redirect('/admin/product_management?alert=Failed to add product')
-        // }
+        const SP = Math.round(req.body.sellingPrice)
+        const product = {
+            product_name: req.body.product_name,
+            description: req.body.description,
+            category_id: req.body.category_id,
+            subCategory_id: req.body.subCategory_id,
+            brand: req.body.brand,
+            purchasePrice: req.body.purchasePrice,
+            stock: req.body.stock,
+            basePrice: req.body.basePrice,
+            gst: req.body.gst,
+            discount: req.body.discount,
+            mrp: req.body.mrp,
+            sellingPrice: SP,
+        }
+        // editing all field 
+        const productData = await Product.updateOne({ _id: req.body.product_id }, { $set: product });
+        
+        
+        //adding image to array
+    //     if(req.files){
+    //    // =========Change Product Image path ==========
+    //    const Match = await Product.findOne({ _id: productData._id })
+
+    //    const imgPaths = Match.product_image
+    //    let temp2 = []
+    //    for (i = 0; i < imgPaths.length; i++) {
+    //        let temp = imgPaths[i].split("\\");
+    //        temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
+    //    }
+    //    const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
+    //     }
+
+
+        // console.log(productData);
+        if (productData) {  // editing to database success?
+            res.redirect('/admin/product_management?alert=Product edited successfully')
+        } else {
+            res.redirect('/admin/product_management?alert=Failed to edit product')
+        }
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -399,7 +410,7 @@ const productDetail = async (req, res) => {
     try {
         // console.log(req.query);
         const product = await Product.find({ $and: [{ _id: req.query.product_id }, { is_blocked: false }] })
-        const otherProducts = await Product.find({ is_blocked: 0 }).sort({updatedAt:-1}).limit(4)
+        const otherProducts = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(4)
 
         res.render('productDetail', {
             product: product,
