@@ -17,7 +17,7 @@
               <th scope="col">Order ID</th>
               <th scope="col">No.of items</th>
               <th scope="col">Amount</th>
-              <th scope="col">Options</th>
+              <th scope="col">Status</th>
             </tr>
           </thead>
           <tbody class="text-center">
@@ -39,7 +39,7 @@
                     <%=locals.orders[i].amount%>
                   </td>
                   <td>
-                   <button class="btn btn-outline-danger">Return</button>
+                    <%=locals.orders[i].status%>
                   </td>
                   
                 </tr>

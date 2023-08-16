@@ -23,6 +23,10 @@ const ordersSchema = new mongoose.Schema({
     amount: {
         type: Number,
         required: true,
+    },
+    status:{
+        type : String,
+        default : "Pending"
     }
 },  { timestamps: true })
 

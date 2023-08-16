@@ -200,8 +200,8 @@ const removeCart = async (req, res) => {
 
 const loadCheckout = async (req, res) => {
     try {
-        let productData = []
         const cartData = await Cart.findOne({ userID: req.session._id })
+        let productData = []
         if (cartData) {
             for (i = 0; i < cartData.items.length; i++) {
                 let data = await Product.findOne({ _id: cartData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1 })
@@ -210,11 +210,13 @@ const loadCheckout = async (req, res) => {
         }
         // res.send(productData)
         // console.log(cartData);
+        const userAddress = await Address.findOne({ userID: req.session._id })
 
         res.render('checkout', {
             username: req.session.user_name,
             cart: cartData,
             products: productData,
+            address: userAddress,
         });
     } catch (error) {
         console.log(error.message)
@@ -239,33 +241,33 @@ const checkout = async (req, res) => {
                 pincode: req.body.pincode,
             })
             const addressData = await newAddress.save();
-            if(addressData)console.log("New Address added");
+            if (addressData) console.log("New Address added");
             else throw Error //
         }
 
         const cartData = await Cart.findOne({ userID: req.session._id })
 
-        const newOrder = new Order ({
+        const newOrder = new Order({
             userID: req.session._id,
-           items: cartData.items,
-           amount: req.body.amount,
+            items: cartData.items,
+            amount: req.body.amount,
         })
         //save new order placed
         const orderData = await newOrder.save()
         //decrease qty from stock
-        if(orderData) {
+        if (orderData) {
             for (i = 0; i < orderData.items.length; i++) {
-                let data = await Product.updateOne({ _id: orderData.items[i].productID },{$inc :{stock: -orderData.items[i].qty} })
+                let data = await Product.updateOne({ _id: orderData.items[i].productID }, { $inc: { stock: -orderData.items[i].qty } })
             }
         }
         else throw Error
-       
+
         //Reset cart
-       const cartReset = await Cart.deleteOne({ userID: req.session._id })
-       if(cartReset) console.log("Cart reset");
-       else throw Error
-        
-        res.render("orderSuccess",{
+        const cartReset = await Cart.deleteOne({ userID: req.session._id })
+        if (cartReset) console.log("Cart reset");
+        else throw Error
+
+        res.render("orderSuccess", {
             username: req.session.user_name,
         })
 
