@@ -33,6 +33,8 @@ user_route.post('/login', userController.verifyLogin);
 //otp Login
 user_route.get('/otpLogin', auth.isLogout, userController.loadOtpLogin);
 user_route.post('/otpLogin', auth.isLogout,OTPVerification.requestOTP);
+user_route.post('/otpLoginVerify', auth.isLogout,OTPVerification.otpLoginVerify);
+
 
 user_route.get('/allProducts', userController.loadAllProducts);
 user_route.get('/productDetail', productController.productDetail);

@@ -21,19 +21,27 @@
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
                         <input type="email" name="email" class="form-control" id="emailForOTP"
-                            placeholder="Enter email ID"  required>
+                            onchange="emailOTPUpdate()" placeholder="Enter email ID" required>
 
-                        <button class="btn p-1 mt-2 btn-light" id="sendOTPbutton" onclick=sendOTPbutton() type="submit">send OTP</button>
+                        <% if(!locals.message){%>
+                            <button class="btn p-1 mt-2 btn-light" id="sendOTPbutton" type="submit">send OTP</button>
+                            <% } else { %>
+                                <button class="btn p-1 mt-2 btn-light" id="sendOTPbutton" type="submit">Re-send
+                                    OTP</button>
+                                <% } %>
+
+
                 </form>
 
             </div>
-            <form class="formData" action="/otpLoginVerify" method="post"></form>
+            <form class="formData" action="/otpLoginVerify" method="post">
 
             <label for="otp" class="form-label">OTP</label>
-            <input type="email" name="email" class="form-control" id="emailFill" placeholder="Enter email ID" required>
+            <input type="email" name="email" class="form-control" id="emailOTPFill" placeholder="Enter email ID" hidden
+                required>
 
             <div class="mb-3">
-                <input type="number" name="otp" class="form-control" id="otp" placeholder="Enter email OTP" required>
+                <input type="string" name="otp" class="form-control" id="otp" placeholder="Enter email OTP" required>
             </div>
             <br>
             <% if(locals.message){%>

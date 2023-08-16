@@ -98,9 +98,10 @@ function qtyUpdate() {
   const fill = document.getElementById("qty").value
   document.getElementById("qtyCart").value = fill
   document.getElementById("qtyWishlist").value = fill
-  // document.getElementById("qtyCheckout").value = fill
+  // document.getElementById("qtyCheckout").value = fill 
 }
 
-function sendOTPbutton(){
- document.getElementById("sendOTPbutton").innerHTML = "Re-send OTP"
+function emailOTPUpdate(){
+ const fill = document.getElementById("emailForOTP").value
+ document.getElementById("emailOTPFill").value = fill
 }
