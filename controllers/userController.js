@@ -280,7 +280,7 @@ const checkout = async (req, res) => {
 
 const orderHistory = async (req, res) => {
     try {
-        const OrderData = await Order.find({ userID: req.session._id })
+        const OrderData = await Order.find({ userID: req.session._id }).sort({createdAt:-1})
         // let productData = []
         // if (OrderData) {
         //     for (i = 0; i < OrderData.items.length; i++) {
