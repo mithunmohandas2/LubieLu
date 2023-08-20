@@ -47,7 +47,7 @@
 
                         <div class="mb-3">
                             <label for="number" class="form-label">Phone number</label>
-                            <input type="number" name="phone" class="form-control" id="phone" min=1000000000
+                            <input type="text" name="phone" class="form-control" id="phone" pattern="[0-9]*"
                                 oninvalid="setCustomValidity('Please enter a valid mobile number')"
                                 placeholder="Enter contact number" required>
                         </div>

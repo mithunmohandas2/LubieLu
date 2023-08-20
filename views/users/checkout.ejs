@@ -149,18 +149,22 @@
 
                                     </div>
 
-                                    <div class="col-md-6 px-4 bg-info">
+                                    <div class="col-md-6 px-4 bg-light curv">
                                         <% if(locals.address){ %>
                                             <h4 class="text-center my-4">Saved addresses</h4>
-                                          <button type="button" class="btn btn-light w-100">
+                                          <button type="button" class="btn btn-primary w-100">
+                                         <p class="mb-0">
                                             <%= locals.address.addressName%>
-                                            <%= locals.address.phone%>
-                                            <%= locals.address.address1%>
-                                            <%= locals.address.address2%>
-                                            <%= locals.address.district%>
-                                            <%= locals.address.state%>
-                                            <%= locals.address.country%>
-                                            <%= locals.address.pincode%>
+                                           ( Ph : <%= locals.address.phone%> )
+                                        </p>
+                                        <p>
+                                            "<%= locals.address.address1%>",
+                                            <%= locals.address.address2%>,
+                                            <%= locals.address.district%>,
+                                            <%= locals.address.state%>,
+                                            <%= locals.address.country%>-
+                                            pincode  :<%= locals.address.pincode%>
+                                        </p>   
                                         </button>
 
                                        <% } %>

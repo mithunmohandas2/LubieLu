@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
+const Order = require("../models/ordersModel")
 // -------------------------------------------------
 // loading the login page
 const loginLoad = async (req, res) => {
@@ -135,6 +136,21 @@ const blockUser = async (req, res) => {
     }
 }
 
+// ===========Order Management===============
+
+const order_management = async (req, res) => {
+    try {
+        const orders = await Order.find().sort({createdAt:-1})
+        res.render('orders', {
+            username: req.session.user_name,
+            orders: orders
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+// =========================
 
 module.exports = {
     loginLoad,
@@ -143,5 +159,6 @@ module.exports = {
     logout,
     searchUser,
     userManagement,
-    blockUser
+    blockUser,
+    order_management,
 }
