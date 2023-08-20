@@ -46,21 +46,21 @@ function SubCategoryUpdate() {
 
 
 // Sub-Category name populate in add/edit product form
-async function loadSubCategory(id){
-  const subCategoryList = await fetch('/admin/loadSubCat',{
-  method :'post',
-  headers : {
-    "Content-Type" : 'application/json'
-  },
-  body : JSON.stringify({catID: id})
+async function loadSubCategory(id) {
+  const subCategoryList = await fetch('/admin/loadSubCat', {
+    method: 'post',
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({ catID: id })
   })
-  .then((value) =>{ return value.json()} )
-  .catch((err) =>{
-    console.log(err.message)
-  })
- 
-  document.getElementById("subCat").innerHTML= ""
-  for (let i=0; i<subCategoryList.length;i++){
+    .then((value) => { return value.json() })
+    .catch((err) => {
+      console.log(err.message)
+    })
+
+  document.getElementById("subCat").innerHTML = ""
+  for (let i = 0; i < subCategoryList.length; i++) {
     let option = document.createElement("option");
     option.value = subCategoryList[i]._id;
     option.text = subCategoryList[i].subCategoryName;
@@ -70,23 +70,23 @@ async function loadSubCategory(id){
 
 
 // Sub-Category name populate in manage category form
-async function loadSubCat(id){
-  const subCategoryList = await fetch('/admin/loadSubCat',{
-  method :'post',
-  headers : {
-    "Content-Type" : 'application/json'
-  },
-  body : JSON.stringify({catID: id})
+async function loadSubCat(id) {
+  const subCategoryList = await fetch('/admin/loadSubCat', {
+    method: 'post',
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({ catID: id })
   })
-  .then((value) =>{ return value.json()} )
-  .catch((err) =>{
-    console.log(err.message)
-  })
- 
+    .then((value) => { return value.json() })
+    .catch((err) => {
+      console.log(err.message)
+    })
+
   // console.log(subCategoryList)
 
-  document.getElementById("subCategory").innerHTML= ""
-  for (let i=0; i<subCategoryList.length;i++){
+  document.getElementById("subCategory").innerHTML = ""
+  for (let i = 0; i < subCategoryList.length; i++) {
     let option = document.createElement("option");
     option.value = subCategoryList[i].subCategoryName;
     option.text = subCategoryList[i].subCategoryName;
@@ -101,7 +101,15 @@ function qtyUpdate() {
   // document.getElementById("qtyCheckout").value = fill 
 }
 
-function emailOTPUpdate(){
- const fill = document.getElementById("emailForOTP").value
- document.getElementById("emailOTPFill").value = fill
+function emailOTPUpdate() {
+  const fill = document.getElementById("emailForOTP").value
+  document.getElementById("emailOTPFill").value = fill
+}
+
+//image zoom
+function productImageChange(i) {
+  const primary = document.getElementById("prd_img_0").src;
+  const fill = document.getElementsByClassName("product_img")[i].src;
+  document.getElementsByClassName("product_img")[i].src = primary
+  document.getElementById("prd_img_0").src = fill;
 }

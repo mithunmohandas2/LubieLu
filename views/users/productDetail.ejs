@@ -8,22 +8,23 @@
 
                     <div class="col-12 mt-2 p-4">
                         <% if (locals.product[0].product_image[0]){ %>
-                            <img id="prd_img" class="w-100 curv" src=" <%=locals.product[0].product_image[0]%>"></img>
+                            <img id="prd_img_0"  class="w-100 curv zoomable" src=" <%=locals.product[0].product_image[0]%>"></img>
                             <% } else { %>
-                                <img class="w-100 curv"
+                                <img class="w-100 curv" id="prd_img_0"
                                     src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"></img>
                                 <% } %>
                     </div>
 
                     <div class="row p-4">
-                        <% for (i=1; i<locals.product[0].product_image.length;i++){ %>
+                        <% if (locals.product[0].product_image[0]) { 
+                            for (let i=1; i<locals.product[0].product_image.length;i++){ %>
 
                             <div class="col-3 px-3">
-                                <img class="product_img w-100 curv"
+                                <img class="product_img w-100 curv" onclick="productImageChange(<%= i-1 %>)" 
                                     src=" <%=locals.product[0].product_image[i]%>"></img>
                             </div>
 
-                            <% } %>
+                            <% }} %>
                     </div>
 
                 </div>
@@ -51,21 +52,22 @@
                             </span>
                         </h5>
                         <hr>
-                        
-                        <% if (locals.product[0].stock <= 10) { %>
-                            <h6 class="text-danger">Hurry !!! Only <%= locals.product[0].stock %> nos left in Stock </h6>
-                        <% } %>
-                        
-                        <div>
-                            <div class="mb-3">
-                                <label for="qty" class="form-label">Quantity</label>
-                                <input type="number" name="qty" class="form-control w-25" id="qty" value=1 min="1"
-                                    max="<%=locals.product[0].stock %>" onchange="qtyUpdate()" required>
-                            </div>
-                        </div>
+
+                        <% if (locals.product[0].stock <=10) { %>
+                            <h6 class="text-danger">Hurry !!! Only <%= locals.product[0].stock %> nos left in Stock
+                            </h6>
+                            <% } %>
+
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="qty" class="form-label">Quantity</label>
+                                        <input type="number" name="qty" class="form-control w-25" id="qty" value=1
+                                            min="1" max="<%=locals.product[0].stock %>" onchange="qtyUpdate()" required>
+                                    </div>
+                                </div>
 
 
-                        
+
 
 
                                 <div class="text-center my-4 d-flex ">
