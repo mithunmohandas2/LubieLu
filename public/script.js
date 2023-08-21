@@ -113,3 +113,28 @@ function productImageChange(i) {
   document.getElementsByClassName("product_img")[i].src = primary
   document.getElementById("prd_img_0").src = fill;
 }
+
+
+function qtyIncrease(i,stock) {
+  const preQty = document.getElementsByClassName("cartQty")[i].innerHTML
+  if (preQty < stock) {
+  const preCartRate = document.getElementsByClassName("cartRate")[i].innerHTML
+  document.getElementsByClassName("cartQty")[i].innerHTML = +document.getElementsByClassName("cartQty")[i].innerHTML + 1;
+  const qty = document.getElementsByClassName("cartQty")[i].innerHTML
+  document.getElementsByClassName("cartRate")[i].innerHTML = document.getElementsByClassName("rate")[i].innerHTML * qty
+  const total = +document.getElementById("totalValue").innerHTML
+  document.getElementById("totalValue").innerHTML = (1 * total) + (document.getElementsByClassName("cartRate")[i].innerHTML * 1) - (1 * preCartRate)
+  }
+}
+
+function qtyDecrease(i) {
+  const preQty = document.getElementsByClassName("cartQty")[i].innerHTML
+  if (preQty > 1) {
+    const rate = document.getElementsByClassName("rate")[i].innerHTML
+    document.getElementsByClassName("cartQty")[i].innerHTML = +preQty - 1;
+    const qty = document.getElementsByClassName("cartQty")[i].innerHTML
+    document.getElementsByClassName("cartRate")[i].innerHTML = document.getElementsByClassName("rate")[i].innerHTML * qty
+    const total = +document.getElementById("totalValue").innerHTML
+    document.getElementById("totalValue").innerHTML = (1 * total) - (1 * rate)
+  }
+}

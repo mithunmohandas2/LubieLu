@@ -57,5 +57,6 @@ user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 user_route.post('/logout', userController.logout);
 user_route.get('/logout', auth.isLogout, userController.loginLoad);
 
+user_route.get('*',userController.error404)
 
 module.exports = user_route;

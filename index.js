@@ -23,10 +23,10 @@ app.use((req, res, next) => {
     next();
   });
 
-//for user routes
-app.use("/", userRoute)
-
-//for admin users
-app.use("/admin",adminRoute)
-
+  
+  //for admin users
+  app.use("/admin",adminRoute)
+  //for user routes
+  app.use("/", userRoute)
+  
 app.listen(PORT, () => { console.log(`server started successfully at : http://localhost:${PORT}`) });

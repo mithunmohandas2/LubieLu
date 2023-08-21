@@ -4,6 +4,7 @@ const session = require("express-session")
 const config = require('../config/config')
 const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
+const userController = require("../controllers/userController");
 const path = require('path')
 
 
@@ -70,7 +71,7 @@ admin_route.get('/order_management',auth.isLogin,adminController.order_managemen
 
 
 
-// admin_route.get('*',(req,res)=>{ res.redirect('/admin')})
+admin_route.get('*',adminController.error404)
 
 
 

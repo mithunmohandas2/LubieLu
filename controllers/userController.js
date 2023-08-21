@@ -152,7 +152,7 @@ const loadCart = async (req, res) => {
         const cartData = await Cart.findOne({ userID: req.session._id })
         if (cartData) {
             for (i = 0; i < cartData.items.length; i++) {
-                let data = await Product.findOne({ _id: cartData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1 })
+                let data = await Product.findOne({ _id: cartData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1, stock: 1 })
                 productData.push(data)
             }
         }
@@ -327,7 +327,14 @@ const logout = async (req, res) => {
 
 // --------------------------
 
-
+const error404 = async (req, res) => {
+    try {
+        res.render('error')
+    } catch (error) {
+        console.log(error.message)
+        res.render('error',  { error: error.message })
+    }
+}
 
 
 
@@ -347,5 +354,6 @@ module.exports = {
     orderHistory,
     loadWishlist,
     logout,
+    error404,
 
 }

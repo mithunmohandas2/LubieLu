@@ -150,6 +150,16 @@ const order_management = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+
+
+const error404 = async (req, res) => {
+    try {
+        res.render('error')
+    } catch (error) {
+        console.log(error.message)
+        res.render('error',  { error: error.message })
+    }
+}
 // =========================
 
 module.exports = {
@@ -161,4 +171,5 @@ module.exports = {
     userManagement,
     blockUser,
     order_management,
+    error404,
 }

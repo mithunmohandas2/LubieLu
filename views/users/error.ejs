@@ -1,6 +1,6 @@
 <style>
     body {
-  background-color: #2F3242;
+  background-color: #ffe7fa;
 }
 svg {
   position: absolute;
@@ -96,8 +96,8 @@ svg {
     </g>
 </svg>
 <div class="message-box">
-  <h1>ERROR - 404</h1>
-  <p><%= locals.error? locals.error : "Sorry, Page not found" %></p>
+  <h1 style="color: black;">ERROR - 404</h1>
+  <p style="color: black;"><%= locals.error? locals.error : "Sorry, Page not found" %></p>
   <div class="buttons-con">
     <div class="action-link-wrap">
       <a onclick="history.back(-1)" class="link-button link-back-button">Go Back</a>

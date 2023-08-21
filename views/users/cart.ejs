@@ -32,7 +32,7 @@
                   <td>
                     <div>
                       <a href="/productDetail?product_id=<%=locals.products[i]._id%>">
-                      <img class="w-50 curv" src="<%=locals.products[i].product_image[0] %>" alt="product image">
+                        <img class="w-50 curv" src="<%=locals.products[i].product_image[0] %>" alt="product image">
                       </a>
                     </div>
                   </td>
@@ -40,13 +40,22 @@
                     <%=locals.products[i].product_name%>
                   </td>
                   <td>
-                    <%=locals.products[i].sellingPrice%>
+                    <p class="rate">
+                      <%=locals.products[i].sellingPrice%>
+                    </p>
                   </td>
                   <td>
-                    <%=locals.cart.items[i].qty%>
+                    <div class="d-flex">
+                      <button onclick="qtyDecrease(<%= i %>)" class="px-2 btn btn-outline-danger mb-5">-</button>
+                      <p class="px-3 cartQty">
+                        <%=locals.cart.items[i].qty%>
+                      </p> <button onclick="qtyIncrease(<%= i %> , <%=locals.products[i].stock %>)" class="btn btn-outline-danger px-2 mb-5">+</button>
+                    </div>
                   </td>
                   <td>
-                    <%=locals.cart.items[i].qty * locals.products[i].sellingPrice %>
+                    <p class="cartRate">
+                      <%=locals.cart.items[i].qty * locals.products[i].sellingPrice %>
+                    </p>
                   </td>
                   <td>
                     <form action="/removeCart" method="post">
@@ -61,12 +70,12 @@
                       <h4>Cart value : </h4>
                     </th>
                     <th scope="col" colspan="2" class="text-start">
-                      <h4>
+                     <h4> ₹<span id="totalValue">
                         <% let sum=0; for (let i=0; i < locals.cart.items.length; i++) { %>
                           <% sum=sum + locals.cart.items[i].qty * locals.products[i].sellingPrice %>
                             <% } %>
-                            ₹ <%= sum %> /-
-                      </h4>
+                               <%= sum %> 
+                        </span> /- </h4>
                     </th>
                   </tr>
 
@@ -76,10 +85,10 @@
 
       <div class="container text-end mb-4">
         <a href="/checkout">
-        <button class="btn btn-danger me-4 py-2  px-4 mb-3">
-          PROCEED TO CHECKOUT
-      </button>
-      </a>
+          <button class="btn btn-danger me-4 py-2  px-4 mb-3">
+            PROCEED TO CHECKOUT
+          </button>
+        </a>
       </div>
 
       <%- include('../layouts/footerlinks') %>

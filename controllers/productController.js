@@ -281,7 +281,7 @@ const userSearchResult = async (req, res) => {
         // console.log(req.body)
         const keyword = req.body.search
         const regex = new RegExp(`${keyword}`, 'i');
-        const searchProduct = await Product.find({ product_name: { $regex: regex } }).sort({ updatedAt: -1 });   //find products with keyword
+        const searchProduct = await Product.find({$and : [{ product_name: { $regex: regex } },{ is_blocked: 0 }]}).sort({ updatedAt: -1 });   //find products with keyword
 
         // console.log(searchProduct);
 
