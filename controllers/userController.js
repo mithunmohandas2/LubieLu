@@ -1,7 +1,5 @@
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
-const Category = require("../models/productCategoryModel");
-const subCategory = require("../models/productSubCategoryModel");
 const Cart = require("../models/cartModel")
 const Address = require("../models/userAddress")
 const Order = require("../models/ordersModel")
@@ -340,7 +338,7 @@ const error404 = async (req, res) => {
 const userProfile = async (req, res) => {
     try {
         const userMatch = await User.findOne({ _id: req.session._id })
-        const userAddress = await Address.find({ userID: req.session._id })
+        const userAddress = await Address.find({ _id: userMatch.defaultAddress })
 
         res.render('userProfile', {
             username: req.session.user_name,

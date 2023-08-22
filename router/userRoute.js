@@ -6,7 +6,8 @@ const config = require('../config/config')
 const auth = require("../middleware/auth");
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
-const OTPVerification = require("../controllers/OTPverification")
+const OTPVerification = require("../controllers/OTPverification");
+const addressController = require("../controllers/addressController");
 
 
 user_route.use(session({
@@ -51,6 +52,7 @@ user_route.post('/qtyChange', auth.isLogin, productController.qtyChange);
 
 user_route.get('/userProfile', auth.isLogin, userController.userProfile);
 user_route.post('/editProfile', auth.isLogin, userController.editProfile);
+user_route.post('/addAddress', auth.isLogin, addressController.addAddress);
 
 user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 
