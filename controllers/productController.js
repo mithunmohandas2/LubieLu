@@ -1,6 +1,8 @@
 const Product = require("../models/productModel");
 const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
+const Cart = require("../models/cartModel");
+const { isValidObjectId } = require("mongoose");
 
 
 
@@ -281,7 +283,7 @@ const userSearchResult = async (req, res) => {
         // console.log(req.body)
         const keyword = req.body.search
         const regex = new RegExp(`${keyword}`, 'i');
-        const searchProduct = await Product.find({$and : [{ product_name: { $regex: regex } },{ is_blocked: 0 }]}).sort({ updatedAt: -1 });   //find products with keyword
+        const searchProduct = await Product.find({ $and: [{ product_name: { $regex: regex } }, { is_blocked: 0 }] }).sort({ updatedAt: -1 });   //find products with keyword
 
         // console.log(searchProduct);
 
@@ -377,21 +379,21 @@ const editSingleProduct = async (req, res) => {
         }
         // editing all field 
         const productData = await Product.updateOne({ _id: req.body.product_id }, { $set: product });
-        
-        
-        //adding image to array
-    //     if(req.files){
-    //    // =========Change Product Image path ==========
-    //    const Match = await Product.findOne({ _id: productData._id })
 
-    //    const imgPaths = Match.product_image
-    //    let temp2 = []
-    //    for (i = 0; i < imgPaths.length; i++) {
-    //        let temp = imgPaths[i].split("\\");
-    //        temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
-    //    }
-    //    const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
-    //     }
+
+        //adding image to array
+        //     if(req.files){
+        //    // =========Change Product Image path ==========
+        //    const Match = await Product.findOne({ _id: productData._id })
+
+        //    const imgPaths = Match.product_image
+        //    let temp2 = []
+        //    for (i = 0; i < imgPaths.length; i++) {
+        //        let temp = imgPaths[i].split("\\");
+        //        temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
+        //    }
+        //    const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
+        //     }
 
 
         // console.log(productData);
@@ -435,6 +437,27 @@ const loadSubCat = async (req, res) => {
     }
 }
 
+// -----------------------------
+// Change qty in cart
+const qtyChange = async (req, res) => {
+    try {
+        const { product_id, isAdd } = req.body
+        if (isAdd === true) {
+            const cart = await Cart.updateOne({ userID: req.session._id, "items.productID": product_id }, { $inc: { "items.$.qty": 1 } })
+            if (cart) res.json();
+            else throw Error;
+        } else {
+            const cart = await Cart.updateOne({ userID: req.session._id, "items.productID": product_id }, { $inc: { "items.$.qty": -1 } })
+            if (cart) res.json();
+            else throw Error;
+        }
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
 
 // -------------------------
 
@@ -454,5 +477,6 @@ module.exports = {
     deleteProduct,
     editSingleProduct,
     productDetail,
-    loadSubCat
+    loadSubCat,
+    qtyChange,
 }

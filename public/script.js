@@ -114,27 +114,68 @@ function productImageChange(i) {
   document.getElementById("prd_img_0").src = fill;
 }
 
-
-function qtyIncrease(i,stock) {
+// --------------------------------
+//cart qty change
+async function qtyIncrease(i, stock) {
   const preQty = document.getElementsByClassName("cartQty")[i].innerHTML
   if (preQty < stock) {
-  const preCartRate = document.getElementsByClassName("cartRate")[i].innerHTML
-  document.getElementsByClassName("cartQty")[i].innerHTML = +document.getElementsByClassName("cartQty")[i].innerHTML + 1;
-  const qty = document.getElementsByClassName("cartQty")[i].innerHTML
-  document.getElementsByClassName("cartRate")[i].innerHTML = document.getElementsByClassName("rate")[i].innerHTML * qty
-  const total = +document.getElementById("totalValue").innerHTML
-  document.getElementById("totalValue").innerHTML = (1 * total) + (document.getElementsByClassName("cartRate")[i].innerHTML * 1) - (1 * preCartRate)
+    // updating in Mongo DB
+    const productID = document.getElementsByName("product_id")[i].value;
+
+    const qtyUpdate = await fetch('/qtyChange', {
+      method: 'post',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productID,
+        isAdd: true,
+      })
+    })
+      .then(() => {
+        //DOM Manipulate 
+        const preCartRate = document.getElementsByClassName("cartRate")[i].innerHTML
+        document.getElementsByClassName("cartQty")[i].innerHTML = +document.getElementsByClassName("cartQty")[i].innerHTML + 1;
+        const qty = document.getElementsByClassName("cartQty")[i].innerHTML
+        document.getElementsByClassName("cartRate")[i].innerHTML = document.getElementsByClassName("rate")[i].innerHTML * qty
+        const total = +document.getElementById("totalValue").innerHTML
+        document.getElementById("totalValue").innerHTML = (1 * total) + (document.getElementsByClassName("cartRate")[i].innerHTML * 1) - (1 * preCartRate);
+
+      })
+      .catch((err) => {
+        console.log(err.message)
+        throw Error
+      })
   }
 }
 
-function qtyDecrease(i) {
+async function qtyDecrease(i) {
   const preQty = document.getElementsByClassName("cartQty")[i].innerHTML
   if (preQty > 1) {
-    const rate = document.getElementsByClassName("rate")[i].innerHTML
-    document.getElementsByClassName("cartQty")[i].innerHTML = +preQty - 1;
-    const qty = document.getElementsByClassName("cartQty")[i].innerHTML
-    document.getElementsByClassName("cartRate")[i].innerHTML = document.getElementsByClassName("rate")[i].innerHTML * qty
-    const total = +document.getElementById("totalValue").innerHTML
-    document.getElementById("totalValue").innerHTML = (1 * total) - (1 * rate)
+    // updating in Mongo DB
+    const productID = document.getElementsByName("product_id")[i].value;
+    const qtyUpdate = await fetch('/qtyChange', {
+      method: 'post',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productID,
+        isAdd: false,
+      })
+    })
+      .then(() => {
+        //DOM Manipulate 
+        const rate = document.getElementsByClassName("rate")[i].innerHTML
+        document.getElementsByClassName("cartQty")[i].innerHTML = +preQty - 1;
+        const qty = document.getElementsByClassName("cartQty")[i].innerHTML
+        document.getElementsByClassName("cartRate")[i].innerHTML = document.getElementsByClassName("rate")[i].innerHTML * qty
+        const total = +document.getElementById("totalValue").innerHTML
+        document.getElementById("totalValue").innerHTML = (1 * total) - (1 * rate)
+      })
+      .catch((err) => {
+        console.log(err.message)
+        throw Error
+      })
   }
 }
