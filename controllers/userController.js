@@ -210,7 +210,7 @@ const loadCheckout = async (req, res) => {
         }
         // res.send(productData)
         // console.log(cartData);
-        const userAddress = await Address.findOne({ userID: req.session._id })
+        const userAddress = await Address.findMany({ userID: req.session._id })
 
         res.render('checkout', {
             username: req.session.user_name,
@@ -280,7 +280,7 @@ const checkout = async (req, res) => {
 
 const orderHistory = async (req, res) => {
     try {
-        const OrderData = await Order.find({ userID: req.session._id }).sort({createdAt:-1})
+        const OrderData = await Order.find({ userID: req.session._id }).sort({ createdAt: -1 })
         // let productData = []
         // if (OrderData) {
         //     for (i = 0; i < OrderData.items.length; i++) {
@@ -332,12 +332,49 @@ const error404 = async (req, res) => {
         res.render('error')
     } catch (error) {
         console.log(error.message)
-        res.render('error',  { error: error.message })
+        res.render('error', { error: error.message })
     }
 }
 
+// -----------------------
+const userProfile = async (req, res) => {
+    try {
+        const userMatch = await User.findOne({ _id: req.session._id })
+        const userAddress = await Address.find({ userID: req.session._id })
 
+        res.render('userProfile', {
+            username: req.session.user_name,
+            user: userMatch,
+            address: userAddress,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+// ----------------------
 
+const editProfile = async (req, res) => {
+    try {
+        const userData = await User.updateOne({ _id: req.session._id }, {
+            $set: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phone: req.body.phone,
+            }
+        });
+        if (userData) {  // updating to database success?
+            res.redirect('/userProfile')
+        } else {
+            res.redirect('/userProfile?alert=Unable to modify user data')   // failed
+        }
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// ===============================
 module.exports = {
     loadRegister,
     insertUser,
@@ -355,5 +392,6 @@ module.exports = {
     loadWishlist,
     logout,
     error404,
-
+    userProfile,
+    editProfile,
 }

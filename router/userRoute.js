@@ -47,9 +47,10 @@ user_route.get('/checkout', auth.isLogin, userController.loadCheckout);
 user_route.post('/checkout', auth.isLogin, userController.checkout);
 
 user_route.get('/orderHistory', auth.isLogin, userController.orderHistory);
-
 user_route.post('/qtyChange', auth.isLogin, productController.qtyChange);
 
+user_route.get('/userProfile', auth.isLogin, userController.userProfile);
+user_route.post('/editProfile', auth.isLogin, userController.editProfile);
 
 user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 

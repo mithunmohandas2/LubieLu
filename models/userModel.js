@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
@@ -30,7 +31,10 @@ const userSchema = new mongoose.Schema({
     is_blocked: {
         type: Boolean,
         default: 0
-    }
+    },
+    defaultAddress:{
+        type: ObjectId
+    },
 }, { timestamps: true })
 
 module.exports = mongoose.model("User", userSchema);

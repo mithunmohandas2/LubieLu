@@ -160,6 +160,40 @@ const error404 = async (req, res) => {
         res.render('error',  { error: error.message })
     }
 }
+
+// ------------------------------
+const adminProfile = async (req, res) => {
+    try {
+        const userMatch = await User.findOne({ admin_status: true})
+        res.render('adminProfile', {
+            username: req.session.user_name,
+            user: userMatch,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+const editProfile = async (req, res) => {
+    try {
+        const userData = await User.updateOne({ admin_status: true }, {
+            $set: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phone: req.body.phone,
+            }
+        });
+        if (userData) {  // updating to database success?
+            res.redirect('/admin/profile')
+        } else {
+            res.redirect('/admin/profile?alert=Unable to modify user data')   // failed
+        }
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
 // =========================
 
 module.exports = {
@@ -172,4 +206,6 @@ module.exports = {
     blockUser,
     order_management,
     error404,
+    adminProfile,
+    editProfile,
 }

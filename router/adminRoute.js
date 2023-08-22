@@ -69,6 +69,9 @@ admin_route.post('/deleteSubCategory',auth.isLogin,productController.deleteSubCa
 
 admin_route.get('/order_management',auth.isLogin,adminController.order_management)
 
+admin_route.get('/profile',auth.isLogin,adminController.adminProfile)
+admin_route.post('/editAdminProfile', auth.isLogin, adminController.editProfile);
+
 
 
 admin_route.get('*',adminController.error404)
