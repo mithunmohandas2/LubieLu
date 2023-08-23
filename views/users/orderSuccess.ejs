@@ -6,9 +6,9 @@
         <img class="my-4" style="width: 8em;" src="https://static.vecteezy.com/system/resources/previews/020/906/151/original/tick-icon-accept-approve-sign-design-free-free-png.png" alt="tick mark">
         <h3 class="mb-4">Order placed successfully</h3>
         <p>Thank you for shopping with us</p>
-        <p> Your Order ID is :<%= locals.orderData._id %> | Total Amount : <%= locals.orderData.amount %> | Method of Payment : <%= locals.orderData.method %> </p>
+        <p> Your Order ID is : <%= locals.orderData._id %>  |  Total Amount : <%= locals.orderData.amount %>  |  Method of Payment : <%= locals.orderData.method %> </p>
         <hr>
-        <%= locals.orderData.createdAt %>
+        <%= locals.orderData.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %>
         <br>
 
     </div>

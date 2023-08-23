@@ -27,8 +27,7 @@
               for(i=0;i<orders.length;i++){ %>
                 <tr>
                   <td scope="row">
-                    <%=locals.orders[i].createdAt.getDate()%> - <%=locals.orders[i].createdAt.getMonth()%> - <%=locals.orders[i].createdAt.getFullYear()%>
-                    <br>  (Time : <%=locals.orders[i].createdAt.getHours()%> : <%=locals.orders[i].createdAt.getMinutes()%> : <%=locals.orders[i].createdAt.getSeconds()%>)
+                    <%=locals.orders[i].createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %>
                   </td>
                   <td>
                     <%=locals.orders[i]._id%>

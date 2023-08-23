@@ -192,5 +192,20 @@ function selectAddress(i) {
  document.getElementById("district").value = document.getElementsByClassName("savedDistrict")[i].innerHTML
  document.getElementById("state").value = document.getElementsByClassName("savedState")[i].innerHTML
  document.getElementById("pincode").value = document.getElementsByClassName("savedPincode")[i].innerHTML
-  
 }
+
+// -----------------
+
+// to select only one payment option 
+const onlinePayCheckbox = document.getElementById('onlinepay');
+const codCheckbox = document.getElementById('COD');
+
+onlinePayCheckbox.addEventListener('change', function () {
+    codCheckbox.checked = !this.checked;
+});
+codCheckbox.addEventListener('change', function () {
+    onlinePayCheckbox.checked = !this.checked;
+});
+
+// ----------------------------
+  

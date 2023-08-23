@@ -16,10 +16,7 @@
               <div class="card mb-4">
                 <div class="card-header text-start">
                   Order ID: <%= locals.orders[i]._id %>
-                    <p class="text-end">Order Date : <%= locals.orders[i].createdAt.getDate() %> - <%=
-                          locals.orders[i].createdAt.getMonth() %> - <%= locals.orders[i].createdAt.getFullYear() %>
-                            (<%= locals.orders[i].createdAt.getHours() %> : <%= locals.orders[i].createdAt.getMinutes()
-                                %> : <%= locals.orders[i].createdAt.getSeconds() %> Hrs)</p>
+                    <p class="text-end">Order Date : <%= locals.orders[i].createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %></p>
                 </div>
                 <div class="card-body">
 

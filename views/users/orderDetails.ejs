@@ -2,53 +2,69 @@
 
   <%- include('../layouts/userHeader') %>
 
-    <h3 class="text-center my-4">
-      <%=username%>'s Order Details
-    </h3>
+  <style>
+    body {
+      background-color: #fbdfdc;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  </style>
 
-    <% if (locals.orders.length){ %>
-
-      <section class="container pb-4 my-4">
-        <hr>
-        <div class="card-deck">
-          <% if (locals.orders.length > 0) {
-            for (i = 0; i < orders.length; i++) { %>
-              <div class="card mb-4">
-                <div class="card-header text-start">
-                  Order ID: <%= locals.orders[i]._id %> 
-                  <p class="text-end">Order Date : <%= locals.orders[i].createdAt.getDate() %> - <%= locals.orders[i].createdAt.getMonth() %> - <%= locals.orders[i].createdAt.getFullYear() %>
-                    (<%= locals.orders[i].createdAt.getHours() %> : <%= locals.orders[i].createdAt.getMinutes() %> : <%= locals.orders[i].createdAt.getSeconds() %> Hrs)</p>
-                </div>
-                <div class="card-body">
-                  
-                  <p class="card-text">No. of items: <%= locals.orders[i].items.length %></p>
-                  <p class="card-text">Amount: <%= locals.orders[i].amount %></p>
-                  <p class="card-text">Payment Method: <%= locals.orders[i].method %></p>
-                  <p class="card-text">Status: <%= locals.orders[i].status %></p>
-
-                  <form action="/orderDetails">
-                    <input type="text" value="<%= locals.orders[i]._id %>" hidden>
-                    <button type="submit" class="btn btn-outline-danger">Order Details</button>
-                 </form>
-                </div>
+    <div class="container my-5 p-4 bg-light curv">
+      <div class="row p-4">
+          <div class="col-md-12">
+              <h2 class="text-center">Order Details</h2>
+              <hr class="mb-4">
+              <div class="row">
+                  <div class="col-md-6">
+                      <h4>Order Information</h4>
+                      <p><strong>Order ID:</strong> <%= locals.orders._id %></p>
+                      <p><strong>Date:</strong> <%=locals.orders.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %></p>
+                      <p><strong>Status:</strong> <%= locals.orders.status %></p>
+                  </div>
+                  <div class="col-md-6">
+                      <h4>Shipping Information</h4>
+                      <p><strong>Name:</strong> <%= locals.address.addressName %></p>
+                      <p><strong>Address:</strong> <%= locals.address.address1 %>, <%= locals.address.address2 %>, <%= locals.address.district %>, <%= locals.address.state %>-<%= locals.address.pincode %> </p>
+                      <p><strong>Phone:</strong> <%= locals.address.phone %></p>
+                  </div>
               </div>
-            <% }
-          } %>
-        </div>
-      </section>
-      
-
-      <%- include('../layouts/footerlinks') %>
-
-        <% } else { %>
-          <div class="container text-start">
-            <h6 class="alert alert-danger ">No order history available</h6>
+              <hr>
+              <h4>Order Items</h4>
+              <table class="table">
+                  <thead>
+                      <tr>
+                        <th>#</th>
+                          <th colspan="2" class="text-center">Product</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th>Total</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <% for (i=0;i<orders.items.length;i++) {%>
+                      <tr>
+                        <td><%= i+1 %></td>
+                        <td><a href="/productDetail?product_id=<%=locals.productData[i]._id%>"> 
+                          <img src="<%= locals.productData[i].product_image[0] %>" style="width: 3em;" alt="product_image"></a></td>
+                          <td><%= locals.productData[i].product_name %></td>
+                          <td><%= locals.orders.items[i].rate %></td>
+                          <td><%= locals.orders.items[i].qty %></td>
+                          <td><%= locals.orders.items[i].qty*locals.orders.items[i].rate %></td>
+                      </tr>
+                      <% } %>
+                      <tr>
+                          <td colspan="5" class="text-end"><strong>Total:</strong></td>
+                          <td><strong>₹ <%= locals.orders.amount %>/-</strong></td>
+                      </tr>
+                  </tbody>
+              </table>
           </div>
-          <div class="text-center my-4">
-            <a href="/allProducts"><button class="btn btn-outline-danger mb-3">
-                Browse Products
-              </button> </a>
-          </div>
-          <% } %>
+          <a href="/orderHistory"><button class="btn btn-outline-danger my-4">Back to Order History</button></a>
+          
+      </div>
+  </div>
 
+  <%- include('../layouts/footerlinks') %>
             <%- include('../layouts/footer') %>

@@ -19,6 +19,9 @@ const ordersSchema = new mongoose.Schema({
             required: true,
             min: 1,
         },
+        rate: {
+            type:Number,
+        }
     }],
     amount: {
         type: Number,

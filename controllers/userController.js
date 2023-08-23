@@ -239,17 +239,17 @@ const checkout = async (req, res) => {
                 pincode: req.body.pincode,
             })
             addressData = await newAddress.save();
-            if (addressData) {addressIDs = addressData._id;}
+            if (addressData) { addressIDs = addressData._id; }
             else throw Error //
         } else {
             // if any saved address selected
             addressIDs = req.body.addressID;
         }
-        
+
         let payMethod;
-        if(req.body.onlinepay) payMethod="Online-Pay"
-        else payMethod="Cash-On-Delivery"
-        
+        if (req.body.onlinepay) payMethod = "Online-Pay"
+        else payMethod = "Cash-On-Delivery"
+
         const cartData = await Cart.findOne({ userID: req.session._id })
         const newOrder = new Order({
             userID: req.session._id,
@@ -303,44 +303,21 @@ const orderHistory = async (req, res) => {
 
 const orderDetails = async (req, res) => {
     try {
-        const orders = await Order.find({ _id: req.query.orderID })
-        const orderDetail = await Order.aggregate([
-            { $match: { _id: req.query.orderID } },
-            {
-                $unwind: "$items"
-            },
-            {
-                $lookup: {
-                    from: "Product",
-                    localField: "items.productID",
-                    foreignField: "_id",
-                    as: "orderProducts"
-
-                }
-            },
-            {
-                $unwind: "$orderProducts"
-            }, {
-                $project: {
-                    _id: 1,
-                    "orderProducts.product_name": 1,
-                    "orderProducts.product_image": 1,
-                    items : 1,
-                    amount: 1,
-                    // method: 1,
-                    status: 1,
-                    // shippingAddress:1,
-                }
-            }
-        ])
-
-        res.send(orders)
+        const orders = await Order.findOne({ _id: req.query.orderID })
+        const address = await Address.findOne({ _id: orders.shippingAddress })
+        let productData = []
+        for (i = 0; i < orders.items.length; i++) {
+            let data = await Product.findOne({ _id: orders.items[i].productID }, { product_name: 1, product_image: 1 })
+            productData.push(data)
+        }
 
 
-        // res.render('orderDetails', {
-        //     username: req.session.user_name,
-        //     orders,
-        // });
+        res.render('orderDetails', {
+            username: req.session.user_name,
+            orders,
+            address,
+            productData,
+        });
 
     } catch (error) {
         console.log(error.message)
@@ -389,7 +366,7 @@ const userProfile = async (req, res) => {
     try {
         const userMatch = await User.findOne({ _id: req.session._id })
         const defaultAddress = await Address.findOne({ _id: userMatch.defaultAddress })
-        const userAddress = await Address.find({userID: req.session._id}).sort({ updatedAt: -1 }).limit(4)
+        const userAddress = await Address.find({ userID: req.session._id }).sort({ updatedAt: -1 }).limit(4)
         res.render('userProfile', {
             username: req.session.user_name,
             user: userMatch,
