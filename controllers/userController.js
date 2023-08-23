@@ -206,9 +206,7 @@ const loadCheckout = async (req, res) => {
                 productData.push(data)
             }
         }
-        // res.send(productData)
-        // console.log(cartData);
-        const userAddress = await Address.findMany({ userID: req.session._id })
+        const userAddress = await Address.find({ userID: req.session._id }).sort({ updatedAt: -1 }).limit(4)
 
         res.render('checkout', {
             username: req.session.user_name,
@@ -226,7 +224,9 @@ const loadCheckout = async (req, res) => {
 
 const checkout = async (req, res) => {
     try {
-        if (req.body.saveAddress) {
+        let addressIDs;
+        //if new address used
+        if (!req.body.addressID) {
             const newAddress = new Address({
                 userID: req.session._id,
                 addressName: req.body.addressName,
@@ -238,17 +238,25 @@ const checkout = async (req, res) => {
                 country: req.body.country,
                 pincode: req.body.pincode,
             })
-            const addressData = await newAddress.save();
-            if (addressData) console.log("New Address added");
+            addressData = await newAddress.save();
+            if (addressData) {addressIDs = addressData._id;}
             else throw Error //
+        } else {
+            // if any saved address selected
+            addressIDs = req.body.addressID;
         }
-
+        
+        let payMethod;
+        if(req.body.onlinepay) payMethod="Online-Pay"
+        else payMethod="Cash-On-Delivery"
+        
         const cartData = await Cart.findOne({ userID: req.session._id })
-
         const newOrder = new Order({
             userID: req.session._id,
             items: cartData.items,
             amount: req.body.amount,
+            method: payMethod,
+            shippingAddress: addressIDs,
         })
         //save new order placed
         const orderData = await newOrder.save()
@@ -267,6 +275,7 @@ const checkout = async (req, res) => {
 
         res.render("orderSuccess", {
             username: req.session.user_name,
+            orderData,
         })
 
     } catch (error) {
@@ -279,13 +288,6 @@ const checkout = async (req, res) => {
 const orderHistory = async (req, res) => {
     try {
         const OrderData = await Order.find({ userID: req.session._id }).sort({ createdAt: -1 })
-        // let productData = []
-        // if (OrderData) {
-        //     for (i = 0; i < OrderData.items.length; i++) {
-        //         let data = await Product.findOne({ _id: OrderData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1 })
-        //         productData.push(data)
-        //     }
-        // }
         res.render('orderHistory', {
             username: req.session.user_name,
             orders: OrderData,
@@ -297,6 +299,54 @@ const orderHistory = async (req, res) => {
     }
 }
 
+// -------orderDetails--------
+
+const orderDetails = async (req, res) => {
+    try {
+        const orders = await Order.find({ _id: req.query.orderID })
+        const orderDetail = await Order.aggregate([
+            { $match: { _id: req.query.orderID } },
+            {
+                $unwind: "$items"
+            },
+            {
+                $lookup: {
+                    from: "Product",
+                    localField: "items.productID",
+                    foreignField: "_id",
+                    as: "orderProducts"
+
+                }
+            },
+            {
+                $unwind: "$orderProducts"
+            }, {
+                $project: {
+                    _id: 1,
+                    "orderProducts.product_name": 1,
+                    "orderProducts.product_image": 1,
+                    items : 1,
+                    amount: 1,
+                    // method: 1,
+                    status: 1,
+                    // shippingAddress:1,
+                }
+            }
+        ])
+
+        res.send(orders)
+
+
+        // res.render('orderDetails', {
+        //     username: req.session.user_name,
+        //     orders,
+        // });
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
 
 // ...........Load wishlist...........
 
@@ -338,12 +388,13 @@ const error404 = async (req, res) => {
 const userProfile = async (req, res) => {
     try {
         const userMatch = await User.findOne({ _id: req.session._id })
-        const userAddress = await Address.find({ _id: userMatch.defaultAddress })
-
+        const defaultAddress = await Address.findOne({ _id: userMatch.defaultAddress })
+        const userAddress = await Address.find({userID: req.session._id}).sort({ updatedAt: -1 }).limit(4)
         res.render('userProfile', {
             username: req.session.user_name,
             user: userMatch,
             address: userAddress,
+            defaultAddress,
         });
     } catch (error) {
         console.log(error.message)
@@ -387,6 +438,7 @@ module.exports = {
     loadCheckout,
     checkout,
     orderHistory,
+    orderDetails,
     loadWishlist,
     logout,
     error404,

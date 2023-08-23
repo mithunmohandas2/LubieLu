@@ -194,6 +194,22 @@ const editProfile = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+
+// ------------COUPON-----------
+
+const couponsManage = async (req, res) => {
+    try {
+        res.render('couponsManage', {
+            username: req.session.user_name,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+
+
 // =========================
 
 module.exports = {
@@ -208,4 +224,5 @@ module.exports = {
     error404,
     adminProfile,
     editProfile,
+    couponsManage,
 }

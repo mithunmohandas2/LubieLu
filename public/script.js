@@ -179,3 +179,18 @@ async function qtyDecrease(i) {
       })
   }
 }
+
+// ------------------------------
+// select Address
+
+function selectAddress(i) {
+  document.getElementById("addressID").value = document.getElementsByClassName("savedAddressID")[i].value
+ document.getElementById("addressName").value = document.getElementsByClassName("savedAddressName")[i].innerHTML
+ document.getElementById("phone").value = document.getElementsByClassName("savedPhone")[i].innerHTML
+ document.getElementById("address1").value = document.getElementsByClassName("savedAddress1")[i].innerHTML
+ document.getElementById("address2").value = document.getElementsByClassName("savedAddress2")[i].innerHTML
+ document.getElementById("district").value = document.getElementsByClassName("savedDistrict")[i].innerHTML
+ document.getElementById("state").value = document.getElementsByClassName("savedState")[i].innerHTML
+ document.getElementById("pincode").value = document.getElementsByClassName("savedPincode")[i].innerHTML
+  
+}

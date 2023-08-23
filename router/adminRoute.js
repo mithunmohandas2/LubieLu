@@ -52,7 +52,7 @@ admin_route.post('/productSearch',auth.isLogin, auth.cookieCheck, productControl
 
 admin_route.get('/addProduct',auth.isLogin,productController.addProduct)
 admin_route.post('/insertProduct',auth.isLogin, upload.array('product_image', 6),productController.insertProduct)
-// admin_route.get('/editProduct',auth.isLogin, auth.cookieCheck, productController.productManagement)
+admin_route.get('/editProduct',auth.isLogin, auth.cookieCheck, productController.productManagement)
 admin_route.post('/editProductLoad',auth.isLogin,productController.editProductLoad)
 admin_route.post('/editSingleProduct',auth.isLogin, productController.editSingleProduct)
 admin_route.post('/deleteProduct',auth.isLogin,productController.deleteProduct)
@@ -72,7 +72,7 @@ admin_route.get('/order_management',auth.isLogin,adminController.order_managemen
 admin_route.get('/profile',auth.isLogin,adminController.adminProfile)
 admin_route.post('/editAdminProfile', auth.isLogin, adminController.editProfile);
 
-
+admin_route.get('/coupons',auth.isLogin,adminController.couponsManage)
 
 admin_route.get('*',adminController.error404)
 

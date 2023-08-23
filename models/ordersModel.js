@@ -26,8 +26,14 @@ const ordersSchema = new mongoose.Schema({
     },
     status:{
         type : String,
-        default : "Pending"
-    }
+        default : "Order placed"
+    },
+    method:{
+        type : String,
+    },
+    shippingAddress:{
+        type: ObjectId,
+    },
 },  { timestamps: true })
 
 module.exports = mongoose.model("Order", ordersSchema);

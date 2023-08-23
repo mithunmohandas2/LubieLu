@@ -24,23 +24,23 @@
           </div>
 
           <div class="card my-5">
-           <% if (locals.address.length){ %>
-            <div class="card-body">
-              <h5 class="card-title">Default Address</h5> <br>
-              <p class="card-text">
-                <%= locals.address[0].addressName %>
-              </p>
-              <p class="card-text">
-                <%= locals.address[0].address1 %>, <%= locals.address[0].address2 %>
-              </p>
-              <p class="card-text">
-                <%= locals.address[0].district %>, <%= locals.address[0].state %>,
-                    <%= locals.address[0].country %> - <%= locals.address[0].pincode %>
-              </p>
-              <p class="card-text">Ph : <%= locals.address[0].phone %>
-              </p>
-            </div>
-            <% } %>
+            <% if (locals.defaultAddress){ %>
+              <div class="card-body">
+                <h5 class="card-title">Default Address</h5> <br>
+                <p class="card-text">
+                  <%= locals.defaultAddress.addressName %>
+                </p>
+                <p class="card-text">
+                  <%= locals.defaultAddress.address1 %>, <%= locals.defaultAddress.address2 %>
+                </p>
+                <p class="card-text">
+                  <%= locals.defaultAddress.district %>, <%= locals.defaultAddress.state %>,
+                      <%= locals.defaultAddress.country %> - <%= locals.defaultAddress.pincode %>
+                </p>
+                <p class="card-text">Ph : <%= locals.defaultAddress.phone %>
+                </p>
+              </div>
+              <% } %>
           </div>
         </div>
         <div class="col-md-8">
@@ -86,68 +86,95 @@
               <h5 class="card-title mt-3 mb-5 text-center">Manage Address</h5>
 
               <!-- adding address -->
+              <div class="row">
+                <div class="col-md-6 px-1">
+                  <h5 class="card-title mt-3 mb-4 text-start">New address</h5>
+                  <form action="/addAddress" method="post">
 
-              <div class="col-md-6 px-1">
-                <h5 class="card-title mt-3 mb-4 text-start">New address</h5>
-                <form action="/addAddress" method="post">
-
-                  <div class="mb-3">
-                    <label for="addressName" class="form-label">Name</label>
-                    <input type="text" placeholder="Enter name for delivery" pattern="[A-Za-z ]*"
-                      oninvalid="setCustomValidity('Please enter alphabetic characters only')"
-                      oninput="setCustomValidity('')" name="addressName" class="form-control" id="addressName" required>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="phone" class="form-label">Phone number</label>
-                    <input type="text" name="phone" class="form-control" id="phone" pattern="[0-9]*"
-                      oninvalid="setCustomValidity('Please enter a valid mobile number')"
-                      placeholder="Enter contact number" required>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="text" class="form-label">Address Line 1 </label>
-                    <input type="text" placeholder="House No/Name" name="address1" class="form-control" id="address1"
-                      required>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="text" class="form-label">Address Line 2 </label>
-                    <input type="text" placeholder="Street Address" name="address2" class="form-control" id="address2"
-                      required>
-                  </div>
-
-                  <div class="row">
-                    <div class="mb-3 col-md-6">
-                      <label for="district" class="form-label">District</label>
-                      <input type="text" name="district" class="form-control" placeholder="Enter district" required>
-                    </div>
-                    <div class="mb-3 col-md-6">
-                      <label for="state" class="form-label">State</label>
-                      <input type="text" name="state" class="form-control" placeholder="Enter state" required>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="mb-3 col-md-6">
-                      <label for="country" class="form-label">Country</label>
-                      <input type="text" name="country" class="form-control" value="India" readonly>
-                    </div>
-                    <div class="mb-3 col-md-6">
-                      <label for="pincode" class="form-label">Pincode</label>
-                      <input type="number" name="pincode" class="form-control" id="pincode" min=100000 max=999999
-                        oninvalid="setCustomValidity('Please enter a valid Pincode')" placeholder="Enter pincode"
+                    <div class="mb-3">
+                      <label for="addressName" class="form-label">Name</label>
+                      <input type="text" placeholder="Enter name for delivery" pattern="[A-Za-z ]*"
+                        oninvalid="setCustomValidity('Please enter alphabetic characters only')"
+                        oninput="setCustomValidity('')" name="addressName" class="form-control" id="addressName"
                         required>
                     </div>
-                    <div class="form-check ms-3">
-                      <label for="saveAddress" class="form-label">Make address default</label>
-                      <input class="form-check-input" type="checkbox" name="makeDefault" />
+
+                    <div class="mb-3">
+                      <label for="phone" class="form-label">Phone number</label>
+                      <input type="text" name="phone" class="form-control" id="phone" pattern="[0-9]*"
+                        oninvalid="setCustomValidity('Please enter a valid mobile number')"
+                        placeholder="Enter contact number" required>
                     </div>
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-danger my-3">Add new Address</button>
+
+                    <div class="mb-3">
+                      <label for="text" class="form-label">Address Line 1 </label>
+                      <input type="text" placeholder="House No/Name" name="address1" class="form-control" id="address1"
+                        required>
                     </div>
-                  </div>
-                </form>
+
+                    <div class="mb-3">
+                      <label for="text" class="form-label">Address Line 2 </label>
+                      <input type="text" placeholder="Street Address" name="address2" class="form-control" id="address2"
+                        required>
+                    </div>
+
+                    <div class="row">
+                      <div class="mb-3 col-md-6">
+                        <label for="district" class="form-label">District</label>
+                        <input type="text" name="district" class="form-control" placeholder="Enter district" required>
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" name="state" class="form-control" placeholder="Enter state" required>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="mb-3 col-md-6">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" name="country" class="form-control" value="India" readonly>
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label for="pincode" class="form-label">Pincode</label>
+                        <input type="number" name="pincode" class="form-control" id="pincode" min=100000 max=999999
+                          oninvalid="setCustomValidity('Please enter a valid Pincode')" placeholder="Enter pincode"
+                          required>
+                      </div>
+                      <div class="form-check ms-3">
+                        <label for="saveAddress" class="form-label">Make address default</label>
+                        <input class="form-check-input" type="checkbox" name="makeDefault" />
+                      </div>
+                      <div class="text-center">
+                        <button type="submit" class="btn btn-danger my-3">Add new Address</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- listing address -->
+                <div class="col-md-6 px-4">
+                  <h5 class="card-title mt-3 mb-4 text-start">Saved addresses</h5>
+                  <% if(locals.address.length){
+                    for(i=0; i<locals.address.length;i++) { %>
+                    <button class="bg-transparent p-0 my-3" style="border: none;" ><div class="card p-2" style="background-color: rgb(242,242,242);">
+
+                      <p class="mb-0">
+                        <%= locals.address[i].addressName%>
+                          ( Ph : <%= locals.address[i].phone%> )
+                      </p>
+                      <p>
+                        "<%= locals.address[i].address1%>",
+                          <%= locals.address[i].address2%>,
+                            <%= locals.address[i].district%>,
+                              <%= locals.address[i].state%>,
+                                <%= locals.address[i].country%>-
+                                  pincode :<%= locals.address[i].pincode%>
+                      </p>
+                    </div></button>
+                    <% }} %>
+
+                </div>
+
               </div>
             </div>
           </div>
