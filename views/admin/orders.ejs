@@ -31,7 +31,8 @@
                     <%=locals.orders[i].createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %>
                   </td>
                   <td>
-                    <%=locals.orders[i]._id%>
+                    <a href="/admin/orderDetails?orderID=<%= locals.orders[i]._id %>"> <%=locals.orders[i]._id%></a>
+                   
                   </td>
                   <td>
                     <%=locals.orders[i].items.length%>
@@ -54,7 +55,7 @@
                     
                   </td>
                   <td>
-                    <button class="btn btn-outline-danger py=0">View</button>
+                    
                    <button class="btn btn-warning py=0">Update</button>
                   </td>
                   

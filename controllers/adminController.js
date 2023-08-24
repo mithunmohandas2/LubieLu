@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
-const Order = require("../models/ordersModel")
+const Order = require("../models/ordersModel");
+const Address = require("../models/userAddress");
 // -------------------------------------------------
 // loading the login page
 const loginLoad = async (req, res) => {
@@ -207,7 +208,31 @@ const couponsManage = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+// --------------------
 
+const orderDetails = async (req, res) => {
+    try {
+        const orders = await Order.findOne({ _id: req.query.orderID })
+        const address = await Address.findOne({ _id: orders.shippingAddress })
+        let productData = []
+        for (i = 0; i < orders.items.length; i++) {
+            let data = await Product.findOne({ _id: orders.items[i].productID }, { product_name: 1, product_image: 1 })
+            productData.push(data)
+        }
+
+
+        res.render('orderDetailAdmin', {
+            username: req.session.user_name,
+            orders,
+            address,
+            productData,
+        });
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
 
 
 // =========================
@@ -225,4 +250,5 @@ module.exports = {
     adminProfile,
     editProfile,
     couponsManage,
+    orderDetails,
 }

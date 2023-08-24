@@ -1,6 +1,6 @@
 <%- include('../layouts/header') %>
 
-  <%- include('../layouts/userHeader') %>
+  <%- include('../layouts/adminHeader') %>
 
   <style>
     body {
@@ -46,8 +46,8 @@
                     <% for (i=0;i<orders.items.length;i++) {%>
                       <tr>
                         <td><%= i+1 %></td>
-                        <td><a href="/productDetail?product_id=<%=locals.productData[i]._id%>"> 
-                          <img src="<%= locals.productData[i].product_image[0] %>" style="width: 3em;" alt="product_image"></a></td>
+                        <td>
+                          <img src="<%= locals.productData[i].product_image[0] %>" style="width: 3em;" alt="product_image"></td>
                           <td><%= locals.productData[i].product_name %></td>
                           <td><%= locals.orders.items[i].rate %></td>
                           <td class="text-center"><%= locals.orders.items[i].qty %></td>
@@ -61,7 +61,7 @@
                   </tbody>
               </table>
           </div>
-          <a href="/orderHistory"><button class="btn btn-outline-danger my-4">Back to Order History</button></a>
+          <a href="/admin/order_management"><button class="btn btn-outline-danger my-4">Back to Order Management</button></a>
           
       </div>
   </div>

@@ -1,8 +1,8 @@
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
-const Cart = require("../models/cartModel")
-const Address = require("../models/userAddress")
-const Order = require("../models/ordersModel")
+const Cart = require("../models/cartModel");
+const Address = require("../models/userAddress");
+const Order = require("../models/ordersModel");
 // -----------------------------------------------
 
 //loading the signup page

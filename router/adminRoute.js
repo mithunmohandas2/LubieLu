@@ -68,6 +68,7 @@ admin_route.post('/editSubCategory',auth.isLogin,productController.editSubCatego
 admin_route.post('/deleteSubCategory',auth.isLogin,productController.deleteSubCategory)
 
 admin_route.get('/order_management',auth.isLogin,adminController.order_management)
+admin_route.get('/orderDetails',auth.isLogin,adminController.orderDetails)
 
 admin_route.get('/profile',auth.isLogin,adminController.adminProfile)
 admin_route.post('/editAdminProfile', auth.isLogin, adminController.editProfile);
