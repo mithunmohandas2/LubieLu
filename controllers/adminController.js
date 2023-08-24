@@ -41,7 +41,7 @@ const loadDashboard = async (req, res) => {
         const productTotal = await Product.countDocuments()
         const userActive = await User.find({ is_blocked: false }).countDocuments()
         const productActive = await Product.find({ is_blocked: false }).countDocuments()
-        
+
         res.render('dashboard', {
             username: req.session.user_name,
             userTotal: userTotal,
@@ -141,7 +141,7 @@ const blockUser = async (req, res) => {
 
 const order_management = async (req, res) => {
     try {
-        const orders = await Order.find().sort({createdAt:-1})
+        const orders = await Order.find().sort({ createdAt: -1 })
         res.render('orders', {
             username: req.session.user_name,
             orders: orders
@@ -158,14 +158,14 @@ const error404 = async (req, res) => {
         res.render('error')
     } catch (error) {
         console.log(error.message)
-        res.render('error',  { error: error.message })
+        res.render('error', { error: error.message })
     }
 }
 
 // ------------------------------
 const adminProfile = async (req, res) => {
     try {
-        const userMatch = await User.findOne({ admin_status: true})
+        const userMatch = await User.findOne({ admin_status: true })
         res.render('adminProfile', {
             username: req.session.user_name,
             user: userMatch,
@@ -233,7 +233,19 @@ const orderDetails = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+// --------------------------------
 
+const orderStatusChange = async (req, res) => {
+    try {
+        const update = await Order.updateOne({ _id: req.body.orderID }, { $set: { status: req.body.status } })
+        if (update)  res.json();
+        else throw Error ("Unable to update status")
+       
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
 
 // =========================
 
@@ -251,4 +263,5 @@ module.exports = {
     editProfile,
     couponsManage,
     orderDetails,
+    orderStatusChange,
 }

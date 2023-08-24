@@ -185,13 +185,13 @@ async function qtyDecrease(i) {
 
 function selectAddress(i) {
   document.getElementById("addressID").value = document.getElementsByClassName("savedAddressID")[i].value
- document.getElementById("addressName").value = document.getElementsByClassName("savedAddressName")[i].innerHTML
- document.getElementById("phone").value = document.getElementsByClassName("savedPhone")[i].innerHTML
- document.getElementById("address1").value = document.getElementsByClassName("savedAddress1")[i].innerHTML
- document.getElementById("address2").value = document.getElementsByClassName("savedAddress2")[i].innerHTML
- document.getElementById("district").value = document.getElementsByClassName("savedDistrict")[i].innerHTML
- document.getElementById("state").value = document.getElementsByClassName("savedState")[i].innerHTML
- document.getElementById("pincode").value = document.getElementsByClassName("savedPincode")[i].innerHTML
+  document.getElementById("addressName").value = document.getElementsByClassName("savedAddressName")[i].innerHTML
+  document.getElementById("phone").value = document.getElementsByClassName("savedPhone")[i].innerHTML
+  document.getElementById("address1").value = document.getElementsByClassName("savedAddress1")[i].innerHTML
+  document.getElementById("address2").value = document.getElementsByClassName("savedAddress2")[i].innerHTML
+  document.getElementById("district").value = document.getElementsByClassName("savedDistrict")[i].innerHTML
+  document.getElementById("state").value = document.getElementsByClassName("savedState")[i].innerHTML
+  document.getElementById("pincode").value = document.getElementsByClassName("savedPincode")[i].innerHTML
 }
 
 // -----------------
@@ -201,11 +201,37 @@ const onlinePayCheckbox = document.getElementById('onlinepay');
 const codCheckbox = document.getElementById('COD');
 
 onlinePayCheckbox.addEventListener('change', function () {
-    codCheckbox.checked = !this.checked;
+  codCheckbox.checked = !this.checked;
 });
 codCheckbox.addEventListener('change', function () {
-    onlinePayCheckbox.checked = !this.checked;
+  onlinePayCheckbox.checked = !this.checked;
 });
 
 // ----------------------------
-  
+
+// Order status update
+
+async function orderStatusChange(i) {
+  const status = document.getElementsByClassName("orderStatus")[i].value;
+  const orderID = document.getElementsByClassName("orderID")[i].innerHTML
+  const update = await fetch('/admin/orderstatus', {
+    method: 'post',
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({
+      status: status,
+      orderID:orderID
+    })
+  })
+    .then(() => {
+      window.alert("Status updated")
+    })
+}
+
+
+
+// alerts
+function popUpAlert(message){
+  window.alert(message)
+}
