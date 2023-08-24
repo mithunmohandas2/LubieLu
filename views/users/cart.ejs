@@ -6,6 +6,13 @@
       <%=username%>'s Shopping Cart
     </h3>
 
+    <% if(locals.nilStock){%>
+    
+      <div class="alert alert-warning text-center">
+          "<%=locals.nilStock%>" is out of Stock
+      </div>
+      <% } %>
+
     <% if (locals.products.length){ %>
 
       <section class="container pb-4 my-4">

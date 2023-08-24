@@ -61,7 +61,6 @@ const productSchema = new mongoose.Schema({
     feedback: [{
         user: {
             type: ObjectId,
-            required: true
         },
         rating: {
             type: Number

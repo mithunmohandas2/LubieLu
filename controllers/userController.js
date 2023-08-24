@@ -146,21 +146,25 @@ const loadAllProducts = async (req, res) => {
 
 const loadCart = async (req, res) => {
     try {
-        let productData = []
         const cartData = await Cart.findOne({ userID: req.session._id })
+        let productData = []
         if (cartData) {
             for (i = 0; i < cartData.items.length; i++) {
                 let data = await Product.findOne({ _id: cartData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1, stock: 1 })
                 productData.push(data)
             }
         }
-        // res.send(productData)
-        // console.log(cartData);
+        let nilStock;
+        if (req.query.nilStock) {
+            nilStock = await Product.findOne({ _id: req.query.nilStock })
+            nilStock = nilStock.product_name;
+        }
 
         res.render('cart', {
             username: req.session.user_name,
             cart: cartData,
             products: productData,
+            nilStock,
         });
     } catch (error) {
         console.log(error.message)
@@ -202,10 +206,17 @@ const loadCheckout = async (req, res) => {
         let productData = []
         if (cartData) {
             for (i = 0; i < cartData.items.length; i++) {
-                let data = await Product.findOne({ _id: cartData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1 })
+                let data = await Product.findOne({ _id: cartData.items[i].productID }, { product_name: 1, sellingPrice: 1, product_image: 1, stock: 1 })
                 productData.push(data)
             }
         }
+
+        for (let i = 0; i < productData.length; i++) {
+            if (productData[i].stock < 1) {
+                return res.redirect(`/cart?nilStock=${productData[i]._id}`);
+            }
+        }
+
         const userAddress = await Address.find({ userID: req.session._id }).sort({ updatedAt: -1 }).limit(4)
 
         res.render('checkout', {

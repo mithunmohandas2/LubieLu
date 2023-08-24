@@ -72,7 +72,7 @@
                     </th>
                     <td>
                       <div>
-                        <img class="w-100 curv" src="<%=locals.searchData[i].product_image[0] %>" alt="">
+                        <img class="curv" style="width: 7em;" src="<%=locals.searchData[i].product_image[0] %>" alt="">
                       </div>
                     </td>
                     <td>
@@ -82,7 +82,7 @@
                       <%=locals.searchData[i].stock%>
                     </td>
                     <td>
-                      <%=locals.searchData[i].updatedAt%>
+                        <%=locals.searchData[i].updatedAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %>
                     </td>
 
                     <td>
@@ -139,7 +139,7 @@
                         </th>
                         <td>
                           <div>
-                            <img class="w-100 curv" src="<%=locals.products[i].product_image[0] %>" alt="">
+                            <img class="curv" style="width: 7em;" src="<%=locals.products[i].product_image[0] %>" alt="">
                           </div>
                         </td>
                         <td>
@@ -149,11 +149,7 @@
                           <%=locals.products[i].stock%>
                         </td>
                         <td>
-                          <%=locals.products[i].updatedAt.getDate()%> - <%=locals.products[i].updatedAt.getMonth()%> -
-                              <%=locals.products[i].updatedAt.getFullYear()%>
-                                (<%=locals.products[i].updatedAt.getHours()%> :
-                                  <%=locals.products[i].updatedAt.getMinutes()%> :
-                                    <%=locals.products[i].updatedAt.getSeconds()%>)
+                          <%=locals.products[i].updatedAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %>
                         </td>
 
                         <td>

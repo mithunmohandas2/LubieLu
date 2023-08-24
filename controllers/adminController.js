@@ -40,8 +40,8 @@ const loadDashboard = async (req, res) => {
         const productTotal = await Product.countDocuments()
         const userActive = await User.find({ is_blocked: false }).countDocuments()
         const productActive = await Product.find({ is_blocked: false }).countDocuments()
-        // console.log(all_users)
-        res.render('home', {
+        
+        res.render('dashboard', {
             username: req.session.user_name,
             userTotal: userTotal,
             productTotal: productTotal,

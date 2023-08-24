@@ -17,6 +17,7 @@
               <th scope="col">Order ID</th>
               <th scope="col">No.of items</th>
               <th scope="col">Amount</th>
+              <th scope="col">Payment mode</th>
               <th scope="col">Status</th>
               <th scope="col">Options</th>
             </tr>
@@ -39,17 +40,21 @@
                   <td>
                     <%=locals.orders[i].amount%>
                   </td>
+
+                  <td>
+                    <%=locals.orders[i].method%>
+                  </td>
                   <td>
                     <select name="" id="">
                         <option value="<%=locals.orders[i].status%>"><%=locals.orders[i].status%></option>
-                        <option value="">confirmed</option>
-                        <option value="">In-transit</option>
-                        <option value="">Delivered</option>
-
+                        <option value="confirmed">confirmed</option>
+                        <option value="In-transit">In-transit</option>
+                        <option value="Delivered">Delivered</option>
                     </select>
                     
                   </td>
                   <td>
+                    <button class="btn btn-outline-danger py=0">View</button>
                    <button class="btn btn-warning py=0">Update</button>
                   </td>
                   

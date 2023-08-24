@@ -52,8 +52,10 @@
                             </span>
                         </h5>
                         <hr>
-
-                        <% if (locals.product[0].stock <=10) { %>
+                        <% if (locals.product[0].stock ===0) { %>
+                            <h6 class="text-danger"> Out of Stock !!!
+                            </h6>
+                        <%} else if (locals.product[0].stock <=10) { %>
                             <h6 class="text-danger">Hurry !!! Only <%= locals.product[0].stock %> nos left in Stock
                             </h6>
                             <% } %>
