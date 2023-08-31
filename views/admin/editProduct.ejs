@@ -27,8 +27,12 @@
                 <h5 class="mb-4 pb-2 ">Product Details</h5>
                 <form class="row g-3 text-start" action="/admin/editSingleProduct" method="post"
                     enctype="multipart/form-data">
+
+                    <div class="col-12 mb-3">
+                    <label for="product_id" class="form-label">Product ID</label>
                     <input type="text" class="form-control" name="product_id"
                         value="<%= locals.data ? locals.data[0]._id : '' %>" readonly required>
+                    </div>
 
                     <div class="col-12 mb-3">
                         <label for="product_name" class="form-label">Product Name</label>
@@ -44,8 +48,9 @@
                     </div>
 
                     <% if (locals.data){ for(i=0;i<data[0].product_image.length;i++){ %>
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <img class="w-100" src="<%=data[0].product_image[i]%>" alt="product image"> </img>
+                        <div class="col-6 col-md-4 col-lg-3 card py-2">
+                            <img class="mb-2" style="height: 8em;" src="<%=data[0].product_image[i]%>" alt="product image"> </img>
+                            <button type="button" onclick="deleteImage('<%= i %>', '<%= locals.data[0]._id %>')" class="btn btn-outline-danger">Delete</button>
                         </div>
                      <% } } %>
 

@@ -221,17 +221,56 @@ async function orderStatusChange(i) {
     },
     body: JSON.stringify({
       status: status,
-      orderID:orderID
+      orderID: orderID
     })
   })
     .then(() => {
       window.alert("Status updated")
+    })
+    .catch(() => {
+      window.alert("Unable to update status now")
     })
 }
 
 
 
 // alerts
-function popUpAlert(message){
+function popUpAlert(message) {
   window.alert(message)
+}
+
+
+async function deleteImage(imageIndex, productID) {
+  const confirmed = window.confirm("Are you sure you want to delete the image?");
+  if (confirmed) {
+    // console.log(imageIndex +","+ productID);
+    const response = await fetch("/admin/deleteFile", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        index: imageIndex,
+        product_id: productID,
+      })
+    })
+      .then(() => {
+        window.alert("Image Deleted")
+      })
+      .then(() => {
+        const imageContainer = document.querySelectorAll('.col-6')[imageIndex];
+        const image = imageContainer.querySelector('img');
+        // Decrease image transparency by 50%
+        image.style.opacity = 0.5;
+        
+        const deleteButton = imageContainer.querySelector('.btn');
+        // Remove the delete button
+        deleteButton.remove();
+      })
+
+      .catch((error) => {
+        window.alert("Unable to delete image")
+        console.error(error);
+      })
+  }
 }

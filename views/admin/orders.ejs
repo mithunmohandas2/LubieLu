@@ -47,13 +47,13 @@
                     <%=locals.orders[i].method%>
                   </td>
                   <td>
-                    <select name="orderStatus" class="orderStatus form-select" onchange="orderStatusChange(<%= i %>)">
+                    <select name="orderStatus" class="orderStatus form-select" onchange="orderStatusChange('<%= i %>')">
                       <option disabled>Current status</option>
                       <option value="<%=locals.orders[i].status%>">
                         <%=locals.orders[i].status%>
                       </option>
                       <option disabled>Select to update</option>
-                      <option value="confirmed">Order placed</option>
+                      <option value="Order placed">Order placed</option>
                       <option value="confirmed">confirmed</option>
                       <option value="In-transit">In-transit</option>
                       <option value="Delivered">Delivered</option>

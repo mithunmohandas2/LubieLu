@@ -6,6 +6,7 @@ const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const userController = require("../controllers/userController");
 const path = require('path')
+const auth = require("../middleware/adminAuth")
 
 
 admin_route.use(session({
@@ -17,7 +18,6 @@ admin_route.use(session({
 admin_route.set('view engine','ejs');
 admin_route.set('views','./views/admin')
 
-const auth = require("../middleware/adminAuth")
 
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -52,10 +52,11 @@ admin_route.post('/productSearch',auth.isLogin, auth.cookieCheck, productControl
 
 admin_route.get('/addProduct',auth.isLogin,productController.addProduct)
 admin_route.post('/insertProduct',auth.isLogin, upload.array('product_image', 6),productController.insertProduct)
-admin_route.get('/editProduct',auth.isLogin, auth.cookieCheck, productController.productManagement)
 admin_route.post('/editProductLoad',auth.isLogin,productController.editProductLoad)
 admin_route.post('/editSingleProduct',auth.isLogin, productController.editSingleProduct)
+admin_route.post('/deleteFile',auth.isLogin, productController.deleteFile)
 admin_route.post('/deleteProduct',auth.isLogin,productController.deleteProduct)
+admin_route.get('/editProduct',auth.isLogin, auth.cookieCheck, productController.productManagement)
 
 admin_route.post('/addCategory',auth.isLogin,productController.addCategory)
 admin_route.post('/editCategory',auth.isLogin,productController.editCategory)

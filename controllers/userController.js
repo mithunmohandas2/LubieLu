@@ -271,6 +271,8 @@ const checkout = async (req, res) => {
         })
         //save new order placed
         const orderData = await newOrder.save()
+        
+
         //decrease qty from stock
         if (orderData) {
             for (i = 0; i < orderData.items.length; i++) {

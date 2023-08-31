@@ -4,6 +4,13 @@ const subCategory = require("../models/productSubCategoryModel");
 const Cart = require("../models/cartModel");
 const { isValidObjectId } = require("mongoose");
 
+const fs = require('fs');
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 
 
 // ==========VIEW PRODUCT MANAGEMENT PAGE============
@@ -328,6 +335,33 @@ const editProductLoad = async (req, res) => {
 
 // -------------------------------
 
+const deleteFile = async (req, res) => {
+    try {
+        const imageIndex = req.body.index;
+        const product = await Product.findOne({ _id: req.body.product_id })
+        const filePath = `\public` + product.product_image[imageIndex]
+        const isDelete = await Product.updateOne({ _id: req.body.product_id }, {$pull :{ product_image : product.product_image[imageIndex]}})
+
+        fs.unlink(filePath, async (err) => {  // delete image file
+            if (err) {
+                throw Error("Failed to delete image")
+            } else {
+               
+                if(isDelete.modifiedCount >=1){ 
+                    // console.log('File has been successfully deleted.');
+                    res.json()
+                }
+                else  throw Error("Failed to update delete in database")
+            }
+        })
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+
+// -------------------------------
 const deleteProduct = async (req, res) => {
     try {
         // console.log(req.body);
@@ -359,27 +393,30 @@ const deleteProduct = async (req, res) => {
 
 const editSingleProduct = async (req, res) => {
     try {
+        console.log(req.body)
         // const productImages = req.files;
         // const imagePaths = productImages.map(image => image.path);
+        // const SP = Math.round(req.body.sellingPrice)
 
-        const SP = Math.round(req.body.sellingPrice)
-        const product = {
-            product_name: req.body.product_name,
-            description: req.body.description,
-            category_id: req.body.category_id,
-            subCategory_id: req.body.subCategory_id,
-            brand: req.body.brand,
-            purchasePrice: req.body.purchasePrice,
-            stock: req.body.stock,
-            basePrice: req.body.basePrice,
-            gst: req.body.gst,
-            discount: req.body.discount,
-            mrp: req.body.mrp,
-            sellingPrice: SP,
-        }
+        // const product = {
+        //     product_name: req.body.product_name,
+        //     description: req.body.description,
+        //     // product_image: imagePaths,
+        //     category_id: req.body.category_id,
+        //     subCategory_id: req.body.subCategory_id,
+        //     brand: req.body.brand,
+        //     purchasePrice: req.body.purchasePrice,
+        //     stock: req.body.stock,
+        //     basePrice: req.body.basePrice,
+        //     gst: req.body.gst,
+        //     discount: req.body.discount,
+        //     mrp: req.body.mrp,
+        //     sellingPrice: SP,
+        // }
         // editing all field 
-        const productData = await Product.updateOne({ _id: req.body.product_id }, { $set: product });
-
+        const productData ="35"
+        // const productData = await Product.updateOne({ _id: req.body.product_id }, { $set: product });
+        console.log(productData); 
 
         //adding image to array
         //     if(req.files){
@@ -395,8 +432,6 @@ const editSingleProduct = async (req, res) => {
         //    const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
         //     }
 
-
-        // console.log(productData);
         if (productData) {  // editing to database success?
             res.redirect('/admin/product_management?alert=Product edited successfully')
         } else {
@@ -407,6 +442,8 @@ const editSingleProduct = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+
+// -----------------------------
 
 const productDetail = async (req, res) => {
     try {
@@ -474,6 +511,7 @@ module.exports = {
     productSearch,
     userSearchResult,
     editProductLoad,
+    deleteFile,
     deleteProduct,
     editSingleProduct,
     productDetail,

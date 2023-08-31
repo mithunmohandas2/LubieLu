@@ -139,7 +139,12 @@
                         </th>
                         <td>
                           <div>
-                            <img class="curv" style="width: 7em;" src="<%=locals.products[i].product_image[0] %>" alt="">
+                            <% if (locals.products[i].product_image[0]){ %>
+                              <img id="prd_img_0"  class="curv zoomable" style="width: 7em;" src=" <%=locals.products[i].product_image[0]%>"></img>
+                              <% } else { %>
+                                  <img class="curv zoomable" id="prd_img_0" style="width: 7em;"
+                                      src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"></img>
+                                  <% } %>
                           </div>
                         </td>
                         <td>

@@ -220,7 +220,6 @@ const orderDetails = async (req, res) => {
             productData.push(data)
         }
 
-
         res.render('orderDetailAdmin', {
             username: req.session.user_name,
             orders,
@@ -238,7 +237,7 @@ const orderDetails = async (req, res) => {
 const orderStatusChange = async (req, res) => {
     try {
         const update = await Order.updateOne({ _id: req.body.orderID }, { $set: { status: req.body.status } })
-        if (update)  res.json();
+        if (update.modifiedCount >= 1)  res.json();
         else throw Error ("Unable to update status")
        
     } catch (error) {

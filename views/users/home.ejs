@@ -4,14 +4,59 @@
 
 
         <div class="container">
-            <h5 class="pt-4"><i>Welcome <%=locals.username? locals.username :'User' %></i></h5>
+            <h5 class="pt-4  my-3"><i>Welcome <%=locals.username? locals.username :'User' %></i></h5>
+
             <img class="w-100 curv" src="/images/baby-girl-her-crib.jpg"></img>
-            <div class="w-100 text-center" style="z-index: 2; position: absolute; left: 20%; top: 50%;">
-                <h2 class="mt-2">Explore the collection</h2>
-                <a href="/allProducts"><button class="btn btn-danger mb-3">
-                    View All Products
-                </button> </a>
+
+
+            
+            <div class="text-center my-5">
+                <h2>Explore the collection</h2>
+                <a href="/allProducts"><button class="btn btn-danger">
+                        View All Products
+                    </button> </a>
+
             </div>
+
+            <div class="container-fluid row my-5">
+                <div class="col-6 col-md-3 p-4 text-center">
+                    <div class="p-4 card curv">
+                        <h1 class="material-symbols-outlined">
+                            new_releases
+                        </h1>
+                        Quality Product
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 p-4 text-center">
+                    <div class="p-4 card curv">
+                        <h1 class="material-symbols-outlined">
+                            local_shipping
+                        </h1>
+                        Free Shipping
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 p-4 text-center">
+                    <div class="p-4 card curv">
+                        <h1 class="material-symbols-outlined">
+                            compare_arrows
+                        </h1>
+                        14 day return
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 p-4 text-center">
+                    <div class="p-4 card curv">
+                        <h1 class="material-symbols-outlined">
+                                perm_phone_msg
+                        </h1>
+                        24/7 support
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
         </div>
 
         <!-- shop_section -->
@@ -33,15 +78,17 @@
                                 <div class="w-100">
                                     <% if (item.product_image[0]){ %>
                                         <a href="/productDetail?product_id=<%=item._id%>">
-                                            <img class="w-100 curv" src="<%= item.product_image[0]%>" alt="Product Image">
+                                            <img class="w-100 curv" src="<%= item.product_image[0]%>"
+                                                alt="Product Image">
                                         </a>
                                         <% } else { %>
                                             <a href="/productDetail?product_id=<%=item._id%>">
                                                 <img class="w-100 curv"
-                                                    src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg" alt="Product Image"></img>
-                                                </a>
-                                                    <% } %>
-        
+                                                    src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"
+                                                    alt="Product Image"></img>
+                                            </a>
+                                            <% } %>
+
                                 </div>
                                 <hr>
                                 <div class="detail-box">
