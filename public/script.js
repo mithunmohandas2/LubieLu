@@ -210,7 +210,6 @@ codCheckbox.addEventListener('change', function () {
 // ----------------------------
 
 // Order status update
-
 async function orderStatusChange(i) {
   const status = document.getElementsByClassName("orderStatus")[i].value;
   const orderID = document.getElementsByClassName("orderID")[i].innerHTML
@@ -231,7 +230,7 @@ async function orderStatusChange(i) {
       window.alert("Unable to update status now")
     })
 }
-
+// -------------------------------
 
 
 // alerts
@@ -239,7 +238,7 @@ function popUpAlert(message) {
   window.alert(message)
 }
 
-
+// ========= Delete Product Image =================
 async function deleteImage(imageIndex, productID) {
   const confirmed = window.confirm("Are you sure you want to delete the image?");
   if (confirmed) {
@@ -274,3 +273,5 @@ async function deleteImage(imageIndex, productID) {
       })
   }
 }
+// -------------------------
+
