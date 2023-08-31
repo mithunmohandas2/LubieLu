@@ -340,18 +340,18 @@ const deleteFile = async (req, res) => {
         const imageIndex = req.body.index;
         const product = await Product.findOne({ _id: req.body.product_id })
         const filePath = `\public` + product.product_image[imageIndex]
-        const isDelete = await Product.updateOne({ _id: req.body.product_id }, {$pull :{ product_image : product.product_image[imageIndex]}})
+        const isDelete = await Product.updateOne({ _id: req.body.product_id }, { $pull: { product_image: product.product_image[imageIndex] } })
 
         fs.unlink(filePath, async (err) => {  // delete image file
             if (err) {
                 throw Error("Failed to delete image")
             } else {
-               
-                if(isDelete.modifiedCount >=1){ 
+
+                if (isDelete.modifiedCount >= 1) {
                     // console.log('File has been successfully deleted.');
                     res.json()
                 }
-                else  throw Error("Failed to update delete in database")
+                else throw Error("Failed to update delete in database")
             }
         })
     } catch (error) {
@@ -392,45 +392,48 @@ const deleteProduct = async (req, res) => {
 // ------EDIT PRODUCT------------------pending--------------
 
 const editSingleProduct = async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.files);
     try {
-        console.log(req.body)
-        // const productImages = req.files;
-        // const imagePaths = productImages.map(image => image.path);
-        // const SP = Math.round(req.body.sellingPrice)
+        const productImages = req.files;
+        const imagePaths = productImages.map(image => image.path);
+        const SP = Math.round(req.body.sellingPrice)
 
-        // const product = {
-        //     product_name: req.body.product_name,
-        //     description: req.body.description,
-        //     // product_image: imagePaths,
-        //     category_id: req.body.category_id,
-        //     subCategory_id: req.body.subCategory_id,
-        //     brand: req.body.brand,
-        //     purchasePrice: req.body.purchasePrice,
-        //     stock: req.body.stock,
-        //     basePrice: req.body.basePrice,
-        //     gst: req.body.gst,
-        //     discount: req.body.discount,
-        //     mrp: req.body.mrp,
-        //     sellingPrice: SP,
-        // }
+        const product = {
+            product_name: req.body.product_name,
+            description: req.body.description,
+            // product_image: imagePaths,
+            category_id: req.body.category_id,
+            subCategory_id: req.body.subCategory_id,
+            brand: req.body.brand,
+            purchasePrice: req.body.purchasePrice,
+            stock: req.body.stock,
+            basePrice: req.body.basePrice,
+            gst: req.body.gst,
+            discount: req.body.discount,
+            mrp: req.body.mrp,
+            sellingPrice: SP,
+        }
+
         // editing all field 
-        const productData ="35"
-        // const productData = await Product.updateOne({ _id: req.body.product_id }, { $set: product });
-        console.log(productData); 
+        const productData = await Product.updateOne({ _id: req.body.product_id }, { $set: product });
+        // console.log(productData);
 
-        //adding image to array
-        //     if(req.files){
-        //    // =========Change Product Image path ==========
-        //    const Match = await Product.findOne({ _id: productData._id })
+        if (req.files) {
+            //adding image to array
+            const addImagePath = await Product.updateOne({ _id: req.body.product_id }, { $push: { product_image: imagePaths } });
 
-        //    const imgPaths = Match.product_image
-        //    let temp2 = []
-        //    for (i = 0; i < imgPaths.length; i++) {
-        //        let temp = imgPaths[i].split("\\");
-        //        temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
-        //    }
-        //    const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
-        //     }
+            //Change product image path
+            const Match = await Product.findOne({ _id: req.body.product_id })
+
+            const imgPaths = Match.product_image
+            let temp2 = []
+            for (i = 0; i < imgPaths.length; i++) {
+                let temp = imgPaths[i].split("\\");
+                temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
+            }
+            const Change = await Product.updateOne({ _id: req.body.product_id }, { $set: { product_image: temp2 } })
+        }
 
         if (productData) {  // editing to database success?
             res.redirect('/admin/product_management?alert=Product edited successfully')
