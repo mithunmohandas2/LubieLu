@@ -324,7 +324,6 @@ const orderDetails = async (req, res) => {
             productData.push(data)
         }
 
-
         res.render('orderDetails', {
             username: req.session.user_name,
             orders,

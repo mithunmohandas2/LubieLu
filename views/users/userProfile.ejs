@@ -8,9 +8,9 @@
 
     <div class="container my-5">
       <div class="row">
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
+        <div class="col-md-4 curv" style="background-color:rgba(251, 223, 220, 0.959);">
+          <div class="card mb-4 mt-5">
+            <div class="card-body ">
               <h3 class="card-title">
                 <%= locals.user.firstName %>
                   <%= locals.user.lastName %>
@@ -90,17 +90,17 @@
                 <div class="col-md-6 px-4">
                   <h5 class="card-title mt-4 mb-4 text-center">Recently saved addresses</h5>
                   <% if(locals.address.length){ for(i=0; i<locals.address.length;i++) { %>
-                    <button onclick="selectAddress('<%= i %>')" class="bg-transparent p-0 my-3" style="border: none;">
+                    <button onclick="selectAddress('<%= i %>')" class="bg-transparent p-0 my-1" style="border: none;">
                       <div class="card p-2" style="background-color: rgb(242,242,242);">
 
                         <p class="mb-0">
                           <input type="text" class="savedAddressID" value="<%= locals.address[i]._id%>" hidden>
-                          <span class="fw-bold">Address No : <%= i %></span> <br>
+                          <span class="fw-bold">Address <%= i+1 %></span> <br>
                           <span class="savedAddressName"><%= locals.address[i].addressName%></span>
                           ( Ph : <span class="savedPhone"><%= locals.address[i].phone%></span> )
                         </p>
                         <p>
-                          <span class="savedAddress1">"<%= locals.address[i].address1%>"</span>,
+                          "<span class="savedAddress1"><%= locals.address[i].address1%></span>",
                           <span class="savedAddress2"><%= locals.address[i].address2%></span>,
                           <span class="savedDistrict"><%= locals.address[i].district%></span>
                           <span class="savedState"><%= locals.address[i].state%></span>,
@@ -108,7 +108,13 @@
                           Pincode : <span class="savedPincode"><%= locals.address[i].pincode%></span>
                         </p>
                       </div>
+                      <button type="button" style="z-index: 2; position: relative; top: -3em;" class="btn btn-outline-danger px-2" onclick="deleteAddress('<%= locals.address[i]._id%>')" ><span
+                        class="material-symbols-outlined">
+                        delete
+                      </span></button>
                     </button>
+                    
+
                     <% }} %>
                 </div>
 
@@ -167,21 +173,18 @@
                           pattern="[0-9]*" oninvalid="setCustomValidity('Please enter a valid Pincode')"
                           placeholder="Enter pincode" required>
                       </div>
+                      <hr class="my-4">
                       <div class="mb-3 text-center">
-                        <button type="submit" class="btn btn-outline-primary  mt-2 px-2"><span
+                        <button type="submit" class="btn btn-outline-primary  m-2 px-4"><span
                             class="material-symbols-outlined">
                             box_add
                           </span>ADD</button>
                   </form>
-                  <button type="button" class="btn btn-outline-success  mt-2 px-2"><span
+                  <button type="button" class="btn btn-outline-success  m-2 px-4" onclick="editAddress()"><span
                       class="material-symbols-outlined">
                       edit
                     </span>EDIT</button>
 
-                  <button type="button" class="btn btn-outline-danger  mt-2 px-2"><span
-                      class="material-symbols-outlined">
-                      delete
-                    </span>DELETE</button>
                 </div>
               </div>
             </div>

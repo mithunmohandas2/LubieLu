@@ -261,7 +261,7 @@ async function deleteImage(imageIndex, productID) {
         const image = imageContainer.querySelector('img');
         // Decrease image transparency by 50%
         image.style.opacity = 0.5;
-        
+
         const deleteButton = imageContainer.querySelector('.btn');
         // Remove the delete button
         deleteButton.remove();
@@ -273,5 +273,81 @@ async function deleteImage(imageIndex, productID) {
       })
   }
 }
-// -------------------------
 
+
+// -----------delete user address--------------
+async function deleteAddress(addressID) {
+  const confirmed = window.confirm("Are you sure you want to delete the address?");
+  if (confirmed) {
+    const response = await fetch("/deleteAddress", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        addressID,
+      })
+    })
+      .then(() => {
+        window.alert("Address deleted successfully")
+      })
+      .then(() => {
+        location.reload()
+      })
+
+      .catch((error) => {
+        window.alert("Unable to delete address")
+        console.error(error);
+      })
+  }
+}
+
+// -----------------------------
+
+
+async function editAddress() {
+
+  const addressID = document.getElementById("addressID").value
+  if (!addressID) { //if no address selected
+    return window.alert("Select any address to edit")
+  }
+  const addressName = document.getElementById("addressName").value;
+  const phone = document.getElementById("phone").value;
+  const address1 = document.getElementById("address1").value;
+  const address2 = document.getElementById("address2").value;
+  const district = document.getElementById("district").value;
+  const state = document.getElementById("state").value;
+  const pincode = document.getElementById("pincode").value;
+
+  const confirmed = window.confirm("Are you sure you want to edit the address?");
+  if (confirmed) {
+    const response = await fetch("/editAddress", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        addressID,
+        addressName,
+        phone,
+        address1,
+        address2,
+        district,
+        state,
+        pincode,
+      })
+    })
+      .then(() => {
+        window.alert("Address edited successfully")
+      })
+      .then(() => {
+        location.reload()
+      })
+      .catch((error) => {
+        window.alert("Unable to edit address")
+        console.error(error);
+      })
+  }
+}
+
+// -----------------------------------

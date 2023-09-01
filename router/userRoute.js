@@ -54,6 +54,8 @@ user_route.post('/qtyChange', auth.isLogin, productController.qtyChange);
 user_route.get('/userProfile', auth.isLogin, userController.userProfile);
 user_route.post('/editProfile', auth.isLogin, userController.editProfile);
 user_route.post('/addAddress', auth.isLogin, addressController.addAddress);
+user_route.post('/deleteAddress', auth.isLogin, addressController.deleteAddress);
+user_route.post('/editAddress', auth.isLogin, addressController.editAddress);
 
 user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 
