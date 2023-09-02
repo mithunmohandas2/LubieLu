@@ -38,6 +38,7 @@ user_route.post('/otpLoginVerify', auth.isLogout,OTPVerification.otpLoginVerify)
 
 
 user_route.get('/allProducts', userController.loadAllProducts);
+// user_route.post('/allProducts', userController.loadAllProducts);
 user_route.get('/productDetail', productController.productDetail);
 user_route.post('/searchResult', productController.userSearchResult);
 

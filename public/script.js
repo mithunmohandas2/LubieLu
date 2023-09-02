@@ -1,3 +1,5 @@
+const { renderFile } = require("ejs");
+
 // ======== PRICE CALCULATION (add product)================
 function calculate() {
   const basePrice = document.getElementById("basePrice").value;
@@ -47,6 +49,10 @@ function SubCategoryUpdate() {
 
 // Sub-Category name populate in add/edit product form
 async function loadSubCategory(id) {
+  if (id === "All") {
+    document.getElementById("subCat").innerHTML = ""
+    return
+  }
   const subCategoryList = await fetch('/admin/loadSubCat', {
     method: 'post',
     headers: {
@@ -106,7 +112,7 @@ function emailOTPUpdate() {
   document.getElementById("emailOTPFill").value = fill
 }
 
-//image zoom
+// product image toggle
 function productImageChange(i) {
   const primary = document.getElementById("prd_img_0").src;
   const fill = document.getElementsByClassName("product_img")[i].src;
@@ -116,6 +122,7 @@ function productImageChange(i) {
 
 // --------------------------------
 //cart qty change
+
 async function qtyIncrease(i, stock) {
   const preQty = document.getElementsByClassName("cartQty")[i].innerHTML
   if (preQty < stock) {
@@ -302,7 +309,7 @@ async function deleteAddress(addressID) {
   }
 }
 
-// -----------------------------
+// -----------edit Address------------------
 
 
 async function editAddress() {
@@ -350,4 +357,11 @@ async function editAddress() {
   }
 }
 
-// -----------------------------------
+// -------------- productFilter() ---------------------
+
+async function productFilter() {
+  const category = document.getElementById("catSelection").value;
+  const subCategory = document.getElementById("subCat").value;
+  const sort = document.getElementById("sortBy").value;
+  window.location.href = `/allProducts?cat=${category}&subCat=${subCategory}&sort=${sort}`
+}

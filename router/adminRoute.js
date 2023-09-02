@@ -61,7 +61,7 @@ admin_route.get('/editProduct',auth.isLogin, auth.cookieCheck, productController
 admin_route.post('/addCategory',auth.isLogin,productController.addCategory)
 admin_route.post('/editCategory',auth.isLogin,productController.editCategory)
 admin_route.post('/deleteCategory',auth.isLogin,productController.deleteCategory)
-admin_route.post('/loadSubCat',auth.isLogin,productController.loadSubCat)
+admin_route.post('/loadSubCat',productController.loadSubCat)  //common for user & admin
 
 
 admin_route.post('/addSubCategory',auth.isLogin,productController.addSubCategory)

@@ -3,6 +3,8 @@ const Product = require("../models/productModel");
 const Cart = require("../models/cartModel");
 const Address = require("../models/userAddress");
 const Order = require("../models/ordersModel");
+const Category = require("../models/productCategoryModel");
+const subCategory = require("../models/productSubCategoryModel");
 // -----------------------------------------------
 
 //loading the signup page
@@ -125,21 +127,38 @@ const loadHome = async (req, res) => {
 
 const loadAllProducts = async (req, res) => {
     try {
-        const products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 })
+        let products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 })
+        console.log(req.query)
+        //Categorize
+        if (req.query.subCat) {
+            const subCat = req.query.subCat;
+            products = products.filter((prd) => prd.subCategory_id == subCat);
+        }
+        //sort
+        if (req.query.sort == 'Oldest First') {
+            products = products.sort((prd1, prd2) => prd1.updatedAt - prd2.updatedAt)
+        } else if (req.query.sort == 'Price (Low-to-High)') {
+            products = products.sort((prd1, prd2) => prd1.sellingPrice - prd2.sellingPrice)
+        } else if (req.query.sort == 'Price (High-to-Low)') {
+            products = products.sort((prd1, prd2) => prd2.sellingPrice - prd1.sellingPrice)
+        }
+
+        const categoryList = await Category.find({ is_delete: 0 })
+        const subCategoryList = await subCategory.find({ isDelete: 0 })
+
         res.render('allProducts', {
             title: "Product Inventory",
             products: products,
+            categories: categoryList,
+            subCategories: subCategoryList,
             username: req.session.user_name,
+
         });
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
     }
 }
-
-
-
-
 
 
 // ...........Load Cart...........
@@ -271,7 +290,7 @@ const checkout = async (req, res) => {
         })
         //save new order placed
         const orderData = await newOrder.save()
-        
+
 
         //decrease qty from stock
         if (orderData) {
