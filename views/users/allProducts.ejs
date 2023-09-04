@@ -16,7 +16,7 @@
                      
                         <div class="col-sm-3 my-3">
                             <select name="category_id" class="form-select" id="catSelection"
-                                onchange="loadSubCategory(value)">
+                                onchange="SubCategoryLoad(value)">
                                 <!-- array of categories ids -->
                                 <option value="All">All Categories</option>
                                 <% if (locals.categories){ categories.forEach((name)=>{ %>
@@ -49,7 +49,9 @@
                         </div>
 
                         <div class="col-sm-2 my-3">
-                                <button type="button" class="btn btn-outline-danger" onclick="productFilter()">Apply filters</button>
+                                <!-- <a href=""> -->
+                                    <button type="submit" class="btn btn-outline-danger" onclick="productFilter()">Apply filters</button>
+                                <!-- </a> -->
                         </div>
                         <div class="col-sm-2 my-3">
                             <a href="/allProducts">Reset filters</a>

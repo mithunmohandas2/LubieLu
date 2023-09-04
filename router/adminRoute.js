@@ -20,6 +20,7 @@ admin_route.set('views','./views/admin')
 
 
 const multer = require('multer');
+//product Images
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './public/productImages'); // Destination folder
@@ -61,7 +62,7 @@ admin_route.get('/editProduct',auth.isLogin, auth.cookieCheck, productController
 admin_route.post('/addCategory',auth.isLogin,productController.addCategory)
 admin_route.post('/editCategory',auth.isLogin,productController.editCategory)
 admin_route.post('/deleteCategory',auth.isLogin,productController.deleteCategory)
-admin_route.post('/loadSubCat',productController.loadSubCat)  //common for user & admin
+admin_route.post('/loadSubCat',productController.loadSubCat)  
 
 
 admin_route.post('/addSubCategory',auth.isLogin,productController.addSubCategory)
@@ -76,6 +77,9 @@ admin_route.get('/profile',auth.isLogin,adminController.adminProfile)
 admin_route.post('/editAdminProfile', auth.isLogin, adminController.editProfile);
 
 admin_route.get('/coupons',auth.isLogin,adminController.couponsManage)
+admin_route.get('/banners',auth.isLogin,adminController.bannerManage)
+
+admin_route.get('/salesReport',auth.isLogin,adminController.salesReport)
 
 admin_route.get('*',adminController.error404)
 

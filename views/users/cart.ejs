@@ -53,10 +53,10 @@
                   </td>
                   <td>
                     <div class="d-flex">
-                      <button onclick="qtyDecrease(<%= i %>)" class="px-2 btn btn-outline-danger mb-5">-</button>
+                      <button onclick="qtyDecrease('<%= i %>')" class="px-2 btn btn-outline-danger mb-5">-</button>
                       <p class="px-3 cartQty">
                         <%=locals.cart.items[i].qty%>
-                      </p> <button onclick="qtyIncrease(<%= i %> , <%=locals.products[i].stock %>)" class="btn btn-outline-danger px-2 mb-5">+</button>
+                      </p> <button onclick="qtyIncrease('<%= i %>' , '<%=locals.products[i].stock %>')" class="btn btn-outline-danger px-2 mb-5">+</button>
                     </div>
                   </td>
                   <td>

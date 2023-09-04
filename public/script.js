@@ -363,5 +363,34 @@ async function productFilter() {
   const category = document.getElementById("catSelection").value;
   const subCategory = document.getElementById("subCat").value;
   const sort = document.getElementById("sortBy").value;
-  window.location.href = `/allProducts?cat=${category}&subCat=${subCategory}&sort=${sort}`
+  location.href = `/allProducts?cat=${category}&subCat=${subCategory}&sort=${sort}`
+}
+
+
+
+// Sub-Category name populate in view all products
+async function SubCategoryLoad(id) {
+  if (id === "All") {
+    document.getElementById("subCat").innerHTML = ""
+    return
+  }
+  const subCategoryList = await fetch('/loadSubCat', {
+    method: 'post',
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({ catID: id })
+  })
+    .then((value) => { return value.json() })
+    .catch((err) => {
+      console.log(err.message)
+    })
+
+  document.getElementById("subCat").innerHTML = ""
+  for (let i = 0; i < subCategoryList.length; i++) {
+    let option = document.createElement("option");
+    option.value = subCategoryList[i]._id;
+    option.text = subCategoryList[i].subCategoryName;
+    document.getElementById("subCat").appendChild(option);
+  }
 }

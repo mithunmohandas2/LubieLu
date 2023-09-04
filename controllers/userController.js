@@ -128,7 +128,6 @@ const loadHome = async (req, res) => {
 const loadAllProducts = async (req, res) => {
     try {
         let products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 })
-        console.log(req.query)
         //Categorize
         if (req.query.subCat) {
             const subCat = req.query.subCat;
@@ -152,8 +151,8 @@ const loadAllProducts = async (req, res) => {
             categories: categoryList,
             subCategories: subCategoryList,
             username: req.session.user_name,
-
         });
+        
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -193,9 +192,7 @@ const loadCart = async (req, res) => {
 
 const addToCart = async (req, res) => {
     try {
-
         const cartEntry = await Cart.updateOne({ userID: req.session._id }, { $addToSet: { items: { productID: req.body.product_id, qty: req.body.qty } } }, { upsert: true })
-
         if (cartEntry) res.redirect("/cart")
         else throw Error
 
@@ -291,11 +288,14 @@ const checkout = async (req, res) => {
         //save new order placed
         const orderData = await newOrder.save()
 
-
-        //decrease qty from stock
         if (orderData) {
             for (i = 0; i < orderData.items.length; i++) {
-                let data = await Product.updateOne({ _id: orderData.items[i].productID }, { $inc: { stock: -orderData.items[i].qty } })
+                //decrease qty from stock
+                let data = await Product.updateOne({ _id: orderData.items[i].productID }, { $inc: { stock: -orderData.items[i].qty } });
+                let productData = await Product.findOne({ _id: orderData.items[i].productID})
+                //updating rate details in Order
+                // const cart = await Order.updateOne({_id: orderData._id, "items.productID": product_id }, { $inc: { "items.$.qty": -1 } })
+                // let rateUpdate = await Order.updateOne ({ _id: orderData.items[i].productID },{$addToSet :{ rate: productData.sellingPrice }})
             }
         }
         else throw Error
@@ -430,6 +430,8 @@ const editProfile = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+// -----------------------
+
 
 // ===============================
 module.exports = {

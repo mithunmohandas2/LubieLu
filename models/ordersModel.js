@@ -20,8 +20,8 @@ const ordersSchema = new mongoose.Schema({
             min: 1,
         },
         rate: {
-            type:Number,
-        }
+            type: Number,
+        },
     }],
     amount: {
         type: Number,

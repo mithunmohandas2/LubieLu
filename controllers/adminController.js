@@ -208,7 +208,34 @@ const couponsManage = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
-// --------------------
+// --------bannerManage------------
+
+const bannerManage = async (req, res) => {
+    try {
+        res.render('bannerManage', {
+            username: req.session.user_name,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// -------------salesReport----------------
+
+
+const salesReport = async (req, res) => {
+    try {
+        res.render('salesReport', {
+            username: req.session.user_name,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// -----------------------------
 
 const orderDetails = async (req, res) => {
     try {
@@ -261,6 +288,8 @@ module.exports = {
     adminProfile,
     editProfile,
     couponsManage,
+    bannerManage,
+    salesReport,
     orderDetails,
     orderStatusChange,
 }
