@@ -51,7 +51,7 @@
                           <td><%= locals.productData[i].product_name %></td>
                           <td><%= locals.orders.items[i].rate %></td>
                           <td class="text-center"><%= locals.orders.items[i].qty %></td>
-                          <td><%= locals.orders.items[i].qty*locals.orders.items[i].rate %></td>
+                          <td class="text-end">₹<%= locals.orders.items[i].qty*locals.orders.items[i].rate %>.00</td>
                       </tr>
                       <% } %>
                       <tr>

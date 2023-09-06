@@ -51,10 +51,6 @@
                                                 </td>
                                                 <td>
                                                     <h1 class="text-light">|||</h1>
-                                                    <!-- <form action="/removeCart" method="post">
-                        <input type="text" name="product_id" value="<%=locals.products[i]._id%>" hidden required />
-                        <button type="submit" class="btn btn-warning py-0 px-1">Remove</button>
-                      </form> -->
                                                 </td>
                                             </tr>
                                             <% } } %>
@@ -85,30 +81,31 @@
                                 <div class="col-md-6 px-4">
                                     <h5 class="card-title mt-4 mb-4 text-center">Recent addresses</h5>
                                     <% if(locals.address.length){
-                                      for(i=0; i<locals.address.length;i++) { %>
-                                        <button onclick="selectAddress('<%= i %>')" class="bg-transparent p-0 my-3" style="border: none;" ><div class="card p-2" style="background-color: rgb(242,242,242);">
-                  
-                                        <p class="mb-0">
-                                            <input type="text"  class="savedAddressID" value="<%= locals.address[i]._id%>" hidden>
-                                            <span class="savedAddressName"><%= locals.address[i].addressName%></span>
-                                            ( Ph : <span class="savedPhone"><%= locals.address[i].phone%></span> )
-                                        </p>
-                                        <p>
-                                         <span class="savedAddress1">"<%= locals.address[i].address1%>"</span>, 
-                                         <span class="savedAddress2"><%= locals.address[i].address2%></span>,
-                                         <span class="savedDistrict"><%= locals.address[i].district%></span> 
-                                            <span class="savedState"><%= locals.address[i].state%></span>,
-                                                <span class="savedCountry"><%= locals.address[i].country%></span>- 
-                                                Pincode : <span class="savedPincode"><%= locals.address[i].pincode%></span> 
-                                        </p>
-                                      </div></button>
-                                      <% }} %>
+                                        for(i=0; i<locals.address.length;i++) { %>
+                                          <button onclick="selectAddress('<%= i %>')" class="bg-transparent p-0 my-3" style="border: none;" ><div class="card p-2" style="background-color: rgb(242,242,242);">
+                    
+                                          <p class="mb-0">
+                                              <input type="text"  class="savedAddressID" value="<%= locals.address[i]._id%>" hidden>
+                                              <span class="savedAddressName"><%= locals.address[i].addressName%></span>
+                                              ( Ph : <span class="savedPhone"><%= locals.address[i].phone%></span> )
+                                          </p>
+                                          <p>
+                                           <span class="savedAddress1">"<%= locals.address[i].address1%>"</span>, 
+                                           <span class="savedAddress2"><%= locals.address[i].address2%></span>,
+                                           <span class="savedDistrict"><%= locals.address[i].district%></span> 
+                                              <span class="savedState"><%= locals.address[i].state%></span>,
+                                                  <span class="savedCountry"><%= locals.address[i].country%></span>- 
+                                                  Pincode : <span class="savedPincode"><%= locals.address[i].pincode%></span> 
+                                          </p>
+                                        </div></button>
+                                        <% }} %>
                                 </div>
 
                                 <div class="col-md-6 px-4">
                                     <h5 class="card-title mt-4 mb-4 text-center">Shipping address</h5>
-                                    <form action="/checkout" method="post">
-                                        <input type="text" name="addressID" id="addressID" hidden >
+                                    <!-- form starts -->
+                                    <form class="pay-form"> 
+                                        <input type="text" name="addressID" id="addressID" hidden>
 
                                         <div class="my-3">
                                             <label for="addressName" class="form-label">Name</label>
@@ -121,7 +118,8 @@
 
                                         <div class="mb-3">
                                             <label for="phone" class="form-label">Phone number</label>
-                                            <input type="text" name="phone" class="form-control" id="phone" pattern="[0-9]*"
+                                            <input type="text" name="phone" class="form-control" id="phone"
+                                                pattern="[0-9]*"
                                                 oninvalid="setCustomValidity('Please enter a valid mobile number')"
                                                 placeholder="Enter contact number" required>
                                         </div>
@@ -160,22 +158,17 @@
                                             <div class="mb-3 col-md-6">
                                                 <label for="pincode" class="form-label">Pincode</label>
                                                 <input type="string" name="pincode" class="form-control" id="pincode"
-                                                    min=100000 max=999999  pattern="[0-9]*"
+                                                    min=100000 max=999999 pattern="[0-9]*"
                                                     oninvalid="setCustomValidity('Please enter a valid Pincode')"
                                                     placeholder="Enter pincode" required>
                                             </div>
                                             <div>
                                                 <a href="/checkout">Reset</a>
                                             </div>
-                                            <!-- <div class="form-check ms-3 my-3">
-                                                <label for="saveAddress" class="form-label">Save address for future
-                                                    payments</label>
-                                                <input class="form-check-input" type="checkbox" name="saveAddress" />
-                                            </div> -->
                                         </div>
 
 
-                            </div>
+                                </div>
 
 
 
@@ -198,6 +191,17 @@
                 <!-- Summary Section -->
                 <% if (locals.products.length){ %>
                     <div class="col-md-3 py-3 text-center curv" style="background-color: rgb(242,242,242);">
+                        <h5>Coupons</h5>
+                        <hr class="mx-3">
+                        <div class="row w-100  mb-4">
+                            <div class="col-9 ">
+                                <input type="text" id="discountCode" class="mx-0 px-0 form-control">
+                            </div>
+                            <div class="col-3 mx-0 px-0">
+                                <button type="button" class="btn btn-outline-danger mb-3" onclick="applyDiscount()">APPLY</button>
+                            </div>
+                        </div>
+
 
                         <h5>Bill Summary</h5>
                         <hr class="mx-3">
@@ -217,7 +221,8 @@
                                         <tr>
                                             <th scope="row">Discount</th>
                                             <td>
-                                                ₹ 0 /-
+                                                ₹ <span id="Discount">0</span> /-
+                                                <input type="number" id="discountValue" name="discount" value="0" hidden>
                                             </td>
                                         </tr>
                                         <tr>
@@ -226,8 +231,8 @@
                                             </th>
                                             <td>
                                                 <h4 class="fw-bold">
-                                                    ₹ <%= sum %> /-
-                                                        <input type="number" name="amount" value="<%= sum %>" hidden>
+                                                    ₹ <span id="finalAmount"><%= sum %></span> /-
+                                                    <input type="number" name="amount" value="<%= sum %>" hidden>
                                                 </h4>
                                             </td>
                                         </tr>
@@ -250,21 +255,79 @@
                         </div>
 
                         <div class="text-center">
-                            <button class="btn btn-danger mt-4 py-2  px-4 mb-3">
+                            <button id="cod-button1" class="btn btn-danger mt-4 py-2  px-4 mb-3">
                                 PROCEED TO BUY
                             </button>
-                        </div>
                         </form>
+                        </div>
                     </div>
                     <% } %>
 
-
-
             </div>
-
 
         </section>
 
 
         <%- include('../layouts/footerlinks') %>
+
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+            <script> // to select only one payment option 
+                const onlinePayCheckbox = document.getElementById('onlinepay');
+                const codCheckbox = document.getElementById('COD');
+
+                onlinePayCheckbox.addEventListener('change', function () {
+                    codCheckbox.checked = !this.checked;
+                });
+                codCheckbox.addEventListener('change', function () {
+                    onlinePayCheckbox.checked = !this.checked;
+                });
+            </script>
+
+            <script>
+                $(document).ready(function () {
+                    $('.pay-form').submit(function(e){
+                        e.preventDefault();
+                    
+                        var formData = $(this).serialize();
+                        $.ajax({
+                            url:"/createOrder",
+                            type: "POST",
+                            data : formData,
+                            success : function(res){
+                                if(res.success){
+                                    var options = {
+                                        "key": "" + res.key_id + "",
+                                        "amount": "" + res.amount + "",
+                                        "currency": "INR",
+                                        "image": "/icons/Logo_short.png",
+                                        "order_id": "" + res.order_id + "",
+                                        "handler": function (response) {
+                                        alert("Payment Success");
+                                        // window.open("/","_self")
+                                        },
+                                        "theme": {
+                                        "color": "#dc3545"
+                                        },
+                                    };
+                                    var razorpayObject = new Razorpay(options);
+                                    razorpayObject.on('payment.failed', function (response) {
+                                    alert("Payment failed");
+                                    });
+                                    razorpayObject.open();
+                                } else {
+                                    alert(res.msg);
+                                }
+                            }
+                        })
+                    });
+                });
+
+            </script>
+
+         
+
+            
             <%- include('../layouts/footer') %>

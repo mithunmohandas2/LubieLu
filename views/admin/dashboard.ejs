@@ -2,87 +2,132 @@
 
   <%- include('../layouts/adminHeader') %>
 
-    <div class="container-fluid" style="background-color: rgb(208,236,248);">
+  <div class="container-fluid my-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block py-2 sidebar" style="background-color: #fbdfdc;">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item card">
+                        <a class="nav-link active" href="/admin/home">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item card">
+                        <a class="nav-link" href="/admin/user_management">
+                            User Management
+                        </a>
+                    </li>
+                    <li class="nav-item card">
+                        <a class="nav-link" href="/admin/product_management">
+                            All Products
+                        </a>
+                    </li>
+                    <li class="nav-item card">
+                        <a class="nav-link" href="/admin/order_management">
+                            Order List
+                        </a>
+                    </li>
+                    <li class="nav-item card">
+                      <a class="nav-link" href="/admin/profile">
+                          Admin Profile
+                      </a>
+                  </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <h1>Admin Dashboard</h1>
+            <h4 class="py-1 "><i>Welcome <%=locals.username? locals.username :'Admin' %></i></h4>
+            <hr class="mb-4">
+            <div class="row">
+                <!-- Graph Section -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Sales Analysis</h5>
+                            <!-- chart using library Chart.js -->
+                            <canvas id="productChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Data Section -->
+                <div class="row col-md-6">
+                    <div class="card col-md-6">
+                        <div class="card-body">
+                          <table class="table">
+                            <thead>
+                              <tr class="text-center">
+                                <th scope="col" colspan="2">
+                                  <h5>Products</h5>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">Total</th>
+                                <td>
+                                  <%=locals.productTotal? locals.productTotal :'0'%> nos
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row" class="text-success">Active</th>
+                                <td class="text-success">
+                                  <%=locals.productActive? locals.productActive :'0'%> nos
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row" class="text-danger">Blocked</th>
+                                <td class="text-danger">
+                                  <%=locals.productActive? locals.productTotal-locals.productActive :'0'%> nos
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                    </div>
 
-      <div class="row text-center">
-        <div class="col-md-6">
-          <h3 class="pt-4 ">Welcome <%=locals.username? locals.username :'Admin' %>
-          </h3>
-          <img class="w-75 mt-4 curv "
-            src="https://wcs.smartdraw.com/chart/img/basic-bar-graph.png?bn=15100111875"></img>
-            <p>Sample graph</p>
-
-        </div>
-
-        <div class="col-md-6 my-4">
-
-          <!-- Product Table -->
-          <div class="col-md-6 bg-light py-3 m-4 curv">
-            <table class="table">
-              <thead>
-                <tr class="text-center">
-                  <th scope="col" colspan="2">
-                    <h5>Products</h5>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Total</th>
-                  <td>
-                    <%=locals.productTotal? locals.productTotal :'0'%> nos
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="text-success">Active</th>
-                  <td class="text-success">
-                    <%=locals.productActive? locals.productActive :'0'%> nos
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="text-danger">Blocked</th>
-                  <td class="text-danger">
-                    <%=locals.productActive? locals.productTotal-locals.productActive :'0'%> nos
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- User Table -->
-          <div class="col-md-6 py-3  m-4 bg-light curv">
-            <table class="table">
-              <thead>
-                <tr class="text-center">
-                  <th scope="col" colspan="2">
-                    <h5>Users</h5>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Total</th>
-                  <td>
-                    <%=locals.productTotal? locals.userTotal :'0'%> nos
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="text-success">Active</th>
-                  <td class="text-success">
-                    <%=locals.userActive? locals.userActive :'0'%> nos
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row" class="text-danger">Blocked</th>
-                  <td class="text-danger">
-                    <%=locals.userActive? locals.userTotal-locals.userActive :'0'%> nos
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                    <div class="card col-md-6">
+                      <div class="card-body">
+                        <table class="table">
+                          <thead>
+                            <tr class="text-center">
+                              <th scope="col" colspan="2">
+                                <h5>Users</h5>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">Total</th>
+                              <td>
+                                <%=locals.productTotal? locals.userTotal :'0'%> nos
+                              </td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="text-success">Active</th>
+                              <td class="text-success">
+                                <%=locals.userActive? locals.userActive :'0'%> nos
+                              </td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="text-danger">Blocked</th>
+                              <td class="text-danger">
+                                <%=locals.userActive? locals.userTotal-locals.userActive :'0'%> nos
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </main>
     </div>
+</div>
 
 
 

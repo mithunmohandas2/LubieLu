@@ -203,16 +203,7 @@ function selectAddress(i) {
 
 // -----------------
 
-// to select only one payment option 
-const onlinePayCheckbox = document.getElementById('onlinepay');
-const codCheckbox = document.getElementById('COD');
 
-onlinePayCheckbox.addEventListener('change', function () {
-  codCheckbox.checked = !this.checked;
-});
-codCheckbox.addEventListener('change', function () {
-  onlinePayCheckbox.checked = !this.checked;
-});
 
 // ----------------------------
 
@@ -392,5 +383,17 @@ async function SubCategoryLoad(id) {
     option.value = subCategoryList[i]._id;
     option.text = subCategoryList[i].subCategoryName;
     document.getElementById("subCat").appendChild(option);
+  }
+}
+// ----------------------------
+
+function applyDiscount(){
+  const coupon = document.getElementById("discountCode").value
+  
+  const total = document.getElementById("finalAmount").innerHTML
+  if (coupon == "GRAB40"){
+    document.getElementById("Discount").innerHTML = 40;
+    document.getElementById("finalAmount").innerHTML = total-40
+    document.getElementById("discountValue").value= 40
   }
 }

@@ -5,6 +5,8 @@ const Address = require("../models/userAddress");
 const Order = require("../models/ordersModel");
 const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
+const Razorpay = require('razorpay');
+const dotenv = require("dotenv").config();
 // -----------------------------------------------
 
 //loading the signup page
@@ -152,7 +154,7 @@ const loadAllProducts = async (req, res) => {
             subCategories: subCategoryList,
             username: req.session.user_name,
         });
-        
+
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -192,9 +194,16 @@ const loadCart = async (req, res) => {
 
 const addToCart = async (req, res) => {
     try {
-        const cartEntry = await Cart.updateOne({ userID: req.session._id }, { $addToSet: { items: { productID: req.body.product_id, qty: req.body.qty } } }, { upsert: true })
-        if (cartEntry) res.redirect("/cart")
-        else throw Error
+        const userCart = await Cart.findOne({ $and: [{ userID: req.session._id }, { 'items.productID': req.body.product_id }] })
+        if (userCart) {
+            const cartEntry = await Cart.updateOne({ userID: req.session._id, "items.productID": req.body.product_id }, { $inc: { "items.$.qty": req.body.qty } })
+            if (cartEntry) res.redirect("/cart")
+            else throw Error("unable to add to cart")
+        } else {
+            const cartEntry = await Cart.updateOne({ userID: req.session._id }, { $addToSet: { items: { productID: req.body.product_id, qty: req.body.qty } } }, { upsert: true })
+            if (cartEntry) res.redirect("/cart")
+            else throw Error("unable to add to cart")
+        }
 
     } catch (error) {
         console.log(error.message)
@@ -246,11 +255,51 @@ const loadCheckout = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+// ==========orderID creation================
+var instance = new Razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET })
+
+const createOrder = async (req, res) => {
+
+    try {
+        const amount = req.body.amount*100;
+        let randomNumber = Math.floor(Math.random() * 1000000); // Generate a random number
+        let paddedRandomNumber = randomNumber.toString().padStart(6, '0'); // Ensure it's 6 digits long
+        let receiptID = `RTN${paddedRandomNumber}`;
+
+        const options = {
+            amount: amount,
+            currency: "INR",
+            receipt: receiptID,
+        };
+
+        instance.orders.create(options, (err, order) => {
+            if(!err){
+                res.status(200).send({
+                   success : true,
+                   msg: 'Order Created',
+                   order_id : order.id,
+                    amount: amount,
+                    key_id:process.env.KEY_ID,
+                    name: req.session.user_name,
+                });
+            } else {
+                res.status(400).send({success:false, msg:'Something went wrong!'})
+            }
+        });
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+
+}
+
 
 // ===============checkout=====incomplete=======
 
 const checkout = async (req, res) => {
     try {
+        console.log("In checkout function")
         let addressIDs;
         //if new address used
         if (!req.body.addressID) {
@@ -278,6 +327,7 @@ const checkout = async (req, res) => {
         else payMethod = "Cash-On-Delivery"
 
         const cartData = await Cart.findOne({ userID: req.session._id })
+
         const newOrder = new Order({
             userID: req.session._id,
             items: cartData.items,
@@ -292,18 +342,16 @@ const checkout = async (req, res) => {
             for (i = 0; i < orderData.items.length; i++) {
                 //decrease qty from stock
                 let data = await Product.updateOne({ _id: orderData.items[i].productID }, { $inc: { stock: -orderData.items[i].qty } });
-                let productData = await Product.findOne({ _id: orderData.items[i].productID})
+                let productData = await Product.findOne({ _id: orderData.items[i].productID })
                 //updating rate details in Order
-                // const cart = await Order.updateOne({_id: orderData._id, "items.productID": product_id }, { $inc: { "items.$.qty": -1 } })
-                // let rateUpdate = await Order.updateOne ({ _id: orderData.items[i].productID },{$addToSet :{ rate: productData.sellingPrice }})
+                const cart = await Order.updateOne({ _id: orderData._id, "items.productID": productData._id }, { $set: { "items.$.rate": productData.sellingPrice } })
             }
         }
         else throw Error
 
         //Reset cart
         const cartReset = await Cart.deleteOne({ userID: req.session._id })
-        if (cartReset) console.log("Cart reset");
-        else throw Error
+        if (!cartReset) throw Error
 
         res.render("orderSuccess", {
             username: req.session.user_name,
@@ -315,6 +363,7 @@ const checkout = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+
 // ===========order History==============
 
 const orderHistory = async (req, res) => {
@@ -446,6 +495,7 @@ module.exports = {
     addToCart,
     removeCart,
     loadCheckout,
+    createOrder,
     checkout,
     orderHistory,
     orderDetails,
