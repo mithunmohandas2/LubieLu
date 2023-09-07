@@ -218,7 +218,7 @@
                                         <tr>
                                             <th scope="row">Sub-Total</th>
                                             <td>
-                                                ₹ <%= sum %> /-
+                                                ₹ <span id="subTotal"><%= sum %></span> /-
                                             </td>
                                         </tr>
                                         <tr>
@@ -235,10 +235,8 @@
                                             </th>
                                             <td>
                                                 <h4 class="fw-bold">
-                                                    ₹ <span id="finalAmount">
-                                                        <%= sum %>
-                                                    </span> /-
-                                                    <input type="number" name="amount" value="<%= sum %>" hidden>
+                                                    ₹ <span id="finalAmount"><%= sum %></span> /-
+                                                    <input type="number" id="finalAmount2" name="amount" value="<%= sum %>" hidden >
                                                 </h4>
                                             </td>
                                         </tr>
@@ -253,11 +251,11 @@
                         <hr class="mx-3">
                         <div class="form-check mx-5">
                             <label for="onlinepay" class="form-label">Online Payment</label>
-                            <input class="form-check-input" type="checkbox" name="onlinepay" id="onlinepay" />
+                            <input class="form-check-input" type="checkbox" name="onlinepay" id="onlinepay" checked />
                         </div>
                         <div class="form-check mx-5">
                             <label for="cod" class="form-label">Cash-On-Delivery</label>
-                            <input class="form-check-input" type="checkbox" name="COD" id="COD" checked />
+                            <input class="form-check-input" type="checkbox" name="COD" id="COD"  />
                         </div>
 
                         <div class="text-center">
@@ -313,7 +311,7 @@
                                         "image": "/icons/Logo_short.png",
                                         "order_id": "" + res.order_id + "",
                                         "handler": function (response) {
-                                            alert("Payment Success");
+                                            // alert("Payment Success");
                                             verifyPayment(formData)
                                         },
                                         "theme": {
