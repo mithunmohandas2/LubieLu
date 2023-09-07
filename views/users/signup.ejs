@@ -9,10 +9,6 @@
         }
     </style>
 
-    <!-- <div class="col-12 col-md-6 ">
-        <img class="ps-4 m-3" style="width: 40%;" src="images/Logo_full.png"></img>
-    </div> -->
-
     <div class="row mx-5 p-4">
         <div class="col-12 col-md-4 p-4" style="background-color:rgba(251, 223, 220, 0.959); border-radius: 1.5em">
             <div class="text-center">
@@ -26,7 +22,7 @@
                         <div class="mb-3">
                             <label for="text" class="form-label">First Name</label>
                             <input type="text" placeholder="Enter your first name" pattern="[A-Za-z ]*"
-                                oninvalid="setCustomValidity('Please enter alphabetic characters only')"
+                                oninvalid="setCustomValidity('Please enter alphabetic characters only with min 3 letters')" required minlength="3"
                                 oninput="setCustomValidity('')" name="firstName" class="form-control" id="firstName"
                                 required>
                         </div>
@@ -47,7 +43,7 @@
 
                         <div class="mb-3">
                             <label for="number" class="form-label">Phone number</label>
-                            <input type="text" name="phone" class="form-control" id="phone" pattern="[0-9]*"
+                            <input type="text" name="phone" class="form-control" id="phone" pattern="[0-9]*" required minlength="10"
                                 oninvalid="setCustomValidity('Please enter a valid mobile number')"
                                 placeholder="Enter contact number" required>
                         </div>
@@ -55,13 +51,16 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" name="password" class="form-control" placeholder="Enter password"
-                                id="password" required>
+                                id="password"
+                                oninvalid="setCustomValidity('At least one alphanumeric character,one symbol & min 6 digits')"
+                                pattern="^(?=.*[A-Za-z0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-=|]).{6,}$" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">ConfirmPassword</label>
                             <input type="password" name="password2" placeholder="Re-enter password" class="form-control"
-                                id="password2" required>
+                                id="password2"
+                                pattern="^(?=.*[A-Za-z0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-=|]).{6,}$" required>
                         </div>
 
                         <% if(locals.message){%>

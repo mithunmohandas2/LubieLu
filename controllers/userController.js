@@ -24,23 +24,24 @@ const insertUser = async (req, res) => {
     // check password and confirm password is same
     if (req.body.password != req.body.password2) {
         res.render('signup', { title: 'Lubie-Lu_Signup', message: 'Password mismatch' });
+    } else if(req.body.firstName.trim() == "" || req.body.lastName.trim() == "" || req.body.phone.trim() == "" || req.body.password.trim() == ""){ 
+        res.render('signup', { title: 'Lubie-Lu_Signup', message: 'Empty input fileds present' });
     } else {
-
         try {
             // if email or password exist in database
-            const emailMatch = await User.findOne({ email: req.body.email })
-            const phoneMatch = await User.findOne({ phone: req.body.phone })
+            const emailMatch = await User.findOne({ email: req.body.email.trim() })
+            const phoneMatch = await User.findOne({ phone: req.body.phone.trim() })
             if (emailMatch || phoneMatch) {
                 res.render('signup', { title: 'Lubie-Lu_Signup', message: 'Email or Phone number already exist' });
 
             } else { // if details not in database
 
                 const user = new User({
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
-                    phone: req.body.phone,
-                    password: req.body.password,
+                    firstName: req.body.firstName.trim(),
+                    lastName: req.body.lastName.trim(),
+                    email: req.body.email.trim(),
+                    phone: req.body.phone.trim(),
+                    password: req.body.password.trim(),
                     admin_status: false
                 })
 
