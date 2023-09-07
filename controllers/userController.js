@@ -261,32 +261,44 @@ var instance = new Razorpay({ key_id: process.env.KEY_ID, key_secret: process.en
 const createOrder = async (req, res) => {
 
     try {
-        const amount = req.body.amount*100;
+
+        const amount = req.body.amount * 100;
         let randomNumber = Math.floor(Math.random() * 1000000); // Generate a random number
         let paddedRandomNumber = randomNumber.toString().padStart(6, '0'); // Ensure it's 6 digits long
         let receiptID = `RTN${paddedRandomNumber}`;
 
-        const options = {
-            amount: amount,
-            currency: "INR",
-            receipt: receiptID,
-        };
+        if (req.body.COD) {
 
-        instance.orders.create(options, (err, order) => {
-            if(!err){
-                res.status(200).send({
-                   success : true,
-                   msg: 'Order Created',
-                   order_id : order.id,
-                    amount: amount,
-                    key_id:process.env.KEY_ID,
-                    name: req.session.user_name,
-                });
-            } else {
-                res.status(400).send({success:false, msg:'Something went wrong!'})
-            }
-        });
+            // ====COD=====
 
+            res.status(200).send({
+                CODsuccess: true,
+            });
+
+            // ========
+
+        } else {
+            const options = {
+                amount: amount,
+                currency: "INR",
+                receipt: receiptID,
+            };
+
+            instance.orders.create(options, (err, order) => {
+                if (!err) {
+                    res.status(200).send({
+                        success: true,
+                        msg: 'Order Created',
+                        order_id: order.id,
+                        amount: amount,
+                        key_id: process.env.KEY_ID,
+                        name: req.session.user_name,
+                    });
+                } else {
+                    res.status(400).send({ success: false, msg: 'Something went wrong!' })
+                }
+            });
+        }
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -295,7 +307,7 @@ const createOrder = async (req, res) => {
 }
 
 
-// ===============checkout=====incomplete=======
+// ===============checkout============
 
 const checkout = async (req, res) => {
     try {
@@ -332,6 +344,7 @@ const checkout = async (req, res) => {
             userID: req.session._id,
             items: cartData.items,
             amount: req.body.amount,
+            discount: req.body.discount,
             method: payMethod,
             shippingAddress: addressIDs,
         })
@@ -352,6 +365,22 @@ const checkout = async (req, res) => {
         //Reset cart
         const cartReset = await Cart.deleteOne({ userID: req.session._id })
         if (!cartReset) throw Error
+
+        res.status(200).send({
+            orderID: orderData._id
+        });
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// ===========orderSuccess==============
+
+const orderSuccess = async (req, res) => {
+    try {
+        let orderData = await Order.findOne({ _id: req.query.orderID })
 
         res.render("orderSuccess", {
             username: req.session.user_name,
@@ -497,6 +526,7 @@ module.exports = {
     loadCheckout,
     createOrder,
     checkout,
+    orderSuccess,
     orderHistory,
     orderDetails,
     loadWishlist,
