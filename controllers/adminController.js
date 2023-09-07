@@ -222,12 +222,12 @@ const bannerManage = async (req, res) => {
 }
 
 // -------------salesReport----------------
-
-
 const salesReport = async (req, res) => {
     try {
+        const OrderData = await Order.find().sort({ createdAt: -1 })
         res.render('salesReport', {
             username: req.session.user_name,
+            orders: OrderData,
         });
     } catch (error) {
         console.log(error.message)
