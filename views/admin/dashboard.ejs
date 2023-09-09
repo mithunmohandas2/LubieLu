@@ -2,140 +2,231 @@
 
   <%- include('../layouts/adminHeader') %>
 
-  <div class="container-fluid my-4">
-    <div class="row">
+    <div class="container-fluid my-4">
+      <div class="row">
         <!-- Sidebar -->
         <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block py-2 sidebar" style="background-color: #fbdfdc;">
-            <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item card mb-1" style="background-color: #dc3545;">
-                        <a class="nav-link active text-white" href="/admin/home">
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item card">
-                        <a class="nav-link" href="/admin/user_management">
-                            User Management
-                        </a>
-                    </li>
-                    <li class="nav-item card">
-                        <a class="nav-link" href="/admin/product_management">
-                            All Products
-                        </a>
-                    </li>
-                    <li class="nav-item card">
-                        <a class="nav-link" href="/admin/order_management">
-                            Order List
-                        </a>
-                    </li>
-                    <li class="nav-item card">
-                      <a class="nav-link" href="/admin/salesReport">
-                          Sales Report
-                      </a>
-                  </li>
-                  <li class="nav-item card">
-                    <a class="nav-link" href="/admin/profile">
-                        Admin Profile
-                    </a>
-                </li>
-                </ul>
-            </div>
+          <div class="position-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item card mb-1" style="background-color: #dc3545;">
+                <a class="nav-link active text-white" href="/admin/home">
+                  Dashboard
+                </a>
+              </li>
+              <li class="nav-item card">
+                <a class="nav-link" href="/admin/user_management">
+                  User Management
+                </a>
+              </li>
+              <li class="nav-item card">
+                <a class="nav-link" href="/admin/product_management">
+                  All Products
+                </a>
+              </li>
+              <li class="nav-item card">
+                <a class="nav-link" href="/admin/order_management">
+                  Order List
+                </a>
+              </li>
+              <li class="nav-item card">
+                <a class="nav-link" href="/admin/salesReport">
+                  Sales Report
+                </a>
+              </li>
+              <li class="nav-item card">
+                <a class="nav-link" href="/admin/profile">
+                  Admin Profile
+                </a>
+              </li>
+            </ul>
+          </div>
         </nav>
-        
+
         <!-- Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h1>Admin Dashboard</h1>
-            <h4 class="py-1 "><i>Welcome <%=locals.username? locals.username :'Admin' %></i></h4>
-            <hr class="mb-4">
-            <div class="row">
-                <!-- Graph Section -->
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Sales Analysis</h5>
-                            <!-- chart using library Chart.js -->
-                            <canvas id="productChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Data Section -->
-                <div class="row col-md-6">
-                    <div class="card col-md-6">
-                        <div class="card-body">
-                          <table class="table">
-                            <thead>
-                              <tr class="text-center">
-                                <th scope="col" colspan="2">
-                                  <h5>Products</h5>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <th scope="row">Total</th>
-                                <td>
-                                  <%=locals.productTotal? locals.productTotal :'0'%> nos
-                                </td>
-                              </tr>
-                              <tr>
-                                <th scope="row" class="text-success">Active</th>
-                                <td class="text-success">
-                                  <%=locals.productActive? locals.productActive :'0'%> nos
-                                </td>
-                              </tr>
-                              <tr>
-                                <th scope="row" class="text-danger">Blocked</th>
-                                <td class="text-danger">
-                                  <%=locals.productActive? locals.productTotal-locals.productActive :'0'%> nos
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                    </div>
+          <h1>Admin Dashboard</h1>
+          <h4 class="py-1 "><i>Welcome <%=locals.username? locals.username :'Admin' %></i></h4>
+          <hr class="mb-4">
+          <div class="row">
+            <div class="col-md-4 pt-3 bg-light">
 
-                    <div class="card col-md-6">
-                      <div class="card-body">
-                        <table class="table">
-                          <thead>
-                            <tr class="text-center">
-                              <th scope="col" colspan="2">
-                                <h5>Users</h5>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <th scope="row">Total</th>
-                              <td>
-                                <%=locals.productTotal? locals.userTotal :'0'%> nos
-                              </td>
-                            </tr>
-                            <tr>
-                              <th scope="row" class="text-success">Active</th>
-                              <td class="text-success">
-                                <%=locals.userActive? locals.userActive :'0'%> nos
-                              </td>
-                            </tr>
-                            <tr>
-                              <th scope="row" class="text-danger">Blocked</th>
-                              <td class="text-danger">
-                                <%=locals.userActive? locals.userTotal-locals.userActive :'0'%> nos
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+              <div class="card my-4">
+                <div class="card-body">
+                  <h3 class="card-title text-center mb-2">Total Revenue</h3>
+                  <h1 class="text-center">₹ <%=locals.revenue? locals.revenue :0 %> /-</h1>
+                </div>
+              </div>
+
+              <div class="card my-4">
+                <div class="card-body">
+                  <h3 class="card-title text-center mb-2">Total Orders</h3>
+                  <h1 class="text-center"><%=locals.orderTotal? locals.orderTotal :0 %></h1>
+                </div>
+              </div>
+
+              <div class="card my-4">
+                <div class="card-body">
+                  <h5 class="text-center">Revenue (last 10 orders)</h5>
+                  <canvas id="amountChart"></canvas>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-8 row p-4">
+              <!-- chart1 -->
+              <div class="col-md-6">
+                <div class="m-3 card">
+                  <div class="card-body">
+                    <h5 class="text-center">Products</h5>
+                    <canvas id="myChart"></canvas>
+                    <table class="table">
+                      <thead>
+                        <tr class="text-center">
+                          <th scope="col" colspan="2">
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">Total</th>
+                          <td>
+                            <%=locals.productTotal? locals.productTotal :'0'%> nos
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row" class="text-success">Active</th>
+                          <td class="text-success"><span id="activeProduct">
+                              <%=locals.productActive? locals.productActive :'0'%>
+                            </span> nos</td>
+                        </tr>
+                        <tr>
+                          <th scope="row" class="text-danger">Blocked</th>
+                          <td class="text-danger"><span id="blockedProduct">
+                              <%=locals.productActive? locals.productTotal-locals.productActive :'0'%>
+                            </span> nos</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
+              </div>
+              <!-- chart 2 -->
+              <div class="col-md-6">
+                <div class="m-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="text-center">Users</h5>
+                      <canvas id="productChart"></canvas>
+                      <table class="table">
+                        <thead>
+                          <tr class="text-center">
+                            <th scope="col" colspan="2">
+                              <!-- <h5>Users</h5> -->
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">Total</th>
+                            <td>
+                              <%=locals.userTotal? locals.userTotal :'0'%> nos
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="text-success">Active</th>
+                            <td class="text-success"><span id="activeUser">
+                                <%=locals.userActive? locals.userActive :'0'%>
+                              </span> nos</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="text-danger">Blocked</th>
+                            <td class="text-success"><span id="blockedUser">
+                                <%=locals.userActive? locals.userTotal-locals.userActive :'0'%>
+                              </span> nos</td>
+    
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
+          </div>
+
         </main>
+      </div>
     </div>
-</div>
+    <input id="amounts" value="<%=locals.amounts %>" hidden />
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <script>
+      // chart1
+      const activeProduct = document.getElementById("activeProduct").innerHTML
+      const blockedProduct = document.getElementById("blockedProduct").innerHTML
+      const ctx = document.getElementById('myChart');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Active', 'Blocked'],
+          datasets: [{
+            label: 'nos',
+            data: [activeProduct, blockedProduct],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+        }
+      });
+    </script>
 
+    <script>
+      // chart2
+      const activeUser = document.getElementById("activeUser").innerHTML
+      const blockedUser = document.getElementById("blockedUser").innerHTML
+      const cty = document.getElementById('productChart');
+      new Chart(cty, {
+        type: 'pie',
+        data: {
+          labels: ['Active', 'Blocked'],
+          datasets: [{
+            label: 'nos',
+            data: [activeUser, blockedUser],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+        }
+      });
+    </script>
+
+<script>
+  // chart3
+  const amounts = document.getElementById("amounts").value
+  const data = amounts.split(',');
+  const amountsArray = data.map(amount => parseInt(amount));
+
+  const ctz = document.getElementById('amountChart');
+  new Chart(ctz, {
+    type: 'line',
+    data: {
+      labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+      datasets: [{
+        label: 'Order Amount INR',
+        data: amountsArray,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+    }
+  });
+</script>
     <%- include('../layouts/footerlinks') %>
 
       <%- include('../layouts/footer') %>

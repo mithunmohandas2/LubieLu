@@ -387,17 +387,23 @@ async function SubCategoryLoad(id) {
 }
 // ----------------------------
 
-function applyDiscount(){
-  
+function applyDiscount() {
+
   const coupon = document.getElementById("discountCode").value
   const total = document.getElementById("subTotal").innerHTML
   document.getElementById("Discount").innerHTML = 0;
   document.getElementById("finalAmount").innerHTML = total
   document.getElementById("finalAmount2").value = total
-  if (coupon == "GRAB40"){
-    document.getElementById("Discount").innerHTML = 40;
-    document.getElementById("finalAmount").innerHTML = total-40
-    document.getElementById("finalAmount2").value = total-40
-    document.getElementById("discountValue").value= 40
+  if (coupon == "GRAB40") {
+    if (total <= 500) {
+      alert("Minimum cart total should be 500 to use 'GRAB40' coupon")
+    } else {
+      document.getElementById("Discount").innerHTML = 40;
+      document.getElementById("finalAmount").innerHTML = total - 40
+      document.getElementById("finalAmount2").value = total - 40
+      document.getElementById("discountValue").value = 40
+    }
+  } else {
+    alert("Invalid Coupon")
   }
 }

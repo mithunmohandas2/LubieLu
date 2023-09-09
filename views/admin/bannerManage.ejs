@@ -1,13 +1,57 @@
 <%- include('../layouts/header') %>
-    <%- include('../layouts/adminHeader') %>
 
-    <h3 class="text-center my-4">
-       Banner Management
-      </h3>
+  <%- include('../layouts/adminHeader') %>
 
-     <div class="text-center mb-5">
-      <img src="https://edit.org/photos/img/blog/glx-free-toy-catalog-banner-advertisement-store-editable-template-.jpg-840.jpg" alt="sample banner">
-     </div>
+  <style>
+    /* Add your custom styles here */
+    .banner {
+        background-color: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<!-- Banner management section -->
+<div class="container-fluid" style="background-color: #fbdfdc;">
 
-        <%- include('../layouts/footerlinks') %>
-            <%- include('../layouts/footer') %>
+<section class="banner bg-transparent">
+    <div class="container">
+        <h1>Banner Management</h1>
+        <p>Manage your website banners here.</p>
+        <a href="#" class="btn btn-outline-danger">Add Banner</a>
+    </div>
+</section>
+</div>
+<!-- Banner list -->
+<section class="container mt-5">
+    <h2>Banners</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- List of banners goes here -->
+            <tr>
+                <td>1</td>
+                <td>Banner 1</td>
+                <td><img src="https://edit.org/photos/img/blog/glx-free-toy-catalog-banner-advertisement-store-editable-template-.jpg-840.jpg" alt="Banner 1" width="150"></td>
+                <td>
+                    <a href="#" class="btn btn-warning">Edit</a>
+                    <a href="#" class="btn btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+            <!-- Add more banner rows as needed -->
+        </tbody>
+    </table>
+</section>
+
+    
+    <%- include('../layouts/footerlinks') %>
+
+      <%- include('../layouts/footer') %>

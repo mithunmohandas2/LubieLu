@@ -7,7 +7,7 @@ const ordersSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "User",
         required: true,
-    },
+    },  
 
     items: [{
         productID: {

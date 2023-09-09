@@ -41,6 +41,16 @@ const loadDashboard = async (req, res) => {
         const productTotal = await Product.countDocuments()
         const userActive = await User.find({ is_blocked: false }).countDocuments()
         const productActive = await Product.find({ is_blocked: false }).countDocuments()
+        const orders = await Order.find()
+        const orderTotal = orders.length
+        let revenue = 0;
+        let amounts=[]
+        for(let i=0; i<orderTotal;i++){
+            revenue = revenue + orders[i].amount
+            if(i>orderTotal-11 ){
+                amounts.push(orders[i].amount)
+            }
+        }
 
         res.render('dashboard', {
             username: req.session.user_name,
@@ -48,6 +58,9 @@ const loadDashboard = async (req, res) => {
             productTotal: productTotal,
             productActive: productActive,
             userActive: userActive,
+            orderTotal,
+            revenue,
+            amounts,
             alert: req.query.alert
         });
     } catch (error) {
