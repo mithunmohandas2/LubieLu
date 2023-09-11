@@ -5,6 +5,7 @@ const Address = require("../models/userAddress");
 const Order = require("../models/ordersModel");
 const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
+const Banner = require("../models/bannerModel");
 const Razorpay = require('razorpay');
 const dotenv = require("dotenv").config();
 // -----------------------------------------------
@@ -116,9 +117,11 @@ const loadOtpLogin = async (req, res) => {
 const loadHome = async (req, res) => {
     try {
         const products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(6)
+        const banners = await Banner.findOne()
         res.render('home', {
-            products: products,
+            products,
             username: req.session.user_name,
+            banners,
         });
     } catch (error) {
         console.log(error.message)

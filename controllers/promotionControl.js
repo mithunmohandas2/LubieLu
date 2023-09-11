@@ -31,7 +31,6 @@ const bannerManage = async (req, res) => {  //test
 
 const addBanner = async (req, res) => {
     try {
-        console.log(req.file.filename);
         const bannerImg = req.file.filename;
         imagePath = "\\Banners\\" + bannerImg
         const addBanner = await Banner.updateOne({ imageType: "Banner" }, { $push: { banners: imagePath } }, { upsert: true })
