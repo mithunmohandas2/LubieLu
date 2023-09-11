@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const Order = require("../models/ordersModel");
 const Address = require("../models/userAddress");
+
 // -------------------------------------------------
 // loading the login page
 const loginLoad = async (req, res) => {
@@ -44,10 +45,10 @@ const loadDashboard = async (req, res) => {
         const orders = await Order.find()
         const orderTotal = orders.length
         let revenue = 0;
-        let amounts=[]
-        for(let i=0; i<orderTotal;i++){
+        let amounts = []
+        for (let i = 0; i < orderTotal; i++) {
             revenue = revenue + orders[i].amount
-            if(i>orderTotal-11 ){
+            if (i > orderTotal - 11) {
                 amounts.push(orders[i].amount)
             }
         }
@@ -209,30 +210,6 @@ const editProfile = async (req, res) => {
     }
 }
 
-// ------------COUPON-----------
-
-const couponsManage = async (req, res) => {
-    try {
-        res.render('couponsManage', {
-            username: req.session.user_name,
-        });
-    } catch (error) {
-        console.log(error.message)
-        res.render('error', { error: error.message })
-    }
-}
-// --------bannerManage------------
-
-const bannerManage = async (req, res) => {
-    try {
-        res.render('bannerManage', {
-            username: req.session.user_name,
-        });
-    } catch (error) {
-        console.log(error.message)
-        res.render('error', { error: error.message })
-    }
-}
 
 // -------------salesReport----------------
 const salesReport = async (req, res) => {
@@ -277,9 +254,9 @@ const orderDetails = async (req, res) => {
 const orderStatusChange = async (req, res) => {
     try {
         const update = await Order.updateOne({ _id: req.body.orderID }, { $set: { status: req.body.status } })
-        if (update.modifiedCount >= 1)  res.json();
-        else throw Error ("Unable to update status")
-       
+        if (update.modifiedCount >= 1) res.json();
+        else throw Error("Unable to update status")
+
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -300,8 +277,6 @@ module.exports = {
     error404,
     adminProfile,
     editProfile,
-    couponsManage,
-    bannerManage,
     salesReport,
     orderDetails,
     orderStatusChange,

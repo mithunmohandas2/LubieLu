@@ -1,57 +1,135 @@
 <%- include('../layouts/header') %>
 
-  <%- include('../layouts/adminHeader') %>
+    <%- include('../layouts/adminHeader') %>
 
-  <style>
-    /* Add your custom styles here */
-    .banner {
-        background-color: #f8f9fa;
-        padding: 20px;
-        text-align: center;
-    }
-</style>
-</head>
-<body>
-<!-- Banner management section -->
-<div class="container-fluid" style="background-color: #fbdfdc;">
+        <style>
+            /* Add your custom styles here */
+            .banner {
+                background-color: #f8f9fa;
+                padding: 20px;
+                text-align: center;
+            }
+        </style>
+        </head>
 
-<section class="banner bg-transparent">
-    <div class="container">
-        <h1>Banner Management</h1>
-        <p>Manage your website banners here.</p>
-        <a href="#" class="btn btn-outline-danger">Add Banner</a>
-    </div>
-</section>
-</div>
-<!-- Banner list -->
-<section class="container mt-5">
-    <h2>Banners</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Image</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- List of banners goes here -->
-            <tr>
-                <td>1</td>
-                <td>Banner 1</td>
-                <td><img src="https://edit.org/photos/img/blog/glx-free-toy-catalog-banner-advertisement-store-editable-template-.jpg-840.jpg" alt="Banner 1" width="150"></td>
-                <td>
-                    <a href="#" class="btn btn-warning">Edit</a>
-                    <a href="#" class="btn btn-outline-danger">Delete</a>
-                </td>
-            </tr>
-            <!-- Add more banner rows as needed -->
-        </tbody>
-    </table>
-</section>
+        <body>
+            <!-- Banner management section -->
+            <div class="container-fluid" style="background-color: #fbdfdc;">
 
-    
-    <%- include('../layouts/footerlinks') %>
+                <section class="banner bg-transparent">
+                    <div class="container">
+                        <h1>Banner Management</h1>
+                        <p>Manage your website banners here.</p>
+                    </div>
 
-      <%- include('../layouts/footer') %>
+                    <!-- Add Banner Modal -->
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        Add Banner
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Add Banners</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <form action="/admin/addBanner" method="post" enctype="multipart/form-data">
+                                    <div class="modal-body">
+                                        <div class="col-12 mb-4">
+                                            <input type="file" class="form-control" name="banners" id="imageInput">
+                                        </div>
+                                        <div id="imagePreviewContainer"></div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Upload</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- ------------ -->
+
+            <!-- Banner list -->
+            <section class="container mt-5">
+                <div class="row">
+
+                    <% if(locals.banners.banners){ for ( i=0; i<locals.banners.banners.length;i++ ) { %>
+                        <div class="card col-md-4 p-3 bg-light mb-4">
+                            <h2>
+                                Banner <%= i+1 %>
+                            </h2>
+                            <img class="pb-1 w-100" src="<%= locals.banners.banners[i] %>" alt="Banner 1" width="350em">
+                            <button type="button" onclick="deleteBanner('<%= i %>')"
+                                class="btn btn-outline-danger">Delete</button>
+                        </div>
+                        <% }} %>
+                </div>
+            </section>
+            <!-- ------------ -->
+
+            <%- include('../layouts/footerlinks') %>
+
+                <script>
+                    // Preview Images
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const imageInput = document.getElementById('imageInput');
+                        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+                        imageInput.addEventListener('change', function (event) {
+                            imagePreviewContainer.innerHTML = ''; // Clear previous previews
+
+                            const files = event.target.files;
+                            for (const file of files) {
+                                try {
+                                    const img = document.createElement('img');
+                                    img.src = URL.createObjectURL(file);
+                                    img.className = 'preview-image';
+                                    img.style.maxWidth = '15em';
+                                    imagePreviewContainer.appendChild(img);
+                                } catch (error) {
+                                    console.error('Error creating image preview:', error);
+                                }
+                            }
+                        });
+                    });
+
+
+                    async function deleteBanner(imageIndex) {
+                        console.log(imageIndex);
+                        const confirmed = window.confirm("Are you sure you want to delete the image?");
+                        if (confirmed) {
+                            const response = await fetch("/admin/deleteBanner", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    index: imageIndex,
+                                })
+                            })
+                                .then(() => {
+                                    window.alert("Banner Removed")
+                                    location.reload()
+                                })
+
+                                .catch((error) => {
+                                    console.error(error);
+                                    window.alert("Unable to delete image")
+                                })
+                        }
+                    }
+
+                </script>
+
+                <%- include('../layouts/footer') %>

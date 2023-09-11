@@ -407,3 +407,30 @@ function applyDiscount() {
     alert("Invalid Coupon")
   }
 }
+
+// -------------------------------
+
+ // Preview Images
+ document.addEventListener('DOMContentLoaded', function () {
+  const imageInput = document.getElementById('imageInput');
+  const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+  imageInput.addEventListener('change', function (event) {
+      imagePreviewContainer.innerHTML = ''; // Clear previous previews
+
+      const files = event.target.files;
+      for (const file of files) {
+          try {
+              const img = document.createElement('img');
+              img.src = URL.createObjectURL(file);
+              img.className = 'preview-image';
+              img.style.maxWidth = '15em';
+              imagePreviewContainer.appendChild(img);
+          } catch (error) {
+              console.error('Error creating image preview:', error);
+          }
+      }
+  });
+});
+
+// --------------------------------

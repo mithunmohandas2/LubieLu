@@ -5,6 +5,7 @@ const config = require('../config/config')
 const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const userController = require("../controllers/userController");
+const promotionController = require("../controllers/promotionControl");
 const path = require('path')
 const auth = require("../middleware/adminAuth")
 
@@ -20,18 +21,8 @@ admin_route.set('views','./views/admin')
 
 
 const multer = require('multer');
-//product Images
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public/productImages'); // Destination folder
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' ;
-        const extension = path.extname(file.originalname);
-        cb(null, file.fieldname + '-' + uniqueSuffix + extension); //unique filename
-    }
-});
-const upload = multer({ storage: storage });
+const upload = multer({ storage: config.productImageStorage });
+const bannerUpload = multer({ storage: config.bannerStorage });
 
 
 admin_route.get('/', auth.isLogout, adminController.loginLoad);
@@ -76,8 +67,10 @@ admin_route.post('/orderstatus',auth.isLogin,adminController.orderStatusChange)
 admin_route.get('/profile',auth.isLogin,adminController.adminProfile)
 admin_route.post('/editAdminProfile', auth.isLogin, adminController.editProfile);
 
-admin_route.get('/coupons',auth.isLogin,adminController.couponsManage)
-admin_route.get('/banners',auth.isLogin,adminController.bannerManage)
+admin_route.get('/coupons',auth.isLogin,promotionController.couponsManage)
+admin_route.get('/banners',auth.isLogin,promotionController.bannerManage)
+admin_route.post('/addBanner', auth.isLogin,bannerUpload.single("banners"), promotionController.addBanner);
+admin_route.post('/deleteBanner',auth.isLogin, promotionController.deleteBanner)
 
 admin_route.get('/salesReport',auth.isLogin,adminController.salesReport)
 
