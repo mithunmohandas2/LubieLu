@@ -1,0 +1,123 @@
+<%- include('../layouts/header') %>
+    <%- include('../layouts/adminHeader') %>
+
+        <style>
+            /* Add your custom styles here */
+            .banner {
+                background-color: #f8f9fa;
+                padding: 20px;
+                text-align: center;
+            }
+        </style>
+        </head>
+
+        <!-- Banner management section -->
+        <div class="container-fluid" style="background-color: #fbdfdc;">
+
+            <section class="banner bg-transparent">
+                <div class="container">
+                    <h1>Coupon Management</h1>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- edit Coupon section -->
+        <div class="text-start container p-4 col-md-6">
+            <form action="/admin/editCoupon" method="POST">
+                <input type="text" name="id" value="<%= locals.coupon._id %>" hidden>
+                <div class="mb-3">
+                    <label for="code" class="form-label">Coupon Code</label>
+                    <input type="text" id="code" name="code" class="form-control" value="<%= locals.coupon.code %>"
+                        pattern="[a-zA-Z0-9\-_@&$]*" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="offerType" class="form-label">Coupon Type</label>
+                            <select type="text" id="offerType" name="offerType" onchange="couponTypeLimit()"
+                                class="form-control">
+                                <option value="flat" <%=(locals.coupon.offerType==="flat" ) ? "selected" : "" %>>Flat
+                                    Offer</option>
+                                <option value="percent" <%=(locals.coupon.offerType==="percent" ) ? "selected" : "" %>
+                                    >Percentage Offer</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="offerVal" class="form-label">Amount /
+                                Percentage</label>
+                            <input type="text" id="offerVal" name="offerVal" value="<%= locals.coupon.offerVal %>"
+                                min="0" pattern="[0-9\.]*" onchange="couponTypeLimit()" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="minVal" class="form-label">Minimum Purchase
+                                Value</label>
+                            <input type="text" min="10" pattern="[0-9\.]*" id="minVal" name="minVal"
+                                class="form-control" value="<%= locals.coupon.minVal %>" required>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="maxDiscount" class="form-label">Max Discount
+                                limit</label>
+                            <input type="text" min="1" max="50000" min="0" pattern="[0-9\.]*" id="maxDiscount"
+                                name="maxDiscount" value="<%= locals.coupon.maxDiscount %>" class="form-control"
+                                required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="count" class="form-label">Count</label>
+                            <input type="number" id="count" name="count" class="form-control"
+                                value="<%= locals.coupon.count %>" min="1" required>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="expiry" class="form-label">Expiry Date</label>
+                            <input type="date" id="expiry" name="expiry" class="form-control"
+                                value="<%= locals.coupon.expiry %>" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer mt-2">
+                    <a href="/admin/coupons"><button type="button" class="btn btn-secondary">Back</button></a>
+                    <button type="submit" class="btn btn-primary">Edit Coupon</button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            //On coupon select FLAT / Percentage
+            function couponTypeLimit() {
+                const couponType = document.getElementById("offerType").value
+                const maxDiscountInput = document.getElementById("maxDiscount");
+                if (couponType === "flat") {
+                    const offerValue = document.getElementById("offerVal").value
+                    maxDiscountInput.value = offerValue
+                    maxDiscountInput.readOnly = true;
+                } else {
+                    maxDiscountInput.readOnly = false;
+                    maxDiscountInput.value = ""
+                    maxDiscountInput.required = true;
+                }
+            }
+
+        </script>
+
+        <%- include('../layouts/footerlinks') %>
+            <%- include('../layouts/footer') %>

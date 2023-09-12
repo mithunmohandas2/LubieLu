@@ -49,7 +49,8 @@
                                     <form action="/admin/createCoupon" method="POST">
                                         <div class="mb-3">
                                             <label for="code" class="form-label">Coupon Code</label>
-                                            <input type="text" id="code" name="code" class="form-control" required>
+                                            <input type="text" id="code" name="code" class="form-control"
+                                                pattern="[a-zA-Z0-9\-_@&$]*" required>
                                         </div>
 
                                         <div class="row">
@@ -68,8 +69,9 @@
                                                 <div class="mb-3">
                                                     <label for="offerVal" class="form-label">Amount /
                                                         Percentage</label>
-                                                    <input type="number" id="offerVal" name="offerVal"
-                                                        onchange="couponTypeLimit()" class="form-control" required>
+                                                    <input type="text" id="offerVal" name="offerVal" min="0"
+                                                        pattern="[0-9\.]*" onchange="couponTypeLimit()"
+                                                        class="form-control" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -79,8 +81,8 @@
                                                 <div class="mb-3">
                                                     <label for="minVal" class="form-label">Minimum Purchase
                                                         Value</label>
-                                                    <input type="number" id="minVal" name="minVal" class="form-control"
-                                                        required>
+                                                    <input type="text" id="minVal" name="minVal" min="10"
+                                                        pattern="[0-9\.]*" class="form-control" required>
                                                 </div>
                                             </div>
 
@@ -88,8 +90,9 @@
                                                 <div class="mb-3">
                                                     <label for="maxDiscount" class="form-label">Max Discount
                                                         limit</label>
-                                                    <input type="number" id="maxDiscount" name="maxDiscount"
-                                                        class="form-control" required>
+                                                    <input type="text" id="maxDiscount" name="maxDiscount" min="1"
+                                                        max="50000" min="0" pattern="[0-9\.]*" class="form-control"
+                                                        required>
                                                 </div>
                                             </div>
                                         </div>
@@ -100,7 +103,7 @@
                                                 <div class="mb-3">
                                                     <label for="count" class="form-label">Count</label>
                                                     <input type="number" id="count" name="count" class="form-control"
-                                                        required>
+                                                        min="1" required>
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -133,9 +136,9 @@
         <section class="container my-5">
             <h2>Coupon List</h2>
             <hr>
-            <% if(locals.coupons){ if(locals.coupons.length){ let j=1 %>
+            <% if(locals.coupons){ if(locals.coupons.length){ let j=0 %>
 
-                
+
                 <table id="myTable" class="display text-center">
                     <thead>
                         <tr>
@@ -151,126 +154,56 @@
                         </tr>
                     </thead>
                     <tbody>
-                            <%  for ( i=locals.coupons.length-1; i>=0;i-- ) { %>
+                        <% for ( i=locals.coupons.length-1; i>=0;i-- ) { %>
                             <tr>
-                                <td><%= j %></td>
-                                <td><%= locals.coupons[i].code %></td>
-                                <td><%= locals.coupons[i].offerType %></td>
-                                <td><%= locals.coupons[i].offerVal %></td>
-                                <td><%= locals.coupons[i].minVal %></td>
-                                <td><%= locals.coupons[i].maxDiscount %></td>
-                                <td><%= locals.coupons[i].count %></td>
-                                <td><%= locals.coupons[i].expiry.toLocaleString('en-US', { timeZone: 'Asia/Kolkata'}) %></td>
-                                <td> 
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                    data-bs-target="#EditCouponModal" value="<%= i %>">
-                                    <span class="material-symbols-outlined">
-                                        edit
-                                        </span>
-                                </button>
-                                <button type="button" onclick="deleteCoupon('<%= locals.coupons[i]._id %>')" class="btn btn-danger"><span class="material-symbols-outlined">
-                                    delete
-                                    </span></button>
+                                <td>
+                                    <%= j+1 %>
+                                </td>
+                                <td class="Pre_code">
+                                    <%= locals.coupons[i].code %>
+                                </td>
+                                <td class="Pre_offerType">
+                                    <%= locals.coupons[i].offerType %>
+                                </td>
+                                <td class="Pre_offerVal">
+                                    <%= locals.coupons[i].offerVal %>
+                                </td>
+                                <td class="Pre_minVal">
+                                    <%= locals.coupons[i].minVal %>
+                                </td>
+                                <td class="Pre_maxDiscount">
+                                    <%= locals.coupons[i].maxDiscount %>
+                                </td>
+                                <td class="Pre_count">
+                                    <%= locals.coupons[i].count %>
+                                </td>
+                                <td class="Pre_expiry">
+                                    <%= locals.coupons[i].expiry.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                                        %>
+                                </td>
+                                <td>
+                                    <a href="/admin/editCoupon?id=<%= locals.coupons[i]._id %>"><button type="button"
+                                            class="btn btn-warning">
+                                            <span class="material-symbols-outlined">
+                                                edit
+                                            </span>
+                                        </button></a>
+                                    <button type="button" onclick="deleteCoupon('<%= locals.coupons[i]._id %>')"
+                                        class="btn btn-danger"><span class="material-symbols-outlined">
+                                            delete
+                                        </span></button>
                                 </td>
                             </tr>
                             <% j++ } %>
-                           
-                        </tbody>
-                    </table>
 
-                    <% } else { %>
-                        <div class="container text-center">
-                            <h6 class="alert">No coupons added </h6>
-                        </div>
-                        <% }} %>
+                    </tbody>
+                </table>
 
-                        <!-- edit Coupon Modal -->
-                        <div class="modal fade" id="EditCouponModal" data-bs-backdrop="static" data-bs-keyboard="false"
-                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="staticBackdropLabel">Edit Coupon</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="text-start container p-4">
-                                    <form action="/admin/editCoupon" method="POST">
-                                        <div class="mb-3">
-                                            <label for="code" class="form-label">Coupon Code</label>
-                                            <input type="text" id="code" name="code" class="form-control" required>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="mb-3">
-                                                    <label for="offerType" class="form-label">Coupon Type</label>
-                                                    <select type="text" id="offerType" name="offerType"
-                                                        onchange="couponTypeLimit()" class="form-control">
-                                                        <option value="flat">Flat Offer</option>
-                                                        <option value="percent">Percentage Offer</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-6">
-                                                <div class="mb-3">
-                                                    <label for="offerVal" class="form-label">Amount /
-                                                        Percentage</label>
-                                                    <input type="number" id="offerVal" name="offerVal"
-                                                        onchange="couponTypeLimit()" class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="mb-3">
-                                                    <label for="minVal" class="form-label">Minimum Purchase
-                                                        Value</label>
-                                                    <input type="number" id="minVal" name="minVal" class="form-control"
-                                                        required>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-6">
-                                                <div class="mb-3">
-                                                    <label for="maxDiscount" class="form-label">Max Discount
-                                                        limit</label>
-                                                    <input type="number" id="maxDiscount" name="maxDiscount"
-                                                        class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-
-                                            <div class="col-6">
-                                                <div class="mb-3">
-                                                    <label for="count" class="form-label">Count</label>
-                                                    <input type="number" id="count" name="count" class="form-control"
-                                                        required>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="mb-3">
-                                                    <label for="expiry" class="form-label">Expiry Date</label>
-                                                    <input type="date" id="expiry" name="expiry" class="form-control"
-                                                        required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer mt-2">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Edit Coupon</button>
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
+                <% } else { %>
+                    <div class="container text-center">
+                        <h6 class="alert">No coupons added </h6>
                     </div>
+                    <% }} %>
 
         </section>
 

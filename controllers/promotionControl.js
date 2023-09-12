@@ -94,7 +94,7 @@ const createCoupon = async (req, res) => {
             count: req.body.count,
             expiry: req.body.expiry,
         })
-        const created =  await couponEntry.save()
+        const created = await couponEntry.save()
         if (created) {
             res.redirect('/admin/coupons')
         } else {
@@ -112,21 +112,63 @@ const createCoupon = async (req, res) => {
 const deleteCoupon = async (req, res) => {
     try {
         console.log(req.body.CouponID);
-        const isDelete = await Coupons.deleteOne({ _id : req.body.CouponID })
+        const isDelete = await Coupons.deleteOne({ _id: req.body.CouponID })
 
-                if (isDelete.modifiedCount >= 1) {
-                    console.log('Coupon has been successfully deleted.');
-                    res.json()
-                }
-                else throw Error("Failed to delete coupon")
-            }
-            
-         catch (error) {
-            console.log(error.message)
-            res.render('error', { error: error.message })
+        if (isDelete.modifiedCount >= 1) {
+            console.log('Coupon has been successfully deleted.');
+            res.json()
         }
+        else throw Error("Failed to delete coupon")
     }
-    
+
+    catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// ---------editCouponPage--------------
+
+const editCouponLoad = async (req, res) => {
+    try {
+        const couponData = await Coupons.findOne({_id: req.query.id})
+
+        res.render('couponEdit', {
+            username: req.session.user_name,
+            coupon: couponData,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// ----------edit Coupon--------------
+
+const editCoupon = async (req, res) => {
+    try {
+        const couponData = {
+            code: req.body.code,
+            offerType: req.body.offerType,
+            offerVal: req.body.offerVal,
+            minVal: req.body.minVal,
+            maxDiscount: req.body.maxDiscount,
+            count: req.body.count,
+            expiry: req.body.expiry,
+        }
+        const couponDataEdit = await Coupons.updateOne({_id : req.body.id},{$set : couponData})
+        
+        if (couponDataEdit.modifiedCount >= 1) {
+            res.redirect("/admin/coupons")
+        }
+        else throw Error("Failed to edit coupon")
+        
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
 // ------------------------
 module.exports = {
     bannerManage,
@@ -135,4 +177,6 @@ module.exports = {
     couponsManage,
     createCoupon,
     deleteCoupon,
+    editCouponLoad,
+    editCoupon,
 }

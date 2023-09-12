@@ -74,6 +74,8 @@ admin_route.post('/deleteBanner',auth.isLogin, promotionController.deleteBanner)
 admin_route.get('/coupons',auth.isLogin,promotionController.couponsManage)
 admin_route.post('/createCoupon', auth.isLogin, promotionController.createCoupon);
 admin_route.post('/deleteCoupon',auth.isLogin, promotionController.deleteCoupon)
+admin_route.get('/editCoupon', auth.isLogin, promotionController.editCouponLoad);
+admin_route.post('/editCoupon', auth.isLogin, promotionController.editCoupon);
 
 
 admin_route.get('/salesReport',auth.isLogin,adminController.salesReport)
