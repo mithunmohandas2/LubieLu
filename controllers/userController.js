@@ -7,6 +7,7 @@ const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
 const Banner = require("../models/bannerModel");
 const Razorpay = require('razorpay');
+const Coupons = require("../models/couponModel");
 const dotenv = require("dotenv").config();
 // -----------------------------------------------
 
@@ -247,12 +248,15 @@ const loadCheckout = async (req, res) => {
         }
 
         const userAddress = await Address.find({ userID: req.session._id }).sort({ updatedAt: -1 }).limit(4)
+        const couponCount =await Coupons.countDocuments()
+        const coupons = await Coupons.find().sort({expiry:-1}).limit(5)
 
         res.render('checkout', {
             username: req.session.user_name,
             cart: cartData,
             products: productData,
             address: userAddress,
+            coupon : coupons,
         });
     } catch (error) {
         console.log(error.message)

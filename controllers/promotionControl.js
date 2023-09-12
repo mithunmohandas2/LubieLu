@@ -111,11 +111,9 @@ const createCoupon = async (req, res) => {
 
 const deleteCoupon = async (req, res) => {
     try {
-        console.log(req.body.CouponID);
         const isDelete = await Coupons.deleteOne({ _id: req.body.CouponID })
 
-        if (isDelete.modifiedCount >= 1) {
-            console.log('Coupon has been successfully deleted.');
+        if (isDelete) {
             res.json()
         }
         else throw Error("Failed to delete coupon")

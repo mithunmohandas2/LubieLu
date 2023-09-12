@@ -88,31 +88,16 @@
                                                 <p class="mb-0">
                                                     <input type="text" class="savedAddressID"
                                                         value="<%= locals.address[i]._id%>" hidden>
-                                                    <span class="savedAddressName">
-                                                        <%= locals.address[i].addressName%>
-                                                    </span>
-                                                    ( Ph : <span class="savedPhone">
-                                                        <%= locals.address[i].phone%>
-                                                    </span> )
+                                                    <span class="savedAddressName"><%= locals.address[i].addressName%></span>
+                                                    ( Ph : <span class="savedPhone"><%= locals.address[i].phone%></span> )
                                                 </p>
                                                 <p>
-                                                    <span class="savedAddress1">"<%= locals.address[i].address1%>
-                                                            "</span>,
-                                                    <span class="savedAddress2">
-                                                        <%= locals.address[i].address2%>
-                                                    </span>,
-                                                    <span class="savedDistrict">
-                                                        <%= locals.address[i].district%>
-                                                    </span>
-                                                    <span class="savedState">
-                                                        <%= locals.address[i].state%>
-                                                    </span>,
-                                                    <span class="savedCountry">
-                                                        <%= locals.address[i].country%>
-                                                    </span>-
-                                                    Pincode : <span class="savedPincode">
-                                                        <%= locals.address[i].pincode%>
-                                                    </span>
+                                                    <span class="savedAddress1">"<%= locals.address[i].address1%>"</span>,
+                                                    <span class="savedAddress2"><%= locals.address[i].address2%></span>,
+                                                    <span class="savedDistrict"><%= locals.address[i].district%></span>
+                                                    <span class="savedState"><%= locals.address[i].state%></span>,
+                                                    <span class="savedCountry"><%= locals.address[i].country%></span>-
+                                                    Pincode : <span class="savedPincode"><%= locals.address[i].pincode%></span>
                                                 </p>
                                             </div>
                                         </button>
@@ -208,9 +193,28 @@
 
                 <!-- Summary Section -->
                 <% if (locals.products.length){ %>
+
                     <div class="col-md-3 py-3 text-center curv" style="background-color: rgb(242,242,242);">
                         <h5>Coupons</h5>
                         <hr class="mx-3">
+
+                        <% if (locals.coupon){ if (locals.coupon.length){ %>
+                            <div class="pb-3">
+                            <%  for (i=coupon.length-1; i>=0;i--) { %>
+                            <div class="card text-start p-1 m-2">
+                              CODE : <h6><%= locals.coupon[i].code %></h6>
+                               <% if (locals.coupon[i].offerType == 'flat') { %>
+                                ₹ <%= locals.coupon[i].offerVal %> /- FLAT OFF*
+
+                                <% } else {  %>
+                                    <%= locals.coupon[i].offerVal %> % OFF*
+                                <% }  %>
+                            </div>
+    
+                            <% }  %>
+                        </div>
+                            <% } } %>
+
                         <div class="row w-100  mb-4">
                             <div class="col-9 ">
                                 <input type="text" id="discountCode" class="mx-0 px-0 form-control">
