@@ -129,7 +129,7 @@ const deleteCoupon = async (req, res) => {
 
 const editCouponLoad = async (req, res) => {
     try {
-        const couponData = await Coupons.findOne({_id: req.query.id})
+        const couponData = await Coupons.findOne({ _id: req.query.id })
 
         res.render('couponEdit', {
             username: req.session.user_name,
@@ -154,13 +154,13 @@ const editCoupon = async (req, res) => {
             count: req.body.count,
             expiry: req.body.expiry,
         }
-        const couponDataEdit = await Coupons.updateOne({_id : req.body.id},{$set : couponData})
-        
+        const couponDataEdit = await Coupons.updateOne({ _id: req.body.id }, { $set: couponData })
+
         if (couponDataEdit.modifiedCount >= 1) {
             res.redirect("/admin/coupons")
         }
         else throw Error("Failed to edit coupon")
-        
+
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -168,6 +168,26 @@ const editCoupon = async (req, res) => {
 }
 
 // ------------------------
+
+// ----------edit Coupon--------------
+
+const verifyCoupon = async (req, res) => {
+    try {
+        const couponCode = req.body.code
+        const couponData = await Coupons.findOne({ code: couponCode })
+        if (!couponData) throw Error()
+        if (couponData.count > 0 && (couponData.expiry - Date.now()) > 0) {
+            res.json({ couponData });
+        } else {
+            throw Error()
+        }
+    } catch (error) {
+        res.render('error', { error: error.message })
+    }
+}
+
+// ------------------------
+
 module.exports = {
     bannerManage,
     addBanner,
@@ -177,4 +197,5 @@ module.exports = {
     deleteCoupon,
     editCouponLoad,
     editCoupon,
+    verifyCoupon,
 }

@@ -387,49 +387,87 @@ async function SubCategoryLoad(id) {
 }
 // ----------------------------
 
-function applyDiscount() {
+async function applyDiscount() {
 
   const coupon = document.getElementById("discountCode").value
-  const total = document.getElementById("subTotal").innerHTML
-  document.getElementById("Discount").innerHTML = 0;
-  document.getElementById("finalAmount").innerHTML = total
-  document.getElementById("finalAmount2").value = total
-  if (coupon == "GRAB40") {
-    if (total <= 500) {
-      alert("Minimum cart total should be 500 to use 'GRAB40' coupon")
-    } else {
-      document.getElementById("Discount").innerHTML = 40;
-      document.getElementById("finalAmount").innerHTML = total - 40
-      document.getElementById("finalAmount2").value = total - 40
-      document.getElementById("discountValue").value = 40
+
+  const pattern = /^[a-zA-Z0-9\-_@&$]*$/;
+  if (!pattern.test(coupon)) {
+    return alert("Invalid Coupon format")
+  }
+
+  const verifyCoupon = await fetch('/verifyCoupon', {
+    method: 'post',
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({
+      code: coupon,
+    })
+  })
+    .then((value) => {
+      return value.json()
+    })
+    .catch((err) => {
+      console.log(err.message)
+    })
+
+  if (verifyCoupon) { // if valid coupon found
+    //reset discount data
+    const total = document.getElementById("subTotal").innerHTML
+    document.getElementById("Discount").innerHTML = 0;
+    document.getElementById("finalAmount").innerHTML = total
+    document.getElementById("finalAmount2").value = total
+
+    //if coupon qty over
+    if (verifyCoupon.couponData.minVal > total) {
+      return alert(`Minimum cart total should be ${verifyCoupon.couponData.minVal} to use ${verifyCoupon.couponData.code} coupon`)
     }
-  } else {
+
+    let discount = verifyCoupon.couponData.offerVal
+
+    //if percentage offer
+    if (verifyCoupon.couponData.offerType == 'percent') {
+      discount = Math.floor(total / ((100 + discount)/100))
+    }
+
+    //if discount more than max allowable
+    if(discount > verifyCoupon.couponData.maxDiscount){
+      discount = verifyCoupon.couponData.maxDiscount
+    }
+      //final DOM Manipulation
+          document.getElementById("Discount").innerHTML = discount
+          document.getElementById("finalAmount").innerHTML = total - discount
+          document.getElementById("finalAmount2").value = total - discount
+          document.getElementById("discountValue").value = discount
+
+  } else { // if no valid coupon found
     alert("Invalid Coupon")
   }
 }
 
 // -------------------------------
 
- // Preview Images
- document.addEventListener('DOMContentLoaded', function () {
+// Preview Images
+document.addEventListener('DOMContentLoaded', function () {
   const imageInput = document.getElementById('imageInput');
   const imagePreviewContainer = document.getElementById('imagePreviewContainer');
 
   imageInput.addEventListener('change', function (event) {
-      imagePreviewContainer.innerHTML = ''; // Clear previous previews
+    imagePreviewContainer.innerHTML = ''; // Clear previous previews
 
-      const files = event.target.files;
-      for (const file of files) {
-          try {
-              const img = document.createElement('img');
-              img.src = URL.createObjectURL(file);
-              img.className = 'preview-image';
-              img.style.maxWidth = '15em';
-              imagePreviewContainer.appendChild(img);
-          } catch (error) {
-              console.error('Error creating image preview:', error);
-          }
+    const files = event.target.files;
+    for (const file of files) {
+      try {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.className = 'preview-image';
+        img.style.maxWidth = '15em';
+        imagePreviewContainer.appendChild(img);
+      } catch (error) {
+        console.error('Error creating image preview:', error);
       }
+    }
   });
 });
 
@@ -456,4 +494,10 @@ async function deleteCoupon(CouponID) {
         console.error(error);
       })
   }
+}
+
+// ---------Coupon @ Checkout-------------
+
+function fillCoupon(code) {
+  document.getElementById('discountCode').value = code;
 }

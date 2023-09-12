@@ -8,7 +8,7 @@ const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
 const OTPVerification = require("../controllers/OTPverification");
 const addressController = require("../controllers/addressController");
-
+const promotionController = require("../controllers/promotionControl");
 
 user_route.use(session({
     secret: config.sessionSecret,
@@ -45,9 +45,10 @@ user_route.post('/searchResult', productController.userSearchResult);
 user_route.get('/cart', auth.isLogin, userController.loadCart);
 user_route.post('/cart', auth.isLogin, userController.addToCart);
 user_route.post('/removeCart', auth.isLogin, userController.removeCart);
+
 user_route.get('/checkout', auth.isLogin, userController.loadCheckout);
 user_route.post('/createOrder', auth.isLogin, userController.createOrder);
-
+user_route.post('/verifyCoupon', auth.isLogin, promotionController.verifyCoupon);
 user_route.post('/checkout', auth.isLogin, userController.checkout);
 user_route.get('/orderSuccess', auth.isLogin, userController.orderSuccess);
 

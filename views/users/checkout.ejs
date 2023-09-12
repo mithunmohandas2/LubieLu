@@ -201,7 +201,7 @@
                         <% if (locals.coupon){ if (locals.coupon.length){ %>
                             <div class="pb-3">
                             <%  for (i=coupon.length-1; i>=0;i--) { %>
-                            <div class="card text-start p-1 m-2">
+                            <div class="card text-start p-1 m-2" onclick="fillCoupon('<%= locals.coupon[i].code %>')">
                               CODE : <h6><%= locals.coupon[i].code %></h6>
                                <% if (locals.coupon[i].offerType == 'flat') { %>
                                 ₹ <%= locals.coupon[i].offerVal %> /- FLAT OFF*
@@ -217,7 +217,7 @@
 
                         <div class="row w-100  mb-4">
                             <div class="col-9 ">
-                                <input type="text" id="discountCode" class="mx-0 px-0 form-control">
+                                <input type="text" id="discountCode" class="form-control mx-2" pattern="[a-zA-Z0-9\-_@&$]*">
                             </div>
                             <div class="col-3 mx-0 px-0">
                                 <button type="button" class="btn btn-outline-danger mb-3"
