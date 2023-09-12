@@ -86,17 +86,33 @@
                                             <div class="card p-2" style="background-color: rgb(242,242,242);">
 
                                                 <p class="mb-0">
-                                                    <input type="text"  class="savedAddressID" value="<%= locals.address[i]._id%>" hidden>
-                                                    <span class="savedAddressName"><%= locals.address[i].addressName%></span>
-                                                    ( Ph : <span class="savedPhone"><%= locals.address[i].phone%></span> )
+                                                    <input type="text" class="savedAddressID"
+                                                        value="<%= locals.address[i]._id%>" hidden>
+                                                    <span class="savedAddressName">
+                                                        <%= locals.address[i].addressName%>
+                                                    </span>
+                                                    ( Ph : <span class="savedPhone">
+                                                        <%= locals.address[i].phone%>
+                                                    </span> )
                                                 </p>
                                                 <p>
-                                                 <span class="savedAddress1">"<%= locals.address[i].address1%>"</span>, 
-                                                 <span class="savedAddress2"><%= locals.address[i].address2%></span>,
-                                                 <span class="savedDistrict"><%= locals.address[i].district%></span> 
-                                                    <span class="savedState"><%= locals.address[i].state%></span>,
-                                                        <span class="savedCountry"><%= locals.address[i].country%></span>- 
-                                                        Pincode : <span class="savedPincode"><%= locals.address[i].pincode%></span> 
+                                                    <span class="savedAddress1">"<%= locals.address[i].address1%>
+                                                            "</span>,
+                                                    <span class="savedAddress2">
+                                                        <%= locals.address[i].address2%>
+                                                    </span>,
+                                                    <span class="savedDistrict">
+                                                        <%= locals.address[i].district%>
+                                                    </span>
+                                                    <span class="savedState">
+                                                        <%= locals.address[i].state%>
+                                                    </span>,
+                                                    <span class="savedCountry">
+                                                        <%= locals.address[i].country%>
+                                                    </span>-
+                                                    Pincode : <span class="savedPincode">
+                                                        <%= locals.address[i].pincode%>
+                                                    </span>
                                                 </p>
                                             </div>
                                         </button>
@@ -218,7 +234,9 @@
                                         <tr>
                                             <th scope="row">Sub-Total</th>
                                             <td>
-                                                ₹ <span id="subTotal"><%= sum %></span> /-
+                                                ₹ <span id="subTotal">
+                                                    <%= sum %>
+                                                </span> /-
                                             </td>
                                         </tr>
                                         <tr>
@@ -235,8 +253,11 @@
                                             </th>
                                             <td>
                                                 <h4 class="fw-bold">
-                                                    ₹ <span id="finalAmount"><%= sum %></span> /-
-                                                    <input type="number" id="finalAmount2" name="amount" value="<%= sum %>" hidden >
+                                                    ₹ <span id="finalAmount">
+                                                        <%= sum %>
+                                                    </span> /-
+                                                    <input type="number" id="finalAmount2" name="amount"
+                                                        value="<%= sum %>" hidden>
                                                 </h4>
                                             </td>
                                         </tr>
@@ -255,7 +276,7 @@
                         </div>
                         <div class="form-check mx-5">
                             <label for="cod" class="form-label">Cash-On-Delivery</label>
-                            <input class="form-check-input" type="checkbox" name="COD" id="COD"  />
+                            <input class="form-check-input" type="checkbox" name="COD" id="COD" />
                         </div>
 
                         <div class="text-center">
@@ -291,6 +312,7 @@
             </script>
 
             <script>
+                // create order
                 $(document).ready(function () {
                     $('.pay-form').submit(function (e) {
                         e.preventDefault();
@@ -331,7 +353,7 @@
                     });
                 });
 
-
+                // success order display
                 function verifyPayment(formData) {
                     $.ajax({
                         url: "/checkout",

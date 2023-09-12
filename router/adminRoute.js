@@ -67,10 +67,13 @@ admin_route.post('/orderstatus',auth.isLogin,adminController.orderStatusChange)
 admin_route.get('/profile',auth.isLogin,adminController.adminProfile)
 admin_route.post('/editAdminProfile', auth.isLogin, adminController.editProfile);
 
-admin_route.get('/coupons',auth.isLogin,promotionController.couponsManage)
 admin_route.get('/banners',auth.isLogin,promotionController.bannerManage)
 admin_route.post('/addBanner', auth.isLogin,bannerUpload.single("banners"), promotionController.addBanner);
 admin_route.post('/deleteBanner',auth.isLogin, promotionController.deleteBanner)
+
+admin_route.get('/coupons',auth.isLogin,promotionController.couponsManage)
+admin_route.post('/createCoupon', auth.isLogin, promotionController.createCoupon);
+
 
 admin_route.get('/salesReport',auth.isLogin,adminController.salesReport)
 

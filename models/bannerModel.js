@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 
-const coupon = new mongoose.Schema({
+const banner = new mongoose.Schema({
     imageType :{
         type: String,
     },
     banners: [String],
 })
 
-module.exports = mongoose.model("Coupon", coupon);
+module.exports = mongoose.model("Banner", banner);

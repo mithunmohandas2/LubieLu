@@ -64,7 +64,7 @@
             <section class="container mt-5">
                 <div class="row">
 
-                    <% if(locals.banners.banners){ for ( i=0; i<locals.banners.banners.length;i++ ) { %>
+                    <% if(locals.banners){ for ( i=0; i<locals.banners.banners.length;i++ ) { %>
                         <div class="card col-md-4 p-3 bg-light mb-4">
                             <h2>
                                 Banner <%= i+1 %>
@@ -76,6 +76,8 @@
                         <% }} %>
                 </div>
             </section>
+
+
             <!-- ------------ -->
 
             <%- include('../layouts/footerlinks') %>
@@ -104,7 +106,7 @@
                         });
                     });
 
-
+                    //delete Banner
                     async function deleteBanner(imageIndex) {
                         console.log(imageIndex);
                         const confirmed = window.confirm("Are you sure you want to delete the image?");

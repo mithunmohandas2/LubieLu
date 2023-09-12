@@ -1,58 +1,171 @@
 <%- include('../layouts/header') %>
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" /> -->
+    <%- include('../layouts/adminHeader') %>
 
-  <%- include('../layouts/adminHeader') %>
+        <style>
+            /* Add your custom styles here */
+            .banner {
+                background-color: #f8f9fa;
+                padding: 20px;
+                text-align: center;
+            }
+        </style>
+        </head>
 
-  <style>
-    /* Add your custom styles here */
-    .banner {
-        background-color: #f8f9fa;
-        padding: 20px;
-        text-align: center;
-    }
-</style>
-</head>
-<body>
-<!-- Banner management section -->
-<div class="container-fluid" style="background-color: #fbdfdc;">
+        <body>
+            <!-- Banner management section -->
+            <div class="container-fluid" style="background-color: #fbdfdc;">
 
-<section class="banner bg-transparent">
-    <div class="container">
-        <h1>Coupon Management</h1>
-        <p>Manage coupons here.</p>
-        <a href="#" class="btn btn-outline-danger">Add Coupon</a>
-    </div>
-</section>
-</div>
-<!-- Banner list -->
-<section class="container mt-5">
-    <h2>Banners</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Image</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- List of banners goes here -->
-            <tr>
-                <td>1</td>
-                <td>Coupon 1</td>
-                <td> <img src="https://img.freepik.com/free-vector/vector-discount-coupon-half-price-offer-promo-code-gift-voucher-coupons-template_91128-2340.jpg" alt="sample coupon" width="150"></td>
-                <td>
-                    <a href="#" class="btn btn-warning">Edit</a>
-                    <a href="#" class="btn btn-outline-danger">Delete</a>
-                </td>
-            </tr>
-            <!-- Add more banner rows as needed -->
-        </tbody>
-    </table>
-</section>
+                <section class="banner bg-transparent">
+                    <div class="container">
+                        <h1>Coupon Management</h1>
+                        <p>Manage coupons here.</p>
+                        <!-- Add Banner Modal -->
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">
+                            Add Coupon
+                        </button>
 
-    
-    <%- include('../layouts/footerlinks') %>
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Add Coupon</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="text-start container p-4">
+                                        <form action="/admin/createCoupon" method="POST">
+                                            <div class="mb-3">
+                                                <label for="code" class="form-label">Coupon Code</label>
+                                                <input type="text" id="code" name="code" class="form-control" required>
+                                            </div>
 
-      <%- include('../layouts/footer') %>
-           
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="mb-3">
+                                                        <label for="offerType" class="form-label">Coupon Type</label>
+                                                        <select type="text" id="offerType" name="offerType"
+                                                            onchange="couponTypeLimit()" class="form-control">
+                                                            <option value="flat">Flat Offer</option>
+                                                            <option value="percent">Percentage Offer</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <div class="mb-3">
+                                                        <label for="offerVal" class="form-label">Amount /
+                                                            Percentage</label>
+                                                        <input type="number" id="offerVal" name="offerVal"
+                                                            onchange="couponTypeLimit()" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="mb-3">
+                                                        <label for="minVal" class="form-label">Minimum Purchase
+                                                            Value</label>
+                                                        <input type="number" id="minVal" name="minVal"
+                                                            class="form-control" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <div class="mb-3">
+                                                        <label for="maxDiscount" class="form-label">Max Discount
+                                                            limit</label>
+                                                        <input type="number" id="maxDiscount" name="maxDiscount"
+                                                            class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+
+                                                <div class="col-6">
+                                                    <div class="mb-3">
+                                                        <label for="count" class="form-label">Count</label>
+                                                        <input type="number" id="count" name="count"
+                                                            class="form-control" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="mb-3">
+                                                        <label for="expiry" class="form-label">Expiry Date</label>
+                                                        <input type="date" id="expiry" name="expiry"
+                                                            class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer mt-2">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Create</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                </section>
+            </div>
+            <!-- ------------ -->
+            </div>
+            </section>
+            </div>
+            <!-- Banner list -->
+            <section class="container mt-5">
+                <h2>Coupons</h2>
+                <table id="myTable" class="display">
+                    <thead>
+                        <tr>
+                            <th>Column 1</th>
+                            <th>Column 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Row 1 Data 1</td>
+                            <td>Row 1 Data 2</td>
+                        </tr>
+                        <tr>
+                            <td>Row 2 Data 1</td>
+                            <td>Row 2 Data 2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+
+            <%- include('../layouts/footerlinks') %>
+
+                <script>
+                    function couponTypeLimit() {
+                        const couponType = document.getElementById("offerType").value
+                        const maxDiscountInput = document.getElementById("maxDiscount");
+                        if (couponType === "flat") {
+                            const offerValue = document.getElementById("offerVal").value
+                            maxDiscountInput.value = offerValue
+                            maxDiscountInput.readOnly = true;
+                        } else {
+                            maxDiscountInput.readOnly = false;
+                            maxDiscountInput.value = ""
+                            maxDiscountInput.required = true;
+                        }
+                    }
+                </script>
+                <!-- <script>
+                    $(document).ready(function () {
+                        $('#myTable').DataTable();
+                    });
+                </script>
+                <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script> -->
+                <%- include('../layouts/footer') %>
