@@ -69,8 +69,11 @@ const deleteBanner = async (req, res) => {
 
 const couponsManage = async (req, res) => {
     try {
+        let couponLoad = await Coupons.find()
+
         res.render('couponsManage', {
             username: req.session.user_name,
+            coupons: couponLoad,
         });
     } catch (error) {
         console.log(error.message)
@@ -104,12 +107,32 @@ const createCoupon = async (req, res) => {
     }
 }
 
+// -----------deleteCoupon---------------
 
+const deleteCoupon = async (req, res) => {
+    try {
+        console.log(req.body.CouponID);
+        const isDelete = await Coupons.deleteOne({ _id : req.body.CouponID })
+
+                if (isDelete.modifiedCount >= 1) {
+                    console.log('Coupon has been successfully deleted.');
+                    res.json()
+                }
+                else throw Error("Failed to delete coupon")
+            }
+            
+         catch (error) {
+            console.log(error.message)
+            res.render('error', { error: error.message })
+        }
+    }
+    
 // ------------------------
 module.exports = {
-    couponsManage,
     bannerManage,
     addBanner,
     deleteBanner,
+    couponsManage,
     createCoupon,
+    deleteCoupon,
 }

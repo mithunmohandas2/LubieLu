@@ -433,4 +433,27 @@ function applyDiscount() {
   });
 });
 
-// --------------------------------
+// ----------------delete Coupon----------------
+
+async function deleteCoupon(CouponID) {
+  const confirmed = window.confirm("Are you sure you want to delete the coupon?");
+  if (confirmed) {
+    const response = await fetch("/admin/deleteCoupon", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        CouponID,
+      })
+    })
+      .then(() => {
+        window.alert("coupon deleted successfully")
+        location.reload()
+      })
+      .catch((error) => {
+        window.alert("Unable to delete coupon")
+        console.error(error);
+      })
+  }
+}
