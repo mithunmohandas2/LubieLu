@@ -16,7 +16,9 @@
               <div class="card mb-4">
                 <div class="card-header text-start">
                   Order ID: <%= locals.orders[i]._id %>
-                    <p class="text-end">Order Date : <%= locals.orders[i].createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %></p>
+                    <p class="text-end">Order Date : <%= locals.orders[i].createdAt.toLocaleString('en-US', {
+                        timeZone: 'Asia/Kolkata' }) %>
+                    </p>
                 </div>
                 <div class="card-body">
 
@@ -26,12 +28,23 @@
                   </p>
                   <p class="card-text">Payment Method: <%= locals.orders[i].method %>
                   </p>
-                  <p class="card-text">Status: <%= locals.orders[i].status %>
-                  </p>
+                  <% if(locals.orders[i].status=='Cancelled' || locals.orders[i].status=='Returned' ){ %>
+                    <p class="card-text">Status: <span class="text-danger fw-bold">
+                        <%= locals.orders[i].status %>
+                      </span>
+                    </p>
+                    <% } else { %>
+                      <p class="card-text">Status: <%= locals.orders[i].status %>
+                          <% } %>
+                      </p>
 
-                  <a href="/orderDetails?orderID=<%= locals.orders[i]._id %>">
-                    <button type="submit" class="btn btn-outline-danger">Order Details</button>
-                  </a>
+                      <a href="/orderDetails?orderID=<%= locals.orders[i]._id %>">
+                        <button type="submit" class="btn btn-warning">Order Details</button>
+                      </a>
+                      <% if(locals.orders[i].status=='Order placed' || locals.orders[i].status=='confirmed' ){ %>
+                        <button class="btn btn-danger" type="button"
+                          onclick="cancelOrder('<%= locals.orders[i]._id %>')">Cancel Order</button>
+                        <% } %>
                 </div>
               </div>
               <% } } %>

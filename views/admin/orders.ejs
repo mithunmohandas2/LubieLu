@@ -19,6 +19,7 @@
               <th scope="col">Amount</th>
               <th scope="col">Payment mode</th>
               <th scope="col">Status</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody class="text-center">
@@ -31,7 +32,9 @@
                   </td>
                   <td>
                     <a href="/admin/orderDetails?orderID=<%= locals.orders[i]._id %>">
-                      <span class="orderID"><%=locals.orders[i]._id%></span>
+                      <span class="orderID">
+                        <%=locals.orders[i]._id%>
+                      </span>
                     </a>
 
                   </td>
@@ -59,6 +62,20 @@
                       <option value="Delivered">Delivered</option>
                     </select>
 
+                  </td>
+                  <td>
+                    <% if (locals.orders[i].status=='Order placed' || locals.orders[i].status=='confirmed' ||
+                      locals.orders[i].status=='In-transit' ) { %>
+                      <button class="btn btn-danger">Cancel</button>
+                      <% } %>
+
+                      <% if (locals.orders[i].status=='Return requested') { %>
+                      <button class="btn btn-outline-success">Approve</button>
+                      <% } %>
+
+                      <% if (locals.orders[i].status=='Returned') { %>
+                        <button class="btn btn-warning">Refund</button>
+                        <% } %>
                   </td>
                 </tr>
                 <% } } %>

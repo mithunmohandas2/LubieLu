@@ -8,6 +8,7 @@ const subCategory = require("../models/productSubCategoryModel");
 const Banner = require("../models/bannerModel");
 const Razorpay = require('razorpay');
 const Coupons = require("../models/couponModel");
+const Wallet = require("../models/walletModel")
 const dotenv = require("dotenv").config();
 // -----------------------------------------------
 
@@ -26,7 +27,7 @@ const insertUser = async (req, res) => {
     // check password and confirm password is same
     if (req.body.password != req.body.password2) {
         res.render('signup', { title: 'Lubie-Lu_Signup', message: 'Password mismatch' });
-    } else if(req.body.firstName.trim() == "" || req.body.lastName.trim() == "" || req.body.phone.trim() == "" || req.body.password.trim() == ""){ 
+    } else if (req.body.firstName.trim() == "" || req.body.lastName.trim() == "" || req.body.phone.trim() == "" || req.body.password.trim() == "") {
         res.render('signup', { title: 'Lubie-Lu_Signup', message: 'Empty input fileds present' });
     } else {
         try {
@@ -247,16 +248,16 @@ const loadCheckout = async (req, res) => {
             }
         }
 
-        const userAddress = await Address.find({ userID: req.session._id }).sort({ updatedAt: -1 }).limit(4)
-        const couponCount =await Coupons.countDocuments()
-        const coupons = await Coupons.find().sort({expiry:-1}).limit(5)
+        const userAddress = await Address.find({$and :[{ userID: req.session._id },{disabled : false}]}).sort({ updatedAt: -1 }).limit(4)
+        const couponCount = await Coupons.countDocuments()
+        const coupons = await Coupons.find().sort({ expiry: -1 }).limit(5)
 
         res.render('checkout', {
             username: req.session.user_name,
             cart: cartData,
             products: productData,
             address: userAddress,
-            coupon : coupons,
+            coupon: coupons,
         });
     } catch (error) {
         console.log(error.message)
@@ -441,6 +442,60 @@ const orderDetails = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
+//----------------cancelOrder-------------------
+
+const cancelOrder = async (req, res) => {
+    try {
+        const orderID = req.body.orderID
+        const orderData = await Order.findOne({ _id: orderID })
+
+        if (orderData) {
+            //Setting Order Status as Cancelled
+            const setCancel = await Order.updateOne({ _id: orderID }, { $set: { status: 'Cancelled' } })
+            if (!setCancel) throw Error("unable to update status to cancelled")
+
+            for (i = 0; i < orderData.items.length; i++) {
+                //reset stock
+                let data = await Product.updateOne({ _id: orderData.items[i].productID }, { $inc: { stock: orderData.items[i].qty } });
+            }
+        } else throw Error("No order data found")
+
+        //if Online Payment refund to wallet
+        if (orderData.method === "Online-Pay") {
+            const transaction = {
+                Order: orderID,
+                amount: orderData.amount,
+                txnType: 'credit',
+                date: Date.now(),
+            }
+            const walletUpdate = await Wallet.updateOne({ userID: req.session._id }, { $push: { transactions: transaction } }, { upsert: true })
+            if (!walletUpdate) throw Error("wallet not updated")
+            const refund = await Wallet.updateOne({ userID: req.session._id }, { $inc: { balance: orderData.amount } })
+            if (!refund) throw Error("unable to refund to Wallet")
+        }
+        res.json();
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// -------------loadWallet-------------------
+
+const loadWallet = async (req, res) => {
+    try {
+        const walletData = await Wallet.findOne({ userID: req.session._id })
+        res.render('wallet', {
+            username: req.session.user_name,
+            walletData,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
 
 // ...........Load wishlist...........
 
@@ -483,7 +538,7 @@ const userProfile = async (req, res) => {
     try {
         const userMatch = await User.findOne({ _id: req.session._id })
         const defaultAddress = await Address.findOne({ _id: userMatch.defaultAddress })
-        const userAddress = await Address.find({ userID: req.session._id }).sort({ updatedAt: -1 }).limit(4)
+        const userAddress = await Address.find({$and :[{ userID: req.session._id },{disabled : false}]}).sort({ updatedAt: -1 }).limit(4)
         res.render('userProfile', {
             username: req.session.user_name,
             user: userMatch,
@@ -537,6 +592,8 @@ module.exports = {
     orderSuccess,
     orderHistory,
     orderDetails,
+    cancelOrder,
+    loadWallet,
     loadWishlist,
     logout,
     error404,

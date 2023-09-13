@@ -55,6 +55,7 @@ user_route.get('/orderSuccess', auth.isLogin, userController.orderSuccess);
 user_route.get('/orderHistory', auth.isLogin, userController.orderHistory);
 user_route.get('/orderDetails', auth.isLogin, userController.orderDetails);
 user_route.post('/qtyChange', auth.isLogin, productController.qtyChange);
+user_route.post('/cancelOrder', auth.isLogin, userController.cancelOrder);
 
 user_route.get('/userProfile', auth.isLogin, userController.userProfile);
 user_route.post('/editProfile', auth.isLogin, userController.editProfile);
@@ -62,6 +63,7 @@ user_route.post('/addAddress', auth.isLogin, addressController.addAddress);
 user_route.post('/deleteAddress', auth.isLogin, addressController.deleteAddress);
 user_route.post('/editAddress', auth.isLogin, addressController.editAddress);
 
+user_route.get('/wallet', auth.isLogin, userController.loadWallet);
 user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 
 //logout

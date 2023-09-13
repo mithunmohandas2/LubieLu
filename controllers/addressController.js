@@ -32,7 +32,7 @@ const addAddress = async (req, res) => {
 
 const deleteAddress = async (req, res) => {
     try {
-        const deleted = await Address.deleteOne({ _id: req.body.addressID })
+        const deleted = await Address.updateOne({ _id: req.body.addressID },{$set : {disabled : true}})
         if (deleted) res.json()
         else throw Error("Unable to delete")
 

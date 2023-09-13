@@ -1,0 +1,96 @@
+<%- include('../layouts/header') %>
+    <%- include('../layouts/userHeader') %>
+
+        <section style="min-height: 17rem">
+            <div class="container my-5">
+
+                <div class="row">
+
+                    <div class="col-lg-6 ">
+                        <h2>Welcome to Your Wallet</h2>
+                        <div class="row mt-4 ms-3">
+                            <div class="col-md-6" style="background-image: url('https://app.illinois.edu/wp-content/uploads/2022/08/Tile_wallet1.png'); background-size: contain;
+                    background-repeat: no-repeat; height: 14em;">
+                                <div class="ps-3">
+                                    <h3 style="margin-top: 6rem;">Balance</h3>
+                                    <p class="h3"><strong>
+                                            <% if(locals.walletData) { %>
+                                                <%= locals.walletData.balance%>
+                                                    <% } else { %>
+                                                        0
+                                                        <% } %>
+                                        </strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <h4 class="mb-4">Wallet Transactions:</h4>
+                                <hr>
+                                <% if(locals.walletData) { if(locals.walletData.transactions.length) { %>
+                                    <table id="myTable" class="display text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>OrderID</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <% for (i=0;i<locals.walletData.transactions.length;i++) { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= locals.walletData.transactions[i].date.toLocaleString('en-US',
+                                                            { timeZone: 'Asia/Kolkata' }) %>
+                                                    </td>
+                                                    <td>
+                                                        <%= locals.walletData.transactions[i].Order%>
+                                                    </td>
+
+                                                    <% if ( locals.walletData.transactions[i].txnType=='credit' ) { %>
+                                                        <td class="text-success">
+                                                            <%= locals.walletData.transactions[i].amount%> Cr.
+                                                        </td>
+                                                        <% } else { %>
+                                                            <td class="text-danger">
+                                                                <%= locals.walletData.transactions[i].amount%> Db.
+                                                            </td>
+                                                            <% } %>
+
+                                                </tr>
+                                                <% } %>
+                                                
+                                        </tbody>
+                                    </table>
+                                    <% } } else { %>
+                                        <div class="text-center">
+                                            <h6 class="text-danger">No transactions found</h6>
+                                        </div>
+                                        <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+            </div>
+        </section>
+
+        <script>
+            /* Initialization of datatable */
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+        </script>
+
+        <%- include('../layouts/footerlinks') %>
+            <%- include('../layouts/footer') %>

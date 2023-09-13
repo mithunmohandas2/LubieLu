@@ -201,14 +201,19 @@
                         <% if (locals.coupon){ if (locals.coupon.length){ %>
                             <div class="pb-3">
                             <%  for (i=coupon.length-1; i>=0;i--) { %>
-                            <div class="card text-start p-1 m-2" onclick="fillCoupon('<%= locals.coupon[i].code %>')">
-                              CODE : <h6><%= locals.coupon[i].code %></h6>
+                            <div class="card text-start p-1 px-3 m-2" onclick="fillCoupon('<%= locals.coupon[i].code %>')">
+                                
                                <% if (locals.coupon[i].offerType == 'flat') { %>
-                                ₹ <%= locals.coupon[i].offerVal %> /- FLAT OFF*
+                                FLAT ₹ <%= locals.coupon[i].offerVal %> /- OFF *
 
                                 <% } else {  %>
-                                    <%= locals.coupon[i].offerVal %> % OFF*
+                                    <%= locals.coupon[i].offerVal %> % OFF *
                                 <% }  %>
+                                <br>
+                                <span style="font-size: small;">Code : <%= locals.coupon[i].code %></span>
+                                <span style="font-size: x-small;">
+                                    *Min Cart Value : ₹<%= locals.coupon[i].minVal %> ; Max Discount : ₹<%= locals.coupon[i].maxDiscount %>
+                                </span>
                             </div>
     
                             <% }  %>

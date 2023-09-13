@@ -496,8 +496,35 @@ async function deleteCoupon(CouponID) {
   }
 }
 
-// ---------Coupon @ Checkout-------------
+// ---------Fill Coupon @ Checkout-------------
 
 function fillCoupon(code) {
   document.getElementById('discountCode').value = code;
 }
+
+// ---------------cancelOrder-------------------------
+
+async function cancelOrder(orderID) {
+  const confirmed = window.confirm("Are you sure you want to cancel the order?");
+  if (confirmed) {
+    const response = await fetch("/cancelOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        orderID,
+      })
+    })
+      .then(() => {
+        window.alert("Order cancelled successfully")
+        location.reload()
+      })
+      .catch((error) => {
+        window.alert("Unable to cancel order")
+        console.error(error);
+      })
+  }
+}
+
+// -------------------------------

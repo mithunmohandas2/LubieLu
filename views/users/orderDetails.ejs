@@ -25,9 +25,11 @@
                   </div>
                   <div class="col-md-6">
                       <h4>Shipping Information</h4>
-                      <p><strong>Name:</strong> <%= locals.address.addressName %></p>
+                      <% if(locals.address) { %>
+                      <p><strong>Name:</strong><%=locals.address.addressName %> </p>
                       <p><strong>Address:</strong> <%= locals.address.address1 %>, <%= locals.address.address2 %>, <%= locals.address.district %>, <%= locals.address.state %>-<%= locals.address.pincode %> </p>
                       <p><strong>Phone:</strong> <%= locals.address.phone %></p>
+                      <% } %>
                   </div>
               </div>
               <hr>
