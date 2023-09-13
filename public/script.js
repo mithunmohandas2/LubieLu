@@ -211,6 +211,7 @@ function selectAddress(i) {
 async function orderStatusChange(i) {
   const status = document.getElementsByClassName("orderStatus")[i].value;
   const orderID = document.getElementsByClassName("orderID")[i].innerHTML
+  
   const update = await fetch('/admin/orderstatus', {
     method: 'post',
     headers: {
@@ -223,6 +224,7 @@ async function orderStatusChange(i) {
   })
     .then(() => {
       window.alert("Status updated")
+      location.reload()
     })
     .catch(() => {
       window.alert("Unable to update status now")
@@ -527,4 +529,49 @@ async function cancelOrder(orderID) {
   }
 }
 
-// -------------------------------
+// -------------addToWishlist------------------
+
+async function addToWishlist(productID) {
+    const response = await fetch("/addToWishlist", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        productID,
+      })
+    })
+      .then(() => {
+        location.reload()
+      })
+      .catch((error) => {
+        window.alert("Unable to add product to wishlist")
+        console.error(error);
+      })
+}
+
+
+// ----------------removeFromWishlist------------------------
+
+async function removeFromWishlist(productID) {
+  const confirmed = window.confirm("Sure to remove from Wishlist?");
+  if (confirmed) {
+  console.log(productID);
+  const response = await fetch("/removeFromWishlist", {
+    method: "POST",
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({
+      productID,
+    })
+  })
+    .then(() => {
+      location.reload()
+    })
+    .catch((error) => {
+      window.alert("Unable to remove product from wishlist")
+      console.error(error);
+    })
+  }
+}

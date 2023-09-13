@@ -39,7 +39,7 @@
                   <td>
                     <div>
                       <a href="/productDetail?product_id=<%=locals.products[i]._id%>">
-                        <img class="w-50 curv" src="<%=locals.products[i].product_image[0] %>" alt="product image">
+                        <img class="curv" style="height: 10em;" src="<%=locals.products[i].product_image[0] %>" alt="product image">
                       </a>
                     </div>
                   </td>
@@ -67,7 +67,9 @@
                   <td>
                     <form action="/removeCart" method="post">
                       <input type="text" name="product_id" value="<%=locals.products[i]._id%>" hidden required />
-                      <button type="submit" class="btn btn-warning py-0 px-1">Remove</button>
+                      <button type="submit" class="btn btn-outline-danger"><span class="material-symbols-outlined">
+                        delete
+                        </span></button>
                     </form>
                   </td>
                 </tr>

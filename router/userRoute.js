@@ -65,6 +65,10 @@ user_route.post('/editAddress', auth.isLogin, addressController.editAddress);
 
 user_route.get('/wallet', auth.isLogin, userController.loadWallet);
 user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
+user_route.post('/addToWishlist', auth.isLogin, userController.addToWishlist);
+user_route.post('/removeFromWishlist', auth.isLogin, userController.removeFromWishlist);
+
+
 
 //logout
 user_route.post('/logout', userController.logout);

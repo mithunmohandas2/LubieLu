@@ -8,7 +8,8 @@ const subCategory = require("../models/productSubCategoryModel");
 const Banner = require("../models/bannerModel");
 const Razorpay = require('razorpay');
 const Coupons = require("../models/couponModel");
-const Wallet = require("../models/walletModel")
+const Wallet = require("../models/walletModel");
+const Wishlist = require("../models/wishlistModel");
 const dotenv = require("dotenv").config();
 // -----------------------------------------------
 
@@ -198,6 +199,8 @@ const loadCart = async (req, res) => {
     }
 }
 
+// ---------Add to Cart---------------------
+
 const addToCart = async (req, res) => {
     try {
         const userCart = await Cart.findOne({ $and: [{ userID: req.session._id }, { 'items.productID': req.body.product_id }] })
@@ -248,7 +251,7 @@ const loadCheckout = async (req, res) => {
             }
         }
 
-        const userAddress = await Address.find({$and :[{ userID: req.session._id },{disabled : false}]}).sort({ updatedAt: -1 }).limit(4)
+        const userAddress = await Address.find({ $and: [{ userID: req.session._id }, { disabled: false }] }).sort({ updatedAt: -1 }).limit(4)
         const couponCount = await Coupons.countDocuments()
         const coupons = await Coupons.find().sort({ expiry: -1 }).limit(5)
 
@@ -501,7 +504,43 @@ const loadWallet = async (req, res) => {
 
 const loadWishlist = async (req, res) => {
     try {
-        res.render('wishlist', { username: req.session.user_name });
+        // const wishlist = await Wishlist.findOne({ userID: req.session._id })
+        const wishlist = await Wishlist.findOne({ userID: req.session._id })
+            .populate("products", "_id product_image product_name sellingPrice")
+            .exec();
+
+        res.render('wishlist', {
+            username: req.session.user_name,
+            wishlist,
+        });
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// -----------addToWishlist------------------
+
+const addToWishlist = async (req, res) => {
+    try {
+        const addItem = await Wishlist.updateOne({ userID: req.session._id }, { $addToSet: { products: req.body.productID } }, { upsert: true })
+        if (addItem) res.json()
+        else throw Error("unable to add to wishlist")
+
+    } catch (error) {
+        console.log(error.message)
+        res.render('error', { error: error.message })
+    }
+}
+
+// -------------removeFromWishlist------------------
+
+const removeFromWishlist = async (req, res) => {
+    try {
+        const removeItem = await Wishlist.updateOne({ userID: req.session._id }, { $pull: { products: req.body.productID } })
+        if (removeItem) res.json()
+        else throw Error("unable to add to wishlist")
+
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -538,7 +577,7 @@ const userProfile = async (req, res) => {
     try {
         const userMatch = await User.findOne({ _id: req.session._id })
         const defaultAddress = await Address.findOne({ _id: userMatch.defaultAddress })
-        const userAddress = await Address.find({$and :[{ userID: req.session._id },{disabled : false}]}).sort({ updatedAt: -1 }).limit(4)
+        const userAddress = await Address.find({ $and: [{ userID: req.session._id }, { disabled: false }] }).sort({ updatedAt: -1 }).limit(4)
         res.render('userProfile', {
             username: req.session.user_name,
             user: userMatch,
@@ -595,6 +634,8 @@ module.exports = {
     cancelOrder,
     loadWallet,
     loadWishlist,
+    addToWishlist,
+    removeFromWishlist,
     logout,
     error404,
     userProfile,

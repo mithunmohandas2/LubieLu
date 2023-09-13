@@ -1,7 +1,7 @@
 <%- include('../layouts/header') %>
 
   <%- include('../layouts/adminHeader') %>
-
+<section class="container">
     <h3 class="text-center my-4">
       Order Management
     </h3>
@@ -32,9 +32,7 @@
                   </td>
                   <td>
                     <a href="/admin/orderDetails?orderID=<%= locals.orders[i]._id %>">
-                      <span class="orderID">
-                        <%=locals.orders[i]._id%>
-                      </span>
+                      <span class="orderID"><%=locals.orders[i]._id%></span>
                     </a>
 
                   </td>
@@ -42,7 +40,7 @@
                     <%=locals.orders[i].items.length%>
                   </td>
 
-                  <td>
+                  <td class="text-end">
                     <%=locals.orders[i].amount%>
                   </td>
 
@@ -50,17 +48,17 @@
                     <%=locals.orders[i].method%>
                   </td>
                   <td>
-                    <select name="orderStatus" class="orderStatus form-select" onchange="orderStatusChange('<%= i %>')">
-                      <option disabled>Current status</option>
-                      <option value="<%=locals.orders[i].status%>">
-                        <%=locals.orders[i].status%>
-                      </option>
-                      <option disabled>Select to update</option>
-                      <option value="Order placed">Order placed</option>
-                      <option value="confirmed">confirmed</option>
-                      <option value="In-transit">In-transit</option>
-                      <option value="Delivered">Delivered</option>
-                    </select>
+                      <select name="orderStatus" class="orderStatus form-select" onchange="orderStatusChange('<%= i %>')" onclick="statusCheck('<%= i %>','<%=locals.orders[i].status%>')">
+                        <option disabled>Current status</option>
+                        <option value="<%=locals.orders[i].status%>">
+                          <%=locals.orders[i].status%>
+                        </option>
+                        <option disabled>Select to update</option>
+                        <option value="Order placed">Order placed</option>
+                        <option value="confirmed">confirmed</option>
+                        <option value="In-transit">In-transit</option>
+                        <option value="Delivered">Delivered</option>
+                      </select>
 
                   </td>
                   <td>
@@ -83,9 +81,8 @@
         </table>
       </section>
 
-      <%- include('../layouts/footerlinks') %>
-
-        <% } else { %>
+      
+      <% } else { %>
           <div class="container text-start">
             <h6 class="alert alert-danger ">No order history available</h6>
           </div>
@@ -95,5 +92,8 @@
               </button> </a>
           </div>
           <% } %>
+          
+</section>
 
+        <%- include('../layouts/footerlinks') %>
             <%- include('../layouts/footer') %>

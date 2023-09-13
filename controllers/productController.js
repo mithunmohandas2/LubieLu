@@ -2,6 +2,7 @@ const Product = require("../models/productModel");
 const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
 const Cart = require("../models/cartModel");
+const Wishlist = require ("../models/wishlistModel")
 const { isValidObjectId } = require("mongoose");
 
 const fs = require('fs');
@@ -451,13 +452,15 @@ const editSingleProduct = async (req, res) => {
 const productDetail = async (req, res) => {
     try {
         // console.log(req.query);
-        const product = await Product.find({ $and: [{ _id: req.query.product_id }, { is_blocked: false }] })
+        const product = await Product.findOne({ $and: [{ _id: req.query.product_id }, { is_blocked: false }] })
         const otherProducts = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(4)
+        const wishlistCheck = await Wishlist.findOne({userID : req.session._id, products: { $in: [req.query.product_id] } })
 
         res.render('productDetail', {
             product: product,
             products: otherProducts,
             username: req.session.user_name,
+            wishlistCheck,
         });
     } catch (error) {
         console.log(error.message)

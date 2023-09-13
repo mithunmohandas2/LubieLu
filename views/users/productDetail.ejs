@@ -7,8 +7,8 @@
                 <div class="col-md-6">
 
                     <div class="col-12 mt-2 p-4">
-                        <% if (locals.product[0].product_image[0]){ %>
-                            <img id="prd_img_0"  class="w-100 curv zoomable" src=" <%=locals.product[0].product_image[0]%>"></img>
+                        <% if (locals.product.product_image[0]){ %>
+                            <img id="prd_img_0"  class="w-100 curv zoomable" src=" <%=locals.product.product_image[0]%>"></img>
                             <% } else { %>
                                 <img class="w-100 curv" id="prd_img_0"
                                     src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"></img>
@@ -16,12 +16,12 @@
                     </div>
 
                     <div class="row p-4">
-                        <% if (locals.product[0].product_image[0]) { 
-                            for (let i=1; i<locals.product[0].product_image.length;i++){ %>
+                        <% if (locals.product.product_image[0]) { 
+                            for (let i=1; i<locals.product.product_image.length;i++){ %>
 
                             <div class="col-3 px-3">
-                                <img class="product_img w-100 curv" onclick="productImageChange(<%= i-1 %>)" 
-                                    src=" <%=locals.product[0].product_image[i]%>"></img>
+                                <img class="product_img w-100 curv" onclick="productImageChange('<%= i-1 %>')" 
+                                    src=" <%=locals.product.product_image[i]%>"></img>
                             </div>
 
                             <% }} %>
@@ -30,33 +30,33 @@
                 </div>
                 <div class="col-md-6 p-4">
                     <h2>
-                        <%=locals.product[0].product_name%>
+                        <%=locals.product.product_name%>
                     </h2>
                     <hr>
                     Description :
-                    <%=locals.product[0].description%>
-                        <p>Brand : <%=locals.product[0].brand%>
+                    <%=locals.product.description%>
+                        <p>Brand : <%=locals.product.brand%>
                         </p>
                         <hr>
                         <h3>
                             <span class="fw-bold text-dark">
-                                Offer Price : ₹ <%=locals.product[0].sellingPrice%>
+                                Offer Price : ₹ <%=locals.product.sellingPrice%>
                             </span>
                         </h3>
                         <h5 class="text-success fw-bold">
-                            Discount : <%=locals.product[0].discount%>%
+                            Discount : <%=locals.product.discount%>%
                         </h5>
                         <h5>
                             <span class="text-decoration-line-through">
-                                MRP : ₹ <%=locals.product[0].mrp%> /-
+                                MRP : ₹ <%=locals.product.mrp%> /-
                             </span>
                         </h5>
                         <hr>
-                        <% if (locals.product[0].stock ===0) { %>
+                        <% if (locals.product.stock ===0) { %>
                             <h6 class="text-danger"> Out of Stock !!!
                             </h6>
-                        <%} else if (locals.product[0].stock <=10) { %>
-                            <h6 class="text-danger">Hurry !!! Only <%= locals.product[0].stock %> nos left in Stock
+                        <%} else if (locals.product.stock <=10) { %>
+                            <h6 class="text-danger">Hurry !!! Only <%= locals.product.stock %> nos left in Stock
                             </h6>
                             <% } %>
 
@@ -64,7 +64,7 @@
                                     <div class="mb-3">
                                         <label for="qty" class="form-label">Quantity</label>
                                         <input type="number" name="qty" class="form-control w-25" id="qty" value=1
-                                            min="1" max="<%=locals.product[0].stock %>" onchange="qtyUpdate()" required>
+                                            min="1" max="<%=locals.product.stock %>" onchange="qtyUpdate()" required>
                                     </div>
                                 </div>
 
@@ -73,23 +73,27 @@
 
 
                                 <div class="text-center my-4 d-flex ">
-
-                                    <form action="/wishlist" method="post">
-                                        <input type="text" name="product_id" value="<%=locals.product[0]._id%>"
-                                            hidden />
+                                    <% if(locals.username) { if(!locals.wishlistCheck){ %>
                                         <input type="number" name="qty" id="qtyWishlist" value=1 hidden required>
-                                        <button class="btn btn-outline-danger me-4  px-4 mb-3">
+                                        <button onclick="addToWishlist('<%=locals.product._id%>')" type="button" class="btn btn-outline-danger me-4  px-4 mb-3">
                                             <span class="material-symbols-outlined">
                                                 favorite
                                             </span> ADD TO WISHLIST
                                         </button>
-                                    </form>
+                                        <% } else { %>
+                                            <input type="number" name="qty" id="qtyWishlist" value=1 hidden required>
+                                            <button onclick="removeFromWishlist('<%=locals.product._id%>')" type="button" class="btn btn-danger me-4  px-4 mb-3">
+                                                <span class="material-symbols-outlined">
+                                                    favorite
+                                                </span> WISHLISTED
+                                            </button>
 
+                                        <% }} %>
                                     <form action="/cart" method="post">
-                                        <input type="text" name="product_id" value="<%=locals.product[0]._id%>"
+                                        <input type="text" name="product_id" value="<%=locals.product._id%>"
                                             hidden />
                                         <input type="number" name="qty" id="qtyCart" value=1 min="1"
-                                            max="<%=locals.product[0].stock %>" required hidden>
+                                            max="<%=locals.product.stock %>" required hidden>
                                         <button type="submit" class="btn btn-outline-danger me-4  px-4 mb-3">
                                             <span class="material-symbols-outlined">
                                                 add_shopping_cart
@@ -98,7 +102,7 @@
                                     </form>
 
                                     <!-- <form action="/checkout" method="post">
-                                <input type="text" name="product_id" value="<%=locals.product[0]._id%>" hidden />
+                                <input type="text" name="product_id" value="<%=locals.product._id%>" hidden />
                                 <input type="number" name="qty" id="qtyCheckout" value=1 hidden required>
                                 <button class="btn btn-danger me-4 py-2  px-4 mb-3">
                                     BUY NOW

@@ -1,12 +1,83 @@
 <%- include('../layouts/header') %>
 
-<%- include('../layouts/userHeader') %>
+    <%- include('../layouts/userHeader') %>
 
-<section style="min-height: 17rem">
-    
-    <h1>WISHLIST</h1>
+        <section class="container my-4" style="min-height: 17rem">
 
-</section>
+            <h1></h1>
 
-<%- include('../layouts/footerlinks') %>
-<%- include('../layouts/footer') %>
+            <h4 class="my-4">Ranjith's Wishlist</h4>
+            <hr>
+            <% if(locals.wishlist) { if(locals.wishlist.products.length) { %>
+                <table id="myTable" class="display text-center my-4">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product Image</th>
+                            <th>Product Name</th>
+                            <th>Rate</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% for (i=0;i<locals.wishlist.products.length;i++) { %>
+                            <tr>
+                                <td>
+                                    <%= i+1 %>
+                                </td>
+                                <td>
+                                    <a href="/productDetail?product_id=<%=locals.wishlist.products[i]._id%>">
+                                    <img class="curv" style="height: 10em;" src="<%= locals.wishlist.products[i].product_image[0] %>"
+                                        alt="product-image"> </a>
+                                </td>
+                                <td class="text-start">
+                                    <%= locals.wishlist.products[i].product_name %>
+                                </td>
+
+                                <td>
+                                    ₹<%= locals.wishlist.products[i].sellingPrice %>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger mb-1" type="button"
+                                        onclick="removeFromWishlist('<%= locals.wishlist.products[i]._id %>')"><span class="material-symbols-outlined">
+                                            delete
+                                            </span></button>
+
+                                            <form action="/cart" method="post">
+                                                <input type="text" name="product_id" value="<%= locals.wishlist.products[i]._id %>"
+                                                    hidden />
+                                                <input type="number" name="qty" value=1 hidden>
+                                                <button type="submit" class="btn btn-warning mb-1">
+                                                    <span class="material-symbols-outlined">
+                                                        add_shopping_cart
+                                                    </span></button>
+                                            </form>
+                                </td>
+
+                            </tr>
+                            <% } %>
+
+                    </tbody>
+                </table>
+                <% } } else { %>
+                    <div class="text-center">
+                        <h6 class="text-danger">Your wishlist is empty</h6>
+                    </div>
+
+                    <div class="text-center my-4">
+                        <a href="/allProducts"><button class="btn btn-outline-danger mb-3">
+                                Browse Products
+                            </button> </a>
+                    </div>
+                    <% } %>
+
+        </section>
+        <script>
+            /* Initialization of datatable */
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+        </script>
+        <%- include('../layouts/footerlinks') %>
+            <%- include('../layouts/footer') %>
