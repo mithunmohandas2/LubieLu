@@ -6,7 +6,7 @@
 
             <h1></h1>
 
-            <h4 class="my-4">Ranjith's Wishlist</h4>
+            <h4 class="my-4"><%=locals.username%>'s' Wishlist</h4>
             <hr>
             <% if(locals.wishlist) { if(locals.wishlist.products.length) { %>
                 <table id="myTable" class="display text-center my-4">
@@ -70,7 +70,7 @@
                                 Browse Products
                             </button> </a>
                     </div>
-                    <% } %>
+                    <%  } %>
 
         </section>
         <script>

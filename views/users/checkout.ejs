@@ -201,7 +201,7 @@
                         <% if (locals.coupon){ if (locals.coupon.length){ %>
                             <div class="pb-3">
                             <%  for (i=coupon.length-1; i>=0;i--) { %>
-                            <div class="card text-start p-1 px-3 m-2" onclick="fillCoupon('<%= locals.coupon[i].code %>')">
+                            <div class="card text-start p-1 px-3 m-2" onclick="fillCoupon('<%= locals.coupon[i].code %>'), applyDiscountEdit()">
                                 
                                <% if (locals.coupon[i].offerType == 'flat') { %>
                                 FLAT ₹ <%= locals.coupon[i].offerVal %> /- OFF *
@@ -220,17 +220,17 @@
                         </div>
                             <% } } %>
 
-                        <div class="row w-100  mb-4">
-                            <div class="col-9 ">
-                                <input type="text" id="discountCode" class="form-control mx-2" pattern="[a-zA-Z0-9\-_@&$]*">
+                        <div class="row text-center mb-2">
+                            <div class="col-7 ">
+                                <input type="text" id="discountCode" name="discountCode" class="form-control mx-2" pattern="[a-zA-Z0-9\-_@&$]*" onchange="applyDiscountEdit()">
                             </div>
-                            <div class="col-3 mx-0 px-0">
-                                <button type="button" class="btn btn-outline-danger mb-3"
+                            <div class="col-3">
+                                <button type="button" class="applyDiscount btn btn-outline-danger pe-4 mb-3"
                                     onclick="applyDiscount()">APPLY</button>
                             </div>
                         </div>
 
-
+                                           
                         <h5>Bill Summary</h5>
                         <hr class="mx-3">
                         <div class="px-1 mb-4">
@@ -243,9 +243,7 @@
                                         <tr>
                                             <th scope="row">Sub-Total</th>
                                             <td>
-                                                ₹ <span id="subTotal">
-                                                    <%= sum %>
-                                                </span> /-
+                                                ₹ <span id="subTotal"><%= sum %></span> /-
                                             </td>
                                         </tr>
                                         <tr>
@@ -258,16 +256,12 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">
-                                                <h4 class="fw-bold">Total</h4>
+                                                <h5 class="fw-bold">Total</h5>
                                             </th>
                                             <td>
-                                                <h4 class="fw-bold">
-                                                    ₹ <span id="finalAmount">
-                                                        <%= sum %>
-                                                    </span> /-
-                                                    <input type="number" id="finalAmount2" name="amount"
-                                                        value="<%= sum %>" hidden>
-                                                </h4>
+                                                <h5 class="fw-bold">
+                                                    ₹ <span id="finalAmount"><%= sum %></span> /-
+                                                </h5>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -276,9 +270,32 @@
                             <!-- table ends here -->
                         </div>
 
+                        
+                        <% if(locals.walletData) { %>
+                            <div class="card curv py-2 mb-4">
+                                <div class="ps-3">
+                                    <p class="fw-bold">Wallet Balance : ₹ <span id="walletBalance"><%= locals.walletData.balance%></span>/-</p>
+                                </div>
+                                
+                                <div class="form-check mx-5">
+                                    <label for="wallet" class="form-label">use wallet balance*</label>
+                                    <input class="form-check-input" type="checkbox" name="walletSelect" id="walletSelect"  />
+                                    <input class="form-control" type="text" name="wallet" id="wallet" style="display: none;" readonly />
+                                </div>
+                                <span class="px-1" style="font-size: x-small;">
+                                    *Wallet can only be used with online payment of minimum ₹ 1 /-
+                                </span>
+                            </div>
+                        <% } %>
+
+                        <h5> AMOUNT TO PAY</h5>
+                        <hr class="mx-3">
+                        <input type="number" id="finalAmount2" name="amount" class="mb-4 text-center w-75 fw-bold " style="font-size: x-large; border: none; border-radius: 0.5em;"
+                            value="<%= sum %>" readonly>
                         <br>
                         <h5>Payment Options</h5>
                         <hr class="mx-3">
+                      
                         <div class="form-check mx-5">
                             <label for="onlinepay" class="form-label">Online Payment</label>
                             <input class="form-check-input" type="checkbox" name="onlinepay" id="onlinepay" checked />
@@ -373,7 +390,46 @@
                         }
                     })
                 }
+            </script>
 
+            <script> // to select wallet
+             document.addEventListener('DOMContentLoaded', function () {
+                const walletSelect = document.getElementById('walletSelect');
+                const walletAmount = document.getElementById('walletBalance')
+                const walletInput = document.getElementById('wallet')
+                const finalAmount = document.getElementById('finalAmount')
+                const finalAmount2 = document.getElementById('finalAmount2')
+                const codCheck = document.getElementById('COD')
+                const onlinePayCheck = document.getElementById('onlinepay')
+                const walletAmountValue = parseFloat(walletAmount.innerHTML) 
+                const finalAmountValue = parseFloat(finalAmount.innerHTML) 
+
+                walletSelect.addEventListener('change', function () {
+                    if(walletSelect.checked){
+                        walletInput.style.display = "block";
+                        // walletInput.value = walletAmountValue
+                        console.log("walletAmount.innerHTML = "+ walletAmountValue);
+                        console.log("finalAmount.innerHTML = "+finalAmountValue);
+                        if(walletAmountValue < finalAmountValue){
+                            walletInput.value = walletAmountValue-1;
+                            finalAmount2.value = finalAmountValue - walletAmountValue + 1;
+                        } else {
+                            walletInput.value = finalAmountValue -1
+                            finalAmount2.value = "1";
+                             // Disable the checkbox
+                            onlinePayCheck.disabled  =true;
+                            codCheck.disabled  =true;
+                        }
+                    } else {
+                        walletInput.value = "0";
+                        finalAmount2.value = finalAmountValue
+                        walletInput.style.display = "none";
+                         // Re-enable the checkbox
+                        onlinePayCheck.disabled = false;
+                        codCheck.disabled = false;
+                    }
+                })
+            });
             </script>
 
 

@@ -211,7 +211,7 @@ function selectAddress(i) {
 async function orderStatusChange(i) {
   const status = document.getElementsByClassName("orderStatus")[i].value;
   const orderID = document.getElementsByClassName("orderID")[i].innerHTML
-  
+
   const updateOrder = await fetch('/admin/orderstatus', {
     method: 'post',
     headers: {
@@ -228,8 +228,8 @@ async function orderStatusChange(i) {
     .catch(() => {
       window.alert("Unable to update status now")
     })
-    window.alert(updateOrder.msg)
-    location.reload()
+  window.alert(updateOrder.msg)
+  location.reload()
 }
 // -------------------------------
 
@@ -431,22 +431,39 @@ async function applyDiscount() {
 
     //if percentage offer
     if (verifyCoupon.couponData.offerType == 'percent') {
-      discount = Math.floor(total / ((100 + discount)/100))
+      discount = Math.floor(total / ((100 + discount) / 100))
     }
 
     //if discount more than max allowable
-    if(discount > verifyCoupon.couponData.maxDiscount){
+    if (discount > verifyCoupon.couponData.maxDiscount) {
       discount = verifyCoupon.couponData.maxDiscount
     }
-      //final DOM Manipulation
-          document.getElementById("Discount").innerHTML = discount
-          document.getElementById("finalAmount").innerHTML = total - discount
-          document.getElementById("finalAmount2").value = total - discount
-          document.getElementById("discountValue").value = discount
+    //final DOM Manipulation
+    document.getElementById("Discount").innerHTML = discount
+    document.getElementById("finalAmount").innerHTML = total - discount
+    document.getElementById("finalAmount2").value = total - discount
+    document.getElementById("discountValue").value = discount
+    const applyDiscountButton = document.getElementsByClassName("applyDiscount")[0];
+    applyDiscountButton.innerHTML = "APPLIED"
+    applyDiscountButton.className = "applyDiscount btn btn-danger mb-3";
+    //reset wallet checkbox
+    const walletSelect = document.getElementById('walletSelect');
+    walletSelect.checked =false;
+    const walletInput = document.getElementById('wallet')
+    walletInput.style.display = "none";
 
   } else { // if no valid coupon found
     alert("Invalid Coupon")
   }
+}
+
+
+//-----------applyDiscountEdit------------------
+
+function applyDiscountEdit() {
+  const applyDiscountButton = document.getElementsByClassName("applyDiscount")[0];
+  applyDiscountButton.innerHTML = "APPLY"
+  applyDiscountButton.className = "applyDiscount btn btn-outline-danger pe-4 mb-3";
 }
 
 // -------------------------------
@@ -576,8 +593,8 @@ async function returnOrder(orderID) {
         window.alert(error.message)
         console.error(error);
       })
-      window.alert(response.msg)
-      location.reload()
+    window.alert(response.msg)
+    location.reload()
   }
 }
 
@@ -596,14 +613,14 @@ async function approveReturn(orderID) {
       })
     })
       .then((value) => {
-       return value.json()
+        return value.json()
       })
       .catch((error) => {
         window.alert(error.message)
         console.error(error);
       })
-      window.alert(response.msg)
-      location.reload()
+    window.alert(response.msg)
+    location.reload()
   }
 }
 
@@ -622,46 +639,21 @@ async function refundReturn(orderID) {
       })
     })
       .then((value) => {
-       return value.json()
+        return value.json()
       })
       .catch((error) => {
         window.alert(error.message)
         console.error(error);
       })
-      window.alert(response.msg)
-      location.reload()
+    window.alert(response.msg)
+    location.reload()
   }
 }
 
 // -------------addToWishlist------------------
 
 async function addToWishlist(productID) {
-    const response = await fetch("/addToWishlist", {
-      method: "POST",
-      headers: {
-        "Content-Type": 'application/json'
-      },
-      body: JSON.stringify({
-        productID,
-      })
-    })
-      .then(() => {
-        location.reload()
-      })
-      .catch((error) => {
-        window.alert("Unable to add product to wishlist")
-        console.error(error);
-      })
-}
-
-
-// ----------------removeFromWishlist------------------------
-
-async function removeFromWishlist(productID) {
-  const confirmed = window.confirm("Sure to remove from Wishlist?");
-  if (confirmed) {
-  console.log(productID);
-  const response = await fetch("/removeFromWishlist", {
+  const response = await fetch("/addToWishlist", {
     method: "POST",
     headers: {
       "Content-Type": 'application/json'
@@ -674,8 +666,33 @@ async function removeFromWishlist(productID) {
       location.reload()
     })
     .catch((error) => {
-      window.alert("Unable to remove product from wishlist")
+      window.alert("Unable to add product to wishlist")
       console.error(error);
     })
+}
+
+
+// ----------------removeFromWishlist------------------------
+
+async function removeFromWishlist(productID) {
+  const confirmed = window.confirm("Sure to remove from Wishlist?");
+  if (confirmed) {
+    // console.log(productID);
+    const response = await fetch("/removeFromWishlist", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        productID,
+      })
+    })
+      .then(() => {
+        location.reload()
+      })
+      .catch((error) => {
+        window.alert("Unable to remove product from wishlist")
+        console.error(error);
+      })
   }
 }

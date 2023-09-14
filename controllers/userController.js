@@ -252,15 +252,16 @@ const loadCheckout = async (req, res) => {
         }
 
         const userAddress = await Address.find({ $and: [{ userID: req.session._id }, { disabled: false }] }).sort({ updatedAt: -1 }).limit(4)
-        const couponCount = await Coupons.countDocuments()
-        const coupons = await Coupons.find().sort({ expiry: -1 }).limit(5)
+        const coupon = await Coupons.find().sort({ expiry: -1 }).limit(5)
+        const walletData = await Wallet.findOne({ userID: req.session._id })
 
         res.render('checkout', {
             username: req.session.user_name,
             cart: cartData,
             products: productData,
             address: userAddress,
-            coupon: coupons,
+            coupon,
+            walletData,
         });
     } catch (error) {
         console.log(error.message)
@@ -345,8 +346,13 @@ const checkout = async (req, res) => {
             addressIDs = req.body.addressID;
         }
 
+        //decrease used coupon count
+        if(req.body.discountCode){
+            await Coupons.updateOne({ code: req.body.discountCode }, { $inc: { count: -1 } })
+        }
+
         let payMethod;
-        if (req.body.onlinepay) payMethod = "Online-Pay"
+        if (req.body.onlinepay || req.body.walletSelect) payMethod = "Online-Pay"
         else payMethod = "Cash-On-Delivery"
 
         const cartData = await Cart.findOne({ userID: req.session._id })
@@ -370,12 +376,24 @@ const checkout = async (req, res) => {
                 //updating rate details in Order
                 const cart = await Order.updateOne({ _id: orderData._id, "items.productID": productData._id }, { $set: { "items.$.rate": productData.sellingPrice } })
             }
+        } else throw Error("Order not saved")
+
+        if (req.body.walletSelect) {
+            const transaction = {
+                Order: orderData._id,
+                amount: req.body.wallet,
+                txnType: 'debit',
+                date: Date.now(),
+            }
+            const walletUpdate = await Wallet.updateOne({ userID: req.session._id }, { $push: { transactions: transaction } }, { upsert: true })
+            if (!walletUpdate) throw Error("unable to add wallet transaction")
+            const useWalletBalance = await Wallet.updateOne({ userID: req.session._id }, { $inc: { balance: -req.body.wallet } });
+            if (!useWalletBalance) throw Error("unable to debit wallet")
         }
-        else throw Error
 
         //Reset cart
         const cartReset = await Cart.deleteOne({ userID: req.session._id })
-        if (!cartReset) throw Error
+        if (!cartReset) throw Error("Unable to delete cart after placing order")
 
         res.status(200).send({
             orderID: orderData._id
