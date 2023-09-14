@@ -555,6 +555,84 @@ async function adminCancelOrder(orderID) {
   }
 }
 
+// ---------------Return Order by user-------------------------
+
+async function returnOrder(orderID) {
+  const confirmed = window.confirm("Are you sure you want to return the order?");
+  if (confirmed) {
+    const response = await fetch("/returnOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        orderID,
+      })
+    })
+      .then((value) => {
+        return value.json()
+      })
+      .catch((error) => {
+        window.alert(error.message)
+        console.error(error);
+      })
+      window.alert(response.msg)
+      location.reload()
+  }
+}
+
+// --------------approveReturn by admin------------------------
+
+async function approveReturn(orderID) {
+  const confirmed = window.confirm("Are you sure you want to accept return?");
+  if (confirmed) {
+    const response = await fetch("/admin/approveReturn", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        orderID,
+      })
+    })
+      .then((value) => {
+       return value.json()
+      })
+      .catch((error) => {
+        window.alert(error.message)
+        console.error(error);
+      })
+      window.alert(response.msg)
+      location.reload()
+  }
+}
+
+// ----------------refundReturn-----------------------
+
+async function refundReturn(orderID) {
+  const confirmed = window.confirm("Proceed with refund?");
+  if (confirmed) {
+    const response = await fetch("/admin/refundReturn", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        orderID,
+      })
+    })
+      .then((value) => {
+       return value.json()
+      })
+      .catch((error) => {
+        window.alert(error.message)
+        console.error(error);
+      })
+      window.alert(response.msg)
+      location.reload()
+  }
+}
+
 // -------------addToWishlist------------------
 
 async function addToWishlist(productID) {

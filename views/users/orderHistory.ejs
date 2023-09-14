@@ -28,8 +28,13 @@
                   </p>
                   <p class="card-text">Payment Method: <%= locals.orders[i].method %>
                   </p>
-                  <% if(locals.orders[i].status=='Cancelled' || locals.orders[i].status=='Returned' ){ %>
+                  <% if(locals.orders[i].status=='Cancelled' || locals.orders[i].status=='Return requested'){ %>
                     <p class="card-text">Status: <span class="text-danger fw-bold">
+                        <%= locals.orders[i].status %>
+                      </span>
+                    </p>
+                    <% } else if ( locals.orders[i].status=='Return accepted' || locals.orders[i].status=='Refunded' ){ %>
+                      <p class="card-text">Status: <span class="text-success fw-bold">
                         <%= locals.orders[i].status %>
                       </span>
                     </p>
@@ -45,6 +50,15 @@
                         <button class="btn btn-danger" type="button"
                           onclick="cancelOrder('<%= locals.orders[i]._id %>')">Cancel Order</button>
                         <% } %>
+
+                        <% if(locals.orders[i].status=='Delivered' || locals.orders[i].status=='In-transit' ){ 
+                          const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
+                          const sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000;
+                          const timeDifference = (Date.now() - locals.orders[i].updatedAt);
+                          if( timeDifference <= sevenDaysInMillis && timeDifference > threeDaysInMillis ) {%>
+                          <button class="btn btn-danger" type="button"
+                            onclick="returnOrder('<%= locals.orders[i]._id %>')">Return Order</button>
+                          <% }} %>
                 </div>
               </div>
               <% } } %>

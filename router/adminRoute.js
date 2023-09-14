@@ -64,6 +64,8 @@ admin_route.get('/order_management',auth.isLogin,adminController.order_managemen
 admin_route.get('/orderDetails',auth.isLogin,adminController.orderDetails)
 admin_route.post('/orderstatus',auth.isLogin,adminController.orderStatusChange)
 admin_route.post('/cancelOrder',auth.isLogin,userController.cancelOrder)
+admin_route.post('/approveReturn',auth.isLogin,userController.approveReturn)
+admin_route.post('/refundReturn',auth.isLogin,userController.refundReturn)
 
 admin_route.get('/profile',auth.isLogin,adminController.adminProfile)
 admin_route.post('/editAdminProfile', auth.isLogin, adminController.editProfile);

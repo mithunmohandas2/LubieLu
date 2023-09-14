@@ -56,6 +56,7 @@ user_route.get('/orderHistory', auth.isLogin, userController.orderHistory);
 user_route.get('/orderDetails', auth.isLogin, userController.orderDetails);
 user_route.post('/qtyChange', auth.isLogin, productController.qtyChange);
 user_route.post('/cancelOrder', auth.isLogin, userController.cancelOrder);
+user_route.post('/returnOrder', auth.isLogin, userController.returnOrder);
 
 user_route.get('/userProfile', auth.isLogin, userController.userProfile);
 user_route.post('/editProfile', auth.isLogin, userController.editProfile);

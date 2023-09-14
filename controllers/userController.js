@@ -483,6 +483,86 @@ const cancelOrder = async (req, res) => {
     }
 }
 
+// ------------------returnOrder-----------------------
+
+const returnOrder = async (req, res) => {
+    try {
+        const orderID = req.body.orderID
+        const orderData = await Order.findOne({ _id: orderID })
+        if (orderData) {
+            //Setting Order Status as Return requested
+            const setReturnRequest = await Order.updateOne({ _id: orderID }, { $set: { status: 'Return requested' } })
+            if (!setReturnRequest) throw Error("unable to place return request")
+            res.json({ msg: "Return requested" })
+        } else {
+            throw Error("unable to place return request")
+        }
+
+    } catch (error) {
+        console.log(error.message)
+        res.json({ msg: error.message })
+    }
+}
+// ----------------------------------
+
+const approveReturn = async (req, res) => {
+    try {
+        const orderID = req.body.orderID
+        const orderData = await Order.findOne({ _id: orderID })
+        if (orderData) {
+            //Setting Order Status as Return accepted
+            const setReturnRequest = await Order.updateOne({ _id: orderID }, { $set: { status: 'Return accepted' } })
+            if (!setReturnRequest) throw Error("unable to approve return")
+            res.json({ msg: "Return accepted" })
+        } else {
+            throw Error("unable to approve return request")
+        }
+
+    } catch (error) {
+        console.log(error.message)
+        res.json({ msg: error.message })
+    }
+}
+
+// -------------refundReturn----------------------
+
+const refundReturn = async (req, res) => {
+    try {
+        const orderID = req.body.orderID
+        const orderData = await Order.findOne({ _id: orderID })
+        if (orderData) {
+            //Setting Order Status as Refunded
+            const setReturnRequest = await Order.updateOne({ _id: orderID }, { $set: { status: 'Refunded' } })
+            if (!setReturnRequest) throw Error("unable to set status as refund")
+
+            //reset stock
+            for (i = 0; i < orderData.items.length; i++) {
+                let data = await Product.updateOne({ _id: orderData.items[i].productID }, { $inc: { stock: orderData.items[i].qty } });
+            }
+
+            //Payment refund to wallet
+            const transaction = {
+                Order: orderID,
+                amount: orderData.amount,
+                txnType: 'credit',
+                date: Date.now(),
+            }
+            const walletUpdate = await Wallet.updateOne({ userID: orderData.userID }, { $push: { transactions: transaction } }, { upsert: true })
+            if (!walletUpdate) throw Error("wallet not updated") //add transaction details
+            const refund = await Wallet.updateOne({ userID: orderData.userID }, { $inc: { balance: orderData.amount } })
+            if (!refund) throw Error("Wallet Balance not updated") //wallet balance updated
+
+            res.json({ msg: "Refunded to user wallet" })
+        } else {
+            throw Error("Order Details not found")
+        }
+
+    } catch (error) {
+        console.log(error.message)
+        res.json({ msg: error.message })
+    }
+}
+
 // -------------loadWallet-------------------
 
 const loadWallet = async (req, res) => {
@@ -497,7 +577,6 @@ const loadWallet = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
-
 
 // ...........Load wishlist...........
 
@@ -631,6 +710,9 @@ module.exports = {
     orderHistory,
     orderDetails,
     cancelOrder,
+    returnOrder,
+    approveReturn,
+    refundReturn,
     loadWallet,
     loadWishlist,
     addToWishlist,

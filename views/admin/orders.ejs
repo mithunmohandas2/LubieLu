@@ -68,15 +68,15 @@
                   <td>
                     <% if (locals.orders[i].status=='Order placed' || locals.orders[i].status=='confirmed' ||
                       locals.orders[i].status=='In-transit' ) { %>
-                      <button onclick="adminCancelOrder('<%=locals.orders[i]._id%>')" class="btn btn-danger">Cancel</button>
+                      <button onclick="adminCancelOrder('<%=locals.orders[i]._id%>')" class="btn btn-danger px-4">Cancel</button>
                       <% } %>
 
                       <% if (locals.orders[i].status=='Return requested') { %>
-                      <button class="btn btn-outline-success">Approve</button>
+                      <button onclick="approveReturn('<%=locals.orders[i]._id%>')" class="btn btn-success">Approve</button>
                       <% } %>
 
-                      <% if (locals.orders[i].status=='Returned') { %>
-                        <button class="btn btn-warning">Refund</button>
+                      <% if (locals.orders[i].status=='Return accepted') { %>
+                        <button onclick="refundReturn('<%=locals.orders[i]._id%>')" class="btn btn-warning px-4">Refund</button>
                         <% } %>
                   </td>
                 </tr>
