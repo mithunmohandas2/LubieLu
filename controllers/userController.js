@@ -323,7 +323,6 @@ const createOrder = async (req, res) => {
 
 const checkout = async (req, res) => {
     try {
-        console.log("In checkout function")
         let addressIDs;
         //if new address used
         if (!req.body.addressID) {
@@ -471,9 +470,9 @@ const cancelOrder = async (req, res) => {
                 txnType: 'credit',
                 date: Date.now(),
             }
-            const walletUpdate = await Wallet.updateOne({ userID: req.session._id }, { $push: { transactions: transaction } }, { upsert: true })
+            const walletUpdate = await Wallet.updateOne({ userID: orderData.userID }, { $push: { transactions: transaction } }, { upsert: true })
             if (!walletUpdate) throw Error("wallet not updated")
-            const refund = await Wallet.updateOne({ userID: req.session._id }, { $inc: { balance: orderData.amount } })
+            const refund = await Wallet.updateOne({ userID: orderData.userID }, { $inc: { balance: orderData.amount } })
             if (!refund) throw Error("unable to refund to Wallet")
         }
         res.json();

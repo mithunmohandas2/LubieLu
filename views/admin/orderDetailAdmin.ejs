@@ -21,6 +21,7 @@
                       <h4>Order Information</h4>
                       <p><strong>Order ID:</strong> <%= locals.orders._id %></p>
                       <p><strong>Date:</strong> <%=locals.orders.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %></p>
+                      <p><strong>Payment Mode:</strong> <%= locals.orders.method %></p>
                       <p><strong>Status:</strong> <%= locals.orders.status %></p>
                   </div>
                   <div class="col-md-6">

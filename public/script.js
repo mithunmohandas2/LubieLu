@@ -212,7 +212,7 @@ async function orderStatusChange(i) {
   const status = document.getElementsByClassName("orderStatus")[i].value;
   const orderID = document.getElementsByClassName("orderID")[i].innerHTML
   
-  const update = await fetch('/admin/orderstatus', {
+  const updateOrder = await fetch('/admin/orderstatus', {
     method: 'post',
     headers: {
       "Content-Type": 'application/json'
@@ -222,13 +222,14 @@ async function orderStatusChange(i) {
       orderID: orderID
     })
   })
-    .then(() => {
-      window.alert("Status updated")
-      location.reload()
+    .then((value) => {
+      return value.json()
     })
     .catch(() => {
       window.alert("Unable to update status now")
     })
+    window.alert(updateOrder.msg)
+    location.reload()
 }
 // -------------------------------
 
@@ -504,12 +505,37 @@ function fillCoupon(code) {
   document.getElementById('discountCode').value = code;
 }
 
-// ---------------cancelOrder-------------------------
+// ---------------cancel Order by user-------------------------
 
 async function cancelOrder(orderID) {
   const confirmed = window.confirm("Are you sure you want to cancel the order?");
   if (confirmed) {
     const response = await fetch("/cancelOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        orderID,
+      })
+    })
+      .then(() => {
+        window.alert("Order cancelled successfully")
+        location.reload()
+      })
+      .catch((error) => {
+        window.alert("Unable to cancel order")
+        console.error(error);
+      })
+  }
+}
+
+// ---------------cancel Order by admin-------------------------
+
+async function adminCancelOrder(orderID) {
+  const confirmed = window.confirm("Are you sure you want to cancel the order?");
+  if (confirmed) {
+    const response = await fetch("/admin/cancelOrder", {
       method: "POST",
       headers: {
         "Content-Type": 'application/json'

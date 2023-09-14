@@ -10,9 +10,10 @@
 
       <section class="container pb-4 my-4">
         <hr>
-        <table class="table table-striped">
+        <table  id="myTable" class="display text-center my-4">
           <thead>
             <tr class="text-center">
+              <th scope="col">#</th>
               <th scope="col">Order Date</th>
               <th scope="col">Order ID</th>
               <th scope="col">No.of items</th>
@@ -27,6 +28,9 @@
             <% if (locals.orders.length> 0){
               for(i=0;i<orders.length;i++){ %>
                 <tr>
+                  <td scope="row">
+                    <%= i+1 %>
+                  </td>
                   <td scope="row">
                     <%=locals.orders[i].createdAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %>
                   </td>
@@ -48,7 +52,7 @@
                     <%=locals.orders[i].method%>
                   </td>
                   <td>
-                      <select name="orderStatus" class="orderStatus form-select" onchange="orderStatusChange('<%= i %>')" onclick="statusCheck('<%= i %>','<%=locals.orders[i].status%>')">
+                      <select name="orderStatus" class="orderStatus form-select" onchange="orderStatusChange('<%= i %>')">
                         <option disabled>Current status</option>
                         <option value="<%=locals.orders[i].status%>">
                           <%=locals.orders[i].status%>
@@ -64,7 +68,7 @@
                   <td>
                     <% if (locals.orders[i].status=='Order placed' || locals.orders[i].status=='confirmed' ||
                       locals.orders[i].status=='In-transit' ) { %>
-                      <button class="btn btn-danger">Cancel</button>
+                      <button onclick="adminCancelOrder('<%=locals.orders[i]._id%>')" class="btn btn-danger">Cancel</button>
                       <% } %>
 
                       <% if (locals.orders[i].status=='Return requested') { %>
@@ -94,6 +98,13 @@
           <% } %>
           
 </section>
+
+          <script>
+            /* Initialization of datatable */
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+          </script>
 
         <%- include('../layouts/footerlinks') %>
             <%- include('../layouts/footer') %>

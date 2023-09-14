@@ -253,10 +253,14 @@ const orderDetails = async (req, res) => {
 
 const orderStatusChange = async (req, res) => {
     try {
-        const update = await Order.updateOne({ _id: req.body.orderID }, { $set: { status: req.body.status } })
-        if (update.modifiedCount >= 1) res.json();
-        else throw Error("Unable to update status")
-
+        const orderDetails = await Order.findOne({ _id: req.body.orderID })
+        if (orderDetails.status == 'Cancelled') {
+            res.json({ msg: "Unable to update Cancelled orders" })
+        } else {
+            const update = await Order.updateOne({ _id: req.body.orderID }, { $set: { status: req.body.status } })
+            if (update) res.json({ msg: "Status updated successfully" });
+            else { res.json({ msg: "Unable to update status" })}
+        }
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
