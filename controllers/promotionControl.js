@@ -112,13 +112,11 @@ const createCoupon = async (req, res) => {
 const deleteCoupon = async (req, res) => {
     try {
         const isDelete = await Coupons.deleteOne({ _id: req.body.CouponID })
-
         if (isDelete) {
             res.json()
         }
         else throw Error("Failed to delete coupon")
     }
-
     catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -166,8 +164,6 @@ const editCoupon = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
-
-// ------------------------
 
 // ----------edit Coupon--------------
 

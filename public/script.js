@@ -448,7 +448,7 @@ async function applyDiscount() {
     applyDiscountButton.className = "applyDiscount btn btn-danger mb-3";
     //reset wallet checkbox
     const walletSelect = document.getElementById('walletSelect');
-    walletSelect.checked =false;
+    walletSelect.checked = false;
     const walletInput = document.getElementById('wallet')
     walletInput.style.display = "none";
 

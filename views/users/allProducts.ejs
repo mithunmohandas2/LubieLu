@@ -13,7 +13,7 @@
                 <div class="rounded bg-light" style=" position: sticky; top: 0em; z-index: 3;">
                     <!-- ================= -->
                     <div class="row ms-4">
-                     
+
                         <div class="col-sm-3 my-3">
                             <select name="category_id" class="form-select" id="catSelection"
                                 onchange="SubCategoryLoad(value)">
@@ -32,7 +32,7 @@
 
                         <div class="col-sm-3 my-3">
                             <!-- <label for="subCategory" class="form-label">Sub Category</label> -->
-                            <select name="subCategory_id" class="form-select" id="subCat" >
+                            <select name="subCategory_id" class="form-select" id="subCat">
                                 <!-- array of sub categories ids -->
                                 <option disabled>Available Sub Categories</option>
                             </select>
@@ -49,68 +49,91 @@
                         </div>
 
                         <div class="col-sm-2 my-3">
-                                <!-- <a href=""> -->
-                                    <button type="submit" class="btn btn-outline-danger" onclick="productFilter()">Apply filters</button>
-                                <!-- </a> -->
+                            <!-- <a href=""> -->
+                            <button type="submit" class="btn btn-outline-danger" onclick="productFilter()">Apply
+                                filters</button>
+                            <!-- </a> -->
                         </div>
                         <div class="col-sm-2 my-3">
                             <a href="/allProducts">Reset filters</a>
-                    </div>
+                        </div>
 
                     </div>
                     <!-- ====== -->
                 </div>
 
-                <!-- <div class="col-9"> -->
-                <% if (locals.products){ products.forEach((item)=>{ %>
-                    <div class="col-md-4 col-lg-3 my-3">
-                        <div class="h-100 p-4 m-2" style="background-color: #edf1ff; border-radius: 1.5em;">
+                <section class="row">
+                    <% if (locals.products){ products.forEach((item)=>{ %>
+                        <div class="col-md-4 col-lg-3 my-3">
+                            <div class="h-100 p-4 m-2" style="background-color: #edf1ff; border-radius: 1.5em;">
 
-                            <div class="w-100">
-                                <% if (item.product_image[0]){ %>
-                                    <a href="/productDetail?product_id=<%=item._id%>">
-                                        <img class="w-100 curv" src="<%= item.product_image[0]%>" alt="Product Image">
-                                    </a>
-                                    <% } else { %>
+                                <div class="w-100">
+                                    <% if (item.product_image[0]){ %>
                                         <a href="/productDetail?product_id=<%=item._id%>">
-                                            <img class="w-100 curv"
-                                                src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"
-                                                alt="Product Image"></img>
+                                            <img class="w-100 curv" src="<%= item.product_image[0]%>"
+                                                alt="Product Image">
                                         </a>
-                                        <% } %>
+                                        <% } else { %>
+                                            <a href="/productDetail?product_id=<%=item._id%>">
+                                                <img class="w-100 curv"
+                                                    src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"
+                                                    alt="Product Image"></img>
+                                            </a>
+                                            <% } %>
 
-                            </div>
-                            <hr>
-                            <div class="detail-box">
-                                <div>
-                                    <p class="text-non-wrap">
-                                        <%=item.product_name%>
-                                    </p>
                                 </div>
-                                <h5>
-                                    Offer Price :
-                                    <span>
-                                        ₹ <%=item.sellingPrice%> /-
-                                    </span>
-                                </h5>
+                                <hr>
+                                <div class="detail-box">
+                                    <div>
+                                        <p class="text-non-wrap">
+                                            <%=item.product_name%>
+                                        </p>
+                                    </div>
+                                    <h5>
+                                        Offer Price :
+                                        <span>
+                                            ₹ <%=item.sellingPrice%> /-
+                                        </span>
+                                    </h5>
 
-                                <h6>
+                                    <h6>
 
-                                    <span class="text-decoration-line-through">
-                                        Price : ₹ <%=item.mrp%> /-
-                                    </span>
-                                </h6>
+                                        <span class="text-decoration-line-through">
+                                            Price : ₹ <%=item.mrp%> /-
+                                        </span>
+                                    </h6>
+                                </div>
+
+                                <div class="text-center my-3">
+                                    <a href="/productDetail?product_id=<%=item._id%>"><button
+                                            class="btn btn-outline-danger w-50">View Details</button></a>
+
+                                </div>
+
                             </div>
-
-                            <div class="text-center my-3">
-                                <a href="/productDetail?product_id=<%=item._id%>"><button
-                                        class="btn btn-outline-danger w-50">View Details</button></a>
-
-                            </div>
-
                         </div>
-                    </div>
-                    <% }) } %>
+                        <% }) } %>
+
+                            <!-- pagination -->
+                            <div class="text-center">
+                                <nav aria-label="...">
+                                    <ul class="pagination">
+                                        <li class="page-item disabled">
+                                            <span class="page-link">Previous</span>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item active" aria-current="page">
+                                            <span class="page-link">2</span>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                </section>
             </div>
         </div>
 
