@@ -28,7 +28,7 @@
                                 </td>
                                 <td>
                                     <a href="/productDetail?product_id=<%=locals.wishlist.products[i]._id%>">
-                                    <img class="curv" style="height: 10em;" src="<%= locals.wishlist.products[i].product_image[0] %>"
+                                    <img class="curv zoomable" style="height: 10em;" src="<%= locals.wishlist.products[i].product_image[0] %>"
                                         alt="product-image"> </a>
                                 </td>
                                 <td class="text-start">
@@ -60,7 +60,7 @@
 
                     </tbody>
                 </table>
-                <% } } else { %>
+                <% }  else { %>
                     <div class="text-center">
                         <h6 class="text-danger">Your wishlist is empty</h6>
                     </div>
@@ -70,7 +70,7 @@
                                 Browse Products
                             </button> </a>
                     </div>
-                    <%  } %>
+                    <% }  } %>
 
         </section>
         <script>

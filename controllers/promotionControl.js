@@ -171,11 +171,11 @@ const verifyCoupon = async (req, res) => {
     try {
         const couponCode = req.body.code
         const couponData = await Coupons.findOne({ code: couponCode })
-        if (!couponData) throw Error()
+        if (!couponData) throw Error("invalid Coupon")
         if (couponData.count > 0 && (couponData.expiry - Date.now()) > 0) {
             res.json({ couponData });
         } else {
-            throw Error()
+            throw Error("Coupon Expired")
         }
     } catch (error) {
         res.render('error', { error: error.message })

@@ -136,6 +136,7 @@ const loadHome = async (req, res) => {
 
 const loadAllProducts = async (req, res) => {
     try {
+
         let products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 })
         //Categorize
         if (req.query.subCat) {
@@ -153,6 +154,18 @@ const loadAllProducts = async (req, res) => {
 
         const categoryList = await Category.find({ is_delete: 0 })
         const subCategoryList = await subCategory.find({ isDelete: 0 })
+
+        let pages;
+        if (req.query.perPage) {
+            pages = Math.ceil(products.length / req.query.perPage)
+        } else {
+            pages = Math.ceil(products.length / 12)
+        }
+
+        const queryData = {
+            pages: req.query.perPage,
+
+        }
 
         res.render('allProducts', {
             title: "Product Inventory",
@@ -206,11 +219,18 @@ const addToCart = async (req, res) => {
         const userCart = await Cart.findOne({ $and: [{ userID: req.session._id }, { 'items.productID': req.body.product_id }] })
         if (userCart) {
             const cartEntry = await Cart.updateOne({ userID: req.session._id, "items.productID": req.body.product_id }, { $inc: { "items.$.qty": req.body.qty } })
-            if (cartEntry) res.redirect("/cart")
+            if (cartEntry) {
+                //delete from wishlist
+                const wishlistItem = await Wishlist.updateOne({ userID: req.session._id }, { $pull: { products: req.body.product_id } })
+                res.redirect("/cart")
+            }
             else throw Error("unable to add to cart")
         } else {
             const cartEntry = await Cart.updateOne({ userID: req.session._id }, { $addToSet: { items: { productID: req.body.product_id, qty: req.body.qty } } }, { upsert: true })
-            if (cartEntry) res.redirect("/cart")
+            if (cartEntry) {
+                const wishlistItem = await Wishlist.updateOne({ userID: req.session._id }, { $pull: { products: req.body.product_id } })
+                res.redirect("/cart")
+            }
             else throw Error("unable to add to cart")
         }
 
@@ -222,8 +242,12 @@ const addToCart = async (req, res) => {
 
 const removeCart = async (req, res) => {
     try {
+        console.log(req.body);
         const cartRemove = await Cart.updateOne({ userID: req.session._id }, { $pull: { items: { productID: req.body.product_id } } })
-        if (cartRemove) res.redirect("/cart")
+        if (cartRemove) {
+           if(!req.body.method) res.redirect("/cart")
+           else res.json()
+        }
         else throw Error
 
     } catch (error) {
@@ -347,7 +371,7 @@ const checkout = async (req, res) => {
         }
 
         //decrease used coupon count
-        if(req.body.discountCode){
+        if (req.body.discountCode) {
             await Coupons.updateOne({ code: req.body.discountCode }, { $inc: { count: -1 } })
         }
 

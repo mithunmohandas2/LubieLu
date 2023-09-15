@@ -357,7 +357,8 @@ async function productFilter() {
   const category = document.getElementById("catSelection").value;
   const subCategory = document.getElementById("subCat").value;
   const sort = document.getElementById("sortBy").value;
-  location.href = `/allProducts?cat=${category}&subCat=${subCategory}&sort=${sort}`
+  const perPage = document.getElementById("perPage").value;
+  location.href = `/allProducts?cat=${category}&subCat=${subCategory}&sort=${sort}&perPage=${perPage}`
 }
 
 
@@ -696,3 +697,26 @@ async function removeFromWishlist(productID) {
       })
   }
 }
+
+// ----------------removeFromCart------------------------
+
+async function removeFromCart(productID) {
+  const response = await fetch("/removeCart", {
+    method: "POST",
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({
+      product_id: productID,
+      method: "fetch"
+    })
+  })
+    .then(() => {
+      location.reload()
+    })
+    .catch((error) => {
+      window.alert("Unable to save for later")
+      console.error(error);
+    })
+}
+// ---------------------------------------

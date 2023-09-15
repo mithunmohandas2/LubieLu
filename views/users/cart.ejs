@@ -39,7 +39,7 @@
                   <td>
                     <div>
                       <a href="/productDetail?product_id=<%=locals.products[i]._id%>">
-                        <img class="curv" style="height: 10em;" src="<%=locals.products[i].product_image[0] %>" alt="product image">
+                        <img class="curv zoomable" style="height: 6em;" src="<%=locals.products[i].product_image[0] %>" alt="product image">
                       </a>
                     </div>
                   </td>
@@ -67,10 +67,13 @@
                   <td>
                     <form action="/removeCart" method="post">
                       <input type="text" name="product_id" value="<%=locals.products[i]._id%>" hidden required />
-                      <button type="submit" class="btn btn-outline-danger"><span class="material-symbols-outlined">
+                      <button style="font-size: x-small;" type="submit" class="btn btn-outline-danger px-3 mb-1"><span class="material-symbols-outlined">
                         delete
-                        </span></button>
+                        </span><br>Delete</button>
                     </form>
+                    <button style="font-size: x-small;" type="button" onclick="addToWishlist('<%=locals.products[i]._id %>'),removeFromCart('<%=locals.products[i]._id %>')" class="btn btn-outline-danger mb-1 p-1" ><span class="material-symbols-outlined">
+                      heart_plus
+                      </span><br>Save for Later</button>
                   </td>
                 </tr>
                 <% } } %>
