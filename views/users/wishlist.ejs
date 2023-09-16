@@ -70,7 +70,18 @@
                                 Browse Products
                             </button> </a>
                     </div>
-                    <% }  } %>
+                    <% }  } else { %>
+                        <div class="text-center">
+                            <h6 class="text-danger">Your wishlist is empty</h6>
+                        </div>
+    
+                        <div class="text-center my-4">
+                            <a href="/allProducts"><button class="btn btn-outline-danger mb-3">
+                                    Browse Products
+                                </button> </a>
+                        </div>
+
+                        <% } %>
 
         </section>
         <script>

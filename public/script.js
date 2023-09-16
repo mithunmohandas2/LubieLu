@@ -1,4 +1,4 @@
-const { renderFile } = require("ejs");
+// const { renderFile } = require("ejs");
 
 // ======== PRICE CALCULATION (add product)================
 function calculate() {
@@ -720,3 +720,7 @@ async function removeFromCart(productID) {
     })
 }
 // ---------------------------------------
+
+function resetAddressForm(){
+  document.getElementById("addressID").value =""
+}

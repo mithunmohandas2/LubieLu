@@ -34,6 +34,7 @@
                                     <table id="myTable" class="display text-center">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>Date</th>
                                                 <th>OrderID</th>
                                                 <th>Amount</th>
@@ -41,8 +42,11 @@
                                         </thead>
                                         <tbody>
 
-                                            <% for (i=0;i<locals.walletData.transactions.length;i++) { %>
+                                            <% let j=1; for (i=locals.walletData.transactions.length-1;i>=0;i--) {  %>
                                                 <tr>
+                                                    <td>
+                                                        <%= j %>
+                                                    </td>
                                                     <td>
                                                         <%= locals.walletData.transactions[i].date.toLocaleString('en-US',
                                                             { timeZone: 'Asia/Kolkata' }) %>
@@ -62,7 +66,7 @@
                                                             <% } %>
 
                                                 </tr>
-                                                <% } %>
+                                                <% j++ } %>
                                                 
                                         </tbody>
                                     </table>

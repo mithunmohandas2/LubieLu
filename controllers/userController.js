@@ -242,11 +242,10 @@ const addToCart = async (req, res) => {
 
 const removeCart = async (req, res) => {
     try {
-        console.log(req.body);
         const cartRemove = await Cart.updateOne({ userID: req.session._id }, { $pull: { items: { productID: req.body.product_id } } })
         if (cartRemove) {
-           if(!req.body.method) res.redirect("/cart")
-           else res.json()
+            if (!req.body.method) res.redirect("/cart")
+            else res.json()
         }
         else throw Error
 
@@ -304,14 +303,18 @@ const createOrder = async (req, res) => {
         let paddedRandomNumber = randomNumber.toString().padStart(6, '0'); // Ensure it's 6 digits long
         let receiptID = `RTN${paddedRandomNumber}`;
 
-        if (req.body.COD) {
+        // =====Wallet======
+        if (!req.body.COD && !req.body.onlinepay) {
+            res.status(200).send({
+                walletSuccess: true,
+            });
+        }
 
-            // ====COD=====
-
+        // ====COD=====
+        else if (req.body.COD) {
             res.status(200).send({
                 CODsuccess: true,
             });
-
             // ========
 
         } else {
@@ -340,9 +343,7 @@ const createOrder = async (req, res) => {
         console.log(error.message)
         res.render('error', { error: error.message })
     }
-
 }
-
 
 // ===============checkout============
 
@@ -374,17 +375,20 @@ const checkout = async (req, res) => {
         if (req.body.discountCode) {
             await Coupons.updateOne({ code: req.body.discountCode }, { $inc: { count: -1 } })
         }
-
+        let totalAmount=req.body.amount;
         let payMethod;
-        if (req.body.onlinepay || req.body.walletSelect) payMethod = "Online-Pay"
-        else payMethod = "Cash-On-Delivery"
+        if (!req.body.onlinepay && !req.body.walletSelect) payMethod = "Cash-On-Delivery"
+        else if (!req.body.walletSelect && !req.body.COD) payMethod = "Online-Pay"
+        else if (!req.body.onlinepay && !req.body.COD) {payMethod = "Wallet"; totalAmount = req.body.wallet }
+        else if (req.body.onlinepay && req.body.walletSelect) { payMethod = "Wallet + Online-Pay"; totalAmount = parseInt(req.body.wallet) + parseInt(req.body.amount); }
+        else  payMethod = ""
 
         const cartData = await Cart.findOne({ userID: req.session._id })
-
+       
         const newOrder = new Order({
             userID: req.session._id,
             items: cartData.items,
-            amount: req.body.amount,
+            amount: totalAmount,
             discount: req.body.discount,
             method: payMethod,
             shippingAddress: addressIDs,
@@ -504,8 +508,9 @@ const cancelOrder = async (req, res) => {
             }
         } else throw Error("No order data found")
 
-        //if Online Payment refund to wallet
-        if (orderData.method === "Online-Pay") {
+        //if not COD refund to wallet
+        console.log(orderData.method);
+        if (orderData.method != "Cash-On-Delivery") {
             const transaction = {
                 Order: orderID,
                 amount: orderData.amount,

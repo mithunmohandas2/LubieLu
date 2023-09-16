@@ -471,7 +471,7 @@ const productDetail = async (req, res) => {
 // Load sub category in form
 const loadSubCat = async (req, res) => {
     try {
-        const subCat = await subCategory.find({ rootCategoryId: req.body.catID })
+        const subCat = await subCategory.find({$and :[{ rootCategoryId: req.body.catID },{isDelete : false}]})
         res.json(subCat);
 
     } catch (error) {

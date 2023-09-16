@@ -113,7 +113,7 @@
                                         <div class="my-3">
                                             <label for="addressName" class="form-label">Name</label>
                                             <input type="text" placeholder="Enter name for delivery"
-                                                pattern="[A-Za-z ]*"
+                                                pattern="[A-Za-z ]*" onchange="resetAddressForm()"
                                                 oninvalid="setCustomValidity('Please enter alphabetic characters only')"
                                                 oninput="setCustomValidity('')" name="addressName" class="form-control"
                                                 id="addressName" required>
@@ -122,33 +122,33 @@
                                         <div class="mb-3">
                                             <label for="phone" class="form-label">Phone number</label>
                                             <input type="text" name="phone" class="form-control" id="phone"
-                                                pattern="[0-9]*"
+                                                pattern="[0-9]*"  onchange="resetAddressForm()"
                                                 oninvalid="setCustomValidity('Please enter a valid mobile number')"
                                                 placeholder="Enter contact number" required>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="text" class="form-label">Address Line 1 </label>
-                                            <input type="text" placeholder="House No/Name" name="address1"
-                                                class="form-control" id="address1" required>
+                                            <input type="text" placeholder="House No/Name" name="address1" 
+                                                class="form-control" id="address1"  onchange="resetAddressForm()" required>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="text" class="form-label">Address Line 2 </label>
                                             <input type="text" placeholder="Street Address" name="address2"
-                                                class="form-control" id="address2" required>
+                                                class="form-control" id="address2"  onchange="resetAddressForm()" required>
                                         </div>
 
                                         <div class="row">
                                             <div class="mb-3 col-md-6">
                                                 <label for="district" class="form-label">District</label>
                                                 <input type="text" name="district" class="form-control" id="district"
-                                                    placeholder="Enter district" required>
+                                                    placeholder="Enter district"  onchange="resetAddressForm()" required>
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label for="state" class="form-label">State</label>
                                                 <input type="text" name="state" class="form-control" id="state"
-                                                    placeholder="Enter state" required>
+                                                    placeholder="Enter state"  onchange="resetAddressForm()" required>
                                             </div>
                                         </div>
 
@@ -161,7 +161,7 @@
                                             <div class="mb-3 col-md-6">
                                                 <label for="pincode" class="form-label">Pincode</label>
                                                 <input type="string" name="pincode" class="form-control" id="pincode"
-                                                    min=100000 max=999999 pattern="[0-9]*"
+                                                    min=100000 max=999999 pattern="[0-9]*"  onchange="resetAddressForm()"
                                                     oninvalid="setCustomValidity('Please enter a valid Pincode')"
                                                     placeholder="Enter pincode" required>
                                             </div>
@@ -280,11 +280,8 @@
                                 <div class="form-check mx-5">
                                     <label for="wallet" class="form-label">use wallet balance*</label>
                                     <input class="form-check-input" type="checkbox" name="walletSelect" id="walletSelect"  />
-                                    <input class="form-control" type="text" name="wallet" id="wallet" style="display: none;" readonly />
+                                    <input class="form-control" type="number" name="wallet" id="wallet" style="display: none;" readonly />
                                 </div>
-                                <span class="px-1" style="font-size: x-small;">
-                                    *Wallet can only be used with online payment of minimum ₹ 1 /-
-                                </span>
                             </div>
                         <% } %>
 
@@ -300,7 +297,7 @@
                             <label for="onlinepay" class="form-label">Online Payment</label>
                             <input class="form-check-input" type="checkbox" name="onlinepay" id="onlinepay" checked />
                         </div>
-                        <div class="form-check mx-5">
+                        <div class="form-check mx-5" id="codCheckDiv">
                             <label for="cod" class="form-label">Cash-On-Delivery</label>
                             <input class="form-check-input" type="checkbox" name="COD" id="COD" />
                         </div>
@@ -342,7 +339,6 @@
                 $(document).ready(function () {
                     $('.pay-form').submit(function (e) {
                         e.preventDefault();
-
                         var formData = $(this).serialize();
                         $.ajax({
                             url: "/createOrder",
@@ -350,6 +346,8 @@
                             data: formData,
                             success: function (res) {
                                 if (res.CODsuccess) {
+                                    verifyPayment(formData)
+                                } else if (res.walletSuccess) {
                                     verifyPayment(formData)
                                 } else if (res.success) {
                                     var options = {
@@ -407,22 +405,27 @@
                 walletSelect.addEventListener('change', function () {
                     if(walletSelect.checked){
                         walletInput.style.display = "block";
-                        // walletInput.value = walletAmountValue
-                        console.log("walletAmount.innerHTML = "+ walletAmountValue);
-                        console.log("finalAmount.innerHTML = "+finalAmountValue);
-                        if(walletAmountValue < finalAmountValue){
-                            walletInput.value = walletAmountValue-1;
-                            finalAmount2.value = finalAmountValue - walletAmountValue + 1;
+                        if(walletAmountValue < finalAmountValue){ //less wallet amt than bill
+                            walletInput.value = walletAmountValue;
+                            finalAmount2.value = finalAmount.innerHTML - walletAmountValue
+                              //payment option wallet + OnlinePay
+                                onlinePayCheck.checked =true;
+                                onlinePayCheck.style.display = "none";
+                                codCheck.checked =false;
+                                const codCheckDiv = document.getElementById('codCheckDiv')
+                                codCheckDiv.style.display = "none";
                         } else {
-                            walletInput.value = finalAmountValue -1
-                            finalAmount2.value = "1";
-                             // Disable the checkbox
+                            walletInput.value = finalAmount.innerHTML
+                            finalAmount2.value = 0;
+                             //payment option wallet
                             onlinePayCheck.disabled  =true;
                             codCheck.disabled  =true;
+                            onlinePayCheck.checked =false;
+                            codCheck.checked =false;
                         }
                     } else {
-                        walletInput.value = "0";
-                        finalAmount2.value = finalAmountValue
+                        walletInput.value = 0;
+                        finalAmount2.value = finalAmount.innerHTML
                         walletInput.style.display = "none";
                          // Re-enable the checkbox
                         onlinePayCheck.disabled = false;
