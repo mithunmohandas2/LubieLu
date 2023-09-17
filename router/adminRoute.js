@@ -6,9 +6,11 @@ const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const userController = require("../controllers/userController");
 const promotionController = require("../controllers/promotionControl");
-const path = require('path')
-const auth = require("../middleware/adminAuth")
-
+const path = require('path');
+const auth = require("../middleware/adminAuth");
+const multer = require('multer');
+const upload = multer({ storage: config.productImageStorage });
+const bannerUpload = multer({ storage: config.bannerStorage });
 
 admin_route.use(session({
     secret: config.sessionSecret,
@@ -18,12 +20,6 @@ admin_route.use(session({
 
 admin_route.set('view engine','ejs');
 admin_route.set('views','./views/admin')
-
-
-const multer = require('multer');
-const upload = multer({ storage: config.productImageStorage });
-const bannerUpload = multer({ storage: config.bannerStorage });
-
 
 admin_route.get('/', auth.isLogout, adminController.loginLoad);
 
@@ -35,13 +31,11 @@ admin_route.get('/logout', auth.isLogin, adminController.logout);
 admin_route.post('/logout', adminController.logout);
 
 admin_route.post('/search',auth.isLogin, auth.cookieCheck, adminController.searchUser);
-
 admin_route.get('/user_management',auth.isLogin, auth.cookieCheck, adminController.userManagement);
 admin_route.post('/blockUser/',auth.isLogin, auth.cookieCheck, adminController.blockUser); //block/unblock
 
 admin_route.get('/product_management',auth.isLogin, auth.cookieCheck, productController.productManagement);
 admin_route.post('/productSearch',auth.isLogin, auth.cookieCheck, productController.productSearch);
-
 admin_route.get('/addProduct',auth.isLogin,productController.addProduct)
 admin_route.post('/insertProduct',auth.isLogin, upload.array('product_image', 6),productController.insertProduct)
 admin_route.post('/editProductLoad',auth.isLogin,productController.editProductLoad)
@@ -54,7 +48,6 @@ admin_route.post('/addCategory',auth.isLogin,productController.addCategory)
 admin_route.post('/editCategory',auth.isLogin,productController.editCategory)
 admin_route.post('/deleteCategory',auth.isLogin,productController.deleteCategory)
 admin_route.post('/loadSubCat',productController.loadSubCat)  
-
 
 admin_route.post('/addSubCategory',auth.isLogin,productController.addSubCategory)
 admin_route.post('/editSubCategory',auth.isLogin,productController.editSubCategory)
@@ -80,11 +73,8 @@ admin_route.post('/deleteCoupon',auth.isLogin, promotionController.deleteCoupon)
 admin_route.get('/editCoupon', auth.isLogin, promotionController.editCouponLoad);
 admin_route.post('/editCoupon', auth.isLogin, promotionController.editCoupon);
 
-
 admin_route.get('/salesReport',auth.isLogin,adminController.salesReport)
 
 admin_route.get('*',adminController.error404)
-
-
 
 module.exports = admin_route

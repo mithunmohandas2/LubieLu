@@ -36,7 +36,6 @@ user_route.get('/otpLogin', auth.isLogout, userController.loadOtpLogin);
 user_route.post('/otpLogin', auth.isLogout,OTPVerification.requestOTP);
 user_route.post('/otpLoginVerify', auth.isLogout,OTPVerification.otpLoginVerify);
 
-
 user_route.get('/allProducts', userController.loadAllProducts);
 user_route.post('/loadSubCat',productController.loadSubCat)  
 user_route.get('/productDetail', productController.productDetail);
@@ -69,12 +68,11 @@ user_route.get('/wishlist', auth.isLogin, userController.loadWishlist);
 user_route.post('/addToWishlist', auth.isLogin, userController.addToWishlist);
 user_route.post('/removeFromWishlist', auth.isLogin, userController.removeFromWishlist);
 
-
-
 //logout
 user_route.post('/logout', userController.logout);
 user_route.get('/logout', auth.isLogout, userController.loginLoad);
 
+//error
 user_route.get('*',userController.error404)
 
 module.exports = user_route;

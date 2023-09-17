@@ -59,7 +59,7 @@
 
                         <div class="col-12 mb-4">
                             <label for="product_image" class="form-label">Product Images</label>
-                            <input type="file" class="form-control" name="product_image" multiple id="imageInput">
+                            <input type="file" class="form-control" accept="image/*"  qname="product_image" multiple id="imageInput">
                         </div>
 
                         <div class="row">
@@ -200,13 +200,20 @@
                         const files = event.target.files;
                         for (const file of files) {
                             try {
-                                const img = document.createElement('img');
-                                img.src = URL.createObjectURL(file);
-                                img.className = 'preview-image';
-                                img.style.maxWidth = '15em';
-                                imagePreviewContainer.appendChild(img);
+                                if (file.type == "image/png" || file.type == "image/jpeg" || file.type == "image/jpg"
+                                || file.type == "image/webp" || file.type == "image/WebP" || file.type == "image/bmp" ){
+                                    const img = document.createElement('img');
+                                    img.src = URL.createObjectURL(file);
+                                    img.className = 'preview-image';
+                                    img.style.maxWidth = '15em';
+                                    imagePreviewContainer.appendChild(img);
+                                } else {
+                                    imagePreviewContainer.innerHTML=""
+                                    imageInput.value =""
+                                  throw Error ("Only Image files of jpg/jpeg/png/bmp/webp accepted")
+                                }
                             } catch (error) {
-                                console.error('Error creating image preview:', error);
+                                alert(error.message);
                             }
                         }
                     });
