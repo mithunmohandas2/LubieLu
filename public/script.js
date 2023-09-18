@@ -353,15 +353,15 @@ async function editAddress() {
 
 // -------------- productFilter() ---------------------
 
-async function productFilter() {
+async function productFilter(selectedPage) {
+  if(!selectedPage) selectedPage=1
   const category = document.getElementById("catSelection").value;
   const subCategory = document.getElementById("subCat").value;
   const sort = document.getElementById("sortBy").value;
   const perPage = document.getElementById("perPage").value;
-  location.href = `/allProducts?cat=${category}&subCat=${subCategory}&sort=${sort}&perPage=${perPage}`
+  // const pageNo = document.get
+  location.href = `/allProducts?cat=${category}&subCat=${subCategory}&sort=${sort}&perPage=${perPage}&page=${selectedPage}`
 }
-
-
 
 // Sub-Category name populate in view all products
 async function SubCategoryLoad(id) {

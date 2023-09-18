@@ -13,6 +13,7 @@ const ordersSchema = new mongoose.Schema({
         productID: {
             type: ObjectId,
             required: true,
+            ref:'Product'
         },
         qty: {
             type: Number,

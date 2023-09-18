@@ -136,44 +136,77 @@ const loadHome = async (req, res) => {
 
 const loadAllProducts = async (req, res) => {
     try {
-
-        let products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 })
-        //Categorize
-        if (req.query.subCat) {
-            const subCat = req.query.subCat;
-            products = products.filter((prd) => prd.subCategory_id == subCat);
-        }
-        //sort
-        if (req.query.sort == 'Oldest First') {
-            products = products.sort((prd1, prd2) => prd1.updatedAt - prd2.updatedAt)
-        } else if (req.query.sort == 'Price (Low-to-High)') {
-            products = products.sort((prd1, prd2) => prd1.sellingPrice - prd2.sellingPrice)
-        } else if (req.query.sort == 'Price (High-to-Low)') {
-            products = products.sort((prd1, prd2) => prd2.sellingPrice - prd1.sellingPrice)
-        }
-
         const categoryList = await Category.find({ is_delete: 0 })
         const subCategoryList = await subCategory.find({ isDelete: 0 })
 
-        let pages;
-        if (req.query.perPage) {
-            pages = Math.ceil(products.length / req.query.perPage)
-        } else {
-            pages = Math.ceil(products.length / 12)
+        if (req.query.page) { 
+            const { cat, subCat, sort, perPage, page } = req.query
+
+            let products;
+            let productCount;
+            let categoryName = cat;
+            let subCatName = subCat;
+
+            if (subCat) {
+                const categoryDetails = categoryList.find((prd) => prd._id == cat)
+                const subCategoryDetails = subCategoryList.find((prd) => prd._id == subCat)
+                categoryName = categoryDetails.category_name
+                subCatName = subCategoryDetails.subCategoryName
+                productCount = await Product.find({ is_blocked: 0, subCategory_id: subCat }).countDocuments()
+
+                if (sort == 'Oldest First') {
+                    products = await Product.find({ is_blocked: 0, subCategory_id: subCat }).sort({ updatedAt: 1 }).skip(((page - 1) * perPage)).limit(perPage)
+                } else if (sort == 'Price (Low-to-High)') {
+                    products = await Product.find({ is_blocked: 0, subCategory_id: subCat }).sort({ sellingPrice: 1 }).skip(((page - 1) * perPage)).limit(perPage)
+                } else if (sort == 'Price (High-to-Low)') {
+                    products = await Product.find({ is_blocked: 0, subCategory_id: subCat }).sort({ sellingPrice: -1 }).skip(((page - 1) * perPage)).limit(perPage)
+                } else {
+                    products = await Product.find({ is_blocked: 0, subCategory_id: subCat }).sort({ updatedAt: -1 }).skip(((page - 1) * perPage)).limit(perPage)
+                }
+
+            } else {
+                //sort only
+                productCount = await Product.find({ is_blocked: 0 }).countDocuments()
+                if (sort == 'Oldest First') {
+                    products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: 1 }).skip(((page - 1) * perPage)).limit(perPage)
+                } else if (sort == 'Price (Low-to-High)') {
+                    products = await Product.find({ is_blocked: 0 }).sort({ sellingPrice: 1 }).skip(((page - 1) * perPage)).limit(perPage)
+                } else if (sort == 'Price (High-to-Low)') {
+                    products = await Product.find({ is_blocked: 0 }).sort({ sellingPrice: -1 }).skip(((page - 1) * perPage)).limit(perPage)
+                } else {
+                    products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).skip(((page - 1) * perPage)).limit(perPage)
+                }
+            }
+            const totalPage = Math.ceil(productCount / 12)
+
+            const queryData = { cat, subCat, sort, perPage, page, categoryName, subCatName, }
+
+            res.render('allProducts', {
+                title: "Product Inventory",
+                products: products,
+                categories: categoryList,
+                subCategories: subCategoryList,
+                username: req.session.user_name,
+                totalPage,
+                queryData,
+            });
+
+        } else { //no query present
+            console.log("whre?");
+            const productCount = await Product.find({ is_blocked: 0 }).countDocuments()
+            const totalPage = Math.ceil(productCount / 12)
+
+            const products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(12)
+
+            res.render('allProducts', {
+                title: "Product Inventory",
+                products: products,
+                categories: categoryList,
+                subCategories: subCategoryList,
+                username: req.session.user_name,
+                totalPage,
+            });
         }
-
-        const queryData = {
-            pages: req.query.perPage,
-
-        }
-
-        res.render('allProducts', {
-            title: "Product Inventory",
-            products: products,
-            categories: categoryList,
-            subCategories: subCategoryList,
-            username: req.session.user_name,
-        });
 
     } catch (error) {
         console.log(error.message)
@@ -375,16 +408,16 @@ const checkout = async (req, res) => {
         if (req.body.discountCode) {
             await Coupons.updateOne({ code: req.body.discountCode }, { $inc: { count: -1 } })
         }
-        let totalAmount=req.body.amount;
+        let totalAmount = req.body.amount;
         let payMethod;
         if (!req.body.onlinepay && !req.body.walletSelect) payMethod = "Cash-On-Delivery"
         else if (!req.body.walletSelect && !req.body.COD) payMethod = "Online-Pay"
-        else if (!req.body.onlinepay && !req.body.COD) {payMethod = "Wallet"; totalAmount = req.body.wallet }
+        else if (!req.body.onlinepay && !req.body.COD) { payMethod = "Wallet"; totalAmount = req.body.wallet }
         else if (req.body.onlinepay && req.body.walletSelect) { payMethod = "Wallet + Online-Pay"; totalAmount = parseInt(req.body.wallet) + parseInt(req.body.amount); }
-        else  payMethod = ""
+        else payMethod = ""
 
         const cartData = await Cart.findOne({ userID: req.session._id })
-       
+
         const newOrder = new Order({
             userID: req.session._id,
             items: cartData.items,
