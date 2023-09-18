@@ -5,6 +5,7 @@ const productSubCategory = new mongoose.Schema({
 
     rootCategoryId: {
         type: ObjectId,
+        ref:"Category",
         required: true,
     },
 

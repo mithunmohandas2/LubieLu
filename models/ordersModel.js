@@ -40,6 +40,7 @@ const ordersSchema = new mongoose.Schema({
     },
     shippingAddress:{
         type: ObjectId,
+        ref:"userAddress"
     },
 },  { timestamps: true })
 

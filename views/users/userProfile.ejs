@@ -42,6 +42,26 @@
               </div>
               <% } %>
           </div>
+
+          <div class="card p-4">
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" id="password" name="password" class="form-control" placeholder="Enter new password" id="password"
+                oninvalid="setCustomValidity('At least one alphanumeric character,one symbol & min 6 digits')"
+                pattern="^(?=.*[A-Za-z0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-=|]).{6,}$" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">ConfirmPassword</label>
+              <input type="password" id="password2" name="password2" placeholder="Re-enter new password" class="form-control"
+                id="password2" pattern="^(?=.*[A-Za-z0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-=|]).{6,}$" required>
+            </div>
+            <div class="text-start">
+              <button type="button" onclick="changePassword()" class="btn btn-danger my-3 px-2">Change Password</button>
+            </div>
+          </div>
+
         </div>
         <div class="col-md-8">
           <div class="card">
@@ -49,30 +69,44 @@
               <h5 class="card-title mt-3 mb-4 text-center">Edit Profile</h5>
 
               <form class="px-4" action="/editProfile" method="post">
-                <div class="mb-3">
-                  <label for="text" class="form-label">First Name</label>
-                  <input type="text" placeholder="Enter your first name" pattern="[A-Za-z ]*"
-                    oninvalid="setCustomValidity('Please enter alphabetic characters only')"
-                    oninput="setCustomValidity('')" name="firstName" class="form-control" id="firstName"
-                    value="<%= locals.user.firstName %>" required>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="text" class="form-label">First Name</label>
+                      <input type="text" placeholder="Enter your first name" pattern="[A-Za-z ]*"
+                        oninvalid="setCustomValidity('Please enter alphabetic characters only')"
+                        oninput="setCustomValidity('')" name="firstName" class="form-control" id="firstName"
+                        value="<%= locals.user.firstName %>" required>
+                    </div>
+
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="text" class="form-label">Last Name</label>
+                      <input type="text" placeholder="Enter your last name" pattern="[A-Za-z ]*"
+                        oninvalid="setCustomValidity('Please enter alphabetic characters only')"
+                        oninput="setCustomValidity('')" name="lastName" class="form-control" id="lastName"
+                        value="<%= locals.user.lastName %>" required>
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label for="text" class="form-label">Last Name</label>
-                  <input type="text" placeholder="Enter your last name" pattern="[A-Za-z ]*"
-                    oninvalid="setCustomValidity('Please enter alphabetic characters only')"
-                    oninput="setCustomValidity('')" name="lastName" class="form-control" id="lastName"
-                    value="<%= locals.user.lastName %>" required>
-                </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email address</label>
-                  <input type="email" name="email" class="form-control" id="email" value="<%= locals.user.email %>"
-                    placeholder="Enter email ID" readonly>
-                </div>
-                <div class="mb-3">
-                  <label for="number" class="form-label">Phone number</label>
-                  <input type="text" name="phone" class="form-control" pattern="[0-9]*"
-                    oninvalid="setCustomValidity('Please enter a valid mobile number')" value="<%= locals.user.phone %>"
-                    placeholder="Enter contact number" required>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Email address</label>
+                      <input type="email" name="email" class="form-control" id="email" value="<%= locals.user.email %>"
+                        placeholder="Enter email ID" readonly>
+                    </div>
+
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="number" class="form-label">Phone number</label>
+                      <input type="text" name="phone" class="form-control" pattern="[0-9]*"
+                        oninvalid="setCustomValidity('Please enter a valid mobile number')"
+                        value="<%= locals.user.phone %>" placeholder="Enter contact number" required>
+                    </div>
+                  </div>
                 </div>
 
                 <button type="submit" class="btn btn-danger my-3">Update</button>
@@ -108,12 +142,11 @@
                           Pincode : <span class="savedPincode"><%= locals.address[i].pincode%></span>
                         </p>
                       </div>
-                      <button type="button" style="z-index: 2; position: relative; top: -3em;" class="btn btn-outline-danger px-2" onclick="deleteAddress('<%= locals.address[i]._id%>')" ><span
-                        class="material-symbols-outlined">
-                        delete
-                      </span></button>
+                      <button type="button" style="z-index: 2; position: relative; top: -3em;"
+                        class="btn btn-outline-danger px-2" onclick="deleteAddress('<%= locals.address[i]._id%>')"><span
+                          class="material-symbols-outlined">delete</span></button>
                     </button>
-                    
+
 
                     <% }} %>
                 </div>
@@ -173,6 +206,10 @@
                           pattern="[0-9]*" oninvalid="setCustomValidity('Please enter a valid Pincode')"
                           placeholder="Enter pincode" required>
                       </div>
+                      <div class="text-start mt-3">
+                        <input type="checkbox" name="makeDefault" id="makeDefault" />
+                        <label for="checkbox">Make address default</label>
+                      </div>
                       <hr class="my-4">
                       <div class="mb-3 text-center">
                         <button type="submit" class="btn btn-outline-primary  m-2 px-4"><span
@@ -195,4 +232,34 @@
     </div>
     </div>
     <%- include('../layouts/footerlinks') %>
+
+      <script>
+        async function changePassword(){
+          const password = document.getElementById("password").value
+          const password2 = document.getElementById("password2").value
+          if(password != password2){
+            document.getElementById("password").value =""
+            document.getElementById("password2").value =""
+            return alert("Password Mismatch")
+          } else {
+        const change = await fetch('/changePassword', {
+          method: 'post',
+          headers: {
+            "Content-Type": 'application/json'
+          },
+          body: JSON.stringify({
+            password,
+          })
+        })
+          .then((value) => {
+            return value.json()
+          }) 
+          .catch(() => {
+            window.alert("Unable to change password")
+          })
+        window.alert(change.msg)
+        }
+      }
+
+      </script>
       <%- include('../layouts/footer') %>

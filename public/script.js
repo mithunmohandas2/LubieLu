@@ -319,6 +319,7 @@ async function editAddress() {
   const district = document.getElementById("district").value;
   const state = document.getElementById("state").value;
   const pincode = document.getElementById("pincode").value;
+  const makeDefault = document.getElementById("makeDefault").value;
 
   const confirmed = window.confirm("Are you sure you want to edit the address?");
   if (confirmed) {
@@ -336,6 +337,7 @@ async function editAddress() {
         district,
         state,
         pincode,
+        makeDefault,
       })
     })
       .then(() => {
@@ -354,7 +356,10 @@ async function editAddress() {
 // -------------- productFilter() ---------------------
 
 async function productFilter(selectedPage) {
+  const totalPage = document.getElementById("totalPage").value;
   if(!selectedPage) selectedPage=1
+  if (selectedPage <= 0 || selectedPage > totalPage) return
+ 
   const category = document.getElementById("catSelection").value;
   const subCategory = document.getElementById("subCat").value;
   const sort = document.getElementById("sortBy").value;

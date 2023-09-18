@@ -59,6 +59,7 @@ user_route.post('/returnOrder', auth.isLogin, userController.returnOrder);
 
 user_route.get('/userProfile', auth.isLogin, userController.userProfile);
 user_route.post('/editProfile', auth.isLogin, userController.editProfile);
+user_route.post('/changePassword', auth.isLogin, userController.changePassword);
 user_route.post('/addAddress', auth.isLogin, addressController.addAddress);
 user_route.post('/deleteAddress', auth.isLogin, addressController.deleteAddress);
 user_route.post('/editAddress', auth.isLogin, addressController.editAddress);

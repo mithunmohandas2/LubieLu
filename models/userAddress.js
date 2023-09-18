@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 var addressSchema = new mongoose.Schema({
     userID: {
         type: ObjectId,
+        ref:'User',
         required: true,
     },
     addressName: {

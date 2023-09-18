@@ -33,7 +33,8 @@ const userSchema = new mongoose.Schema({
         default: 0
     },
     defaultAddress:{
-        type: ObjectId
+        type: ObjectId,
+        ref:'userAddress'
     },
 }, { timestamps: true })
 

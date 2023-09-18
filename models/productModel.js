@@ -14,9 +14,11 @@ const productSchema = new mongoose.Schema({
     category_id: {
         type: ObjectId,
         required: true,
+        ref:'Category'
     },
     subCategory_id: {
         type: ObjectId,
+        ref : "SubCategory",
         required: true,
     },
     brand: {
@@ -61,6 +63,7 @@ const productSchema = new mongoose.Schema({
     feedback: [{
         user: {
             type: ObjectId,
+            ref:"User"
         },
         rating: {
             type: Number

@@ -18,17 +18,19 @@
                             <select name="category_id" class="form-select" id="catSelection"
                                 onchange="SubCategoryLoad(value)">
                                 <!-- array of categories ids -->
-                                <% if (locals.queryData) {  %>
-                                    <option value="<%= locals.queryData.cat %>"><%= locals.queryData.categoryName %></option>
-                                <% } %>
-                                <option value="All">All Categories</option>
-                                <% if (locals.categories){ categories.forEach((name)=>{ %>
-
-                                    <option value="<%=name._id%>">
-                                        <%=name.category_name%>
+                                <% if (locals.queryData) { %>
+                                    <option value="<%= locals.queryData.cat %>">
+                                        <%= locals.queryData.categoryName %>
                                     </option>
+                                    <% } %>
+                                        <option value="All">All Categories</option>
+                                        <% if (locals.categories){ categories.forEach((name)=>{ %>
 
-                                    <% }) } %>
+                                            <option value="<%=name._id%>">
+                                                <%=name.category_name%>
+                                            </option>
+
+                                            <% }) } %>
 
                             </select>
                         </div>
@@ -37,23 +39,27 @@
                             <!-- <label for="subCategory" class="form-label">Sub Category</label> -->
                             <select name="subCategory_id" class="form-select" id="subCat">
                                 <!-- array of sub categories ids -->
-                                <% if (locals.queryData) {  %>
-                                    <option value="<%= locals.queryData.subCat %>"><%= locals.queryData.subCatName %></option>
-                                <% } %>
-                                <option disabled>Available Sub Categories</option>
+                                <% if (locals.queryData) { %>
+                                    <option value="<%= locals.queryData.subCat %>">
+                                        <%= locals.queryData.subCatName %>
+                                    </option>
+                                    <% } %>
+                                        <option disabled>Available Sub Categories</option>
                             </select>
                         </div>
 
                         <div class="col-sm-2 my-3">
                             <select name="sort" class="form-select" id="sortBy" aria-valuetext="hi">
-                                <% if (locals.queryData) {  %>
-                                    <option value="<%= locals.queryData.sort %>"><%= locals.queryData.sort %></option>
-                                <% } %>
-                                <option disabled>Select</option>
-                                <option value="Newest First">Newest First</option>
-                                <option value="Oldest First">Oldest First</option>
-                                <option value="Price (Low-to-High)">Price (Low-to-High)</option>
-                                <option value="Price (High-to-Low)">Price (High-to-Low)</option>
+                                <% if (locals.queryData) { %>
+                                    <option value="<%= locals.queryData.sort %>">
+                                        <%= locals.queryData.sort %>
+                                    </option>
+                                    <% } %>
+                                        <option disabled>Select</option>
+                                        <option value="Newest First">Newest First</option>
+                                        <option value="Oldest First">Oldest First</option>
+                                        <option value="Price (Low-to-High)">Price (Low-to-High)</option>
+                                        <option value="Price (High-to-Low)">Price (High-to-Low)</option>
                             </select>
                         </div>
 
@@ -66,7 +72,7 @@
                         <div class="col-sm-1 my-3">
                             <a href="/allProducts">Reset filters</a>
                         </div>
-                       
+
                     </div>
                     <!-- ====== -->
                 </div>
@@ -75,13 +81,15 @@
                     <div class="col-sm-2 my-3">
                         <label for="perPage" class="form-label">Product per page</label>
                         <select name="perPage" class="form-select w-50" id="perPage">
-                            <% if (locals.queryData) {  %>
-                                <option value="<%= locals.queryData.perPage %>"><%= locals.queryData.perPage %></option>
-                            <% } %>
-                            <option value="12" disabled>Select</option>
-                            <option value="12">12</option>
-                            <option value="24">24</option>
-                            <option value="36">36</option>
+                            <% if (locals.queryData) { %>
+                                <option value="<%= locals.queryData.perPage %>">
+                                    <%= locals.queryData.perPage %>
+                                </option>
+                                <% } %>
+                                    <option value="12" disabled>Select</option>
+                                    <option value="12">12</option>
+                                    <option value="24">24</option>
+                                    <option value="36">36</option>
                         </select>
                     </div>
 
@@ -148,25 +156,65 @@
 
         <!-- pagination -->
         <section class="container my-5">
-                                <nav aria-label="page">
-                                    <ul class="pagination justify-content-center">
-                                        <% for (i =0; i<locals.totalPage ; i++){ %>
-                                            <% if(i==0 ) { %>
-                                                <li class="page-item disabled">
-                                                    <button type="button" class="page-link" id="prevPage" value="<%= i %>">Previous</button>
-                                                </li>
-                                                <% } %>
-                                            <li class="page-item"><button type="button" class="page-link"value="<%= i+1 %>" onclick="productFilter('<%= i+1 %>')"><%= i+1 %></button></li>
+            <nav aria-label="page">
+                <ul class="pagination justify-content-center">
 
-                                            <% if(i==locals.totalPage-1) { %>
+
+                    <%
+                    let end = 6; 
+                    if (locals.totalPage <= 6){
+                        end  = locals.totalPage;
+                    }
+                    
+                    if (!locals.queryData || locals.queryData.page <=3 ) { 
+                        for (i=0; i<end ; i++){ %>
+                       
+                        <!-- no query data present -->
+                            <% if(i==0 ) { %>
+                                <li class="page-item">
+                                    <button type="button" class="page-link" onclick="productFilter('<%= +locals.queryData.page-1 %>')">Previous</button>
+                                </li>
+                                <% } %>
+    
+                                    <li class="page-item"><button type="button" class="page-link"
+                                            onclick="productFilter('<%= i+1 %>')">
+                                            <%= i+1 %>
+                                        </button></li>
+
+                                    <% if(i==locals.totalPage-1) { %>
+                                        <li class="page-item">
+                                            <button type="button" class="page-link" id="nextPage"
+                                                onclick="productFilter('2')">Next</button>
+                                        </li>
+                                        <% } %>
+                            <% } } else { %>
+
+                                <!-- if QueryData present & page > 3  -->
+                                <% for (i=+locals.queryData.page-2; i<+locals.queryData.page+3 ; i++){ %>
+                                    <% if(i== +locals.queryData.page-2 ) { %>
+                                        <li class="page-item">
+                                            <button type="button" class="page-link" id="prevPage"
+                                                onclick="productFilter('<%= +locals.queryData.page-1 %>')">Previous</button>
+                                        </li>
+                                        <% } %>
+            
+                                            <li class="page-item"><button type="button" class="page-link"
+                                                    onclick="productFilter('<%= i %>')">
+                                                    <%= i %>
+                                                </button></li>
+            
+                                            <% if(i== +locals.queryData.page+2 ) { %>
                                                 <li class="page-item">
-                                                    <button type="button" class="page-link" id="nextPage" value="<%= i+2 %>">Next</button>
+                                                    <button type="button" class="page-link" id="nextPage"
+                                                        onclick="productFilter('<%= +locals.queryData.page+1 %>')">Next</button>
                                                 </li>
                                                 <% } %>
-                                        <% } %>
-                                        
-                                    </ul>
-                                </nav>
+                                                    <% } %>
+
+                            <% } %>
+                </ul>
+                    <input type="text"  value="<%= locals.totalPage %>" id="totalPage" hidden />
+            </nav>
         </section>
 
 

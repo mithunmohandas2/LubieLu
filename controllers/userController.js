@@ -139,7 +139,7 @@ const loadAllProducts = async (req, res) => {
         const categoryList = await Category.find({ is_delete: 0 })
         const subCategoryList = await subCategory.find({ isDelete: 0 })
 
-        if (req.query.page) { 
+        if (req.query.page) {
             const { cat, subCat, sort, perPage, page } = req.query
 
             let products;
@@ -192,7 +192,6 @@ const loadAllProducts = async (req, res) => {
             });
 
         } else { //no query present
-            console.log("whre?");
             const productCount = await Product.find({ is_blocked: 0 }).countDocuments()
             const totalPage = Math.ceil(productCount / 12)
 
@@ -768,8 +767,17 @@ const editProfile = async (req, res) => {
         res.render('error', { error: error.message })
     }
 }
-// -----------------------
+// ---------changePassword--------------
 
+const changePassword = async (req, res) => {
+    try {
+        const update = await User.updateOne({ _id: req.session._id }, { $set: { password: req.body.password } })
+        if(!update) throw Error ("unable to change password")
+        res.json({ msg: "Success" })
+    } catch (error) {
+        res.json({ msg: error.message })
+    }
+}
 
 // ===============================
 module.exports = {
@@ -801,4 +809,5 @@ module.exports = {
     error404,
     userProfile,
     editProfile,
+    changePassword,
 }

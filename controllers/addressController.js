@@ -45,7 +45,7 @@ const deleteAddress = async (req, res) => {
 
 const editAddress = async (req, res) => {
     try {
-        // console.log(req.body);
+        console.log(req.body)
         const addressToEdit = {
             addressName: req.body.addressName,
             phone: req.body.phone,
@@ -56,8 +56,11 @@ const editAddress = async (req, res) => {
             pincode: req.body.pincode,
         }
         const edited = await Address.updateOne({ _id: req.body.addressID }, { $set: addressToEdit })
-        if (edited) res.json()
-        else throw Error("Unable to edit")
+        if (!edited) throw Error("Unable to edit address")
+        if (req.body.makeDefault) {
+            await User.updateOne({ _id: req.session._id }, { $set: { defaultAddress: req.body.addressID } })
+        } else throw Error("Unable to set default address")
+        res.json()
 
     } catch (error) {
         console.log(error.message)
