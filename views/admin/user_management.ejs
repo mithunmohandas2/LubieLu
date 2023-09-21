@@ -11,15 +11,6 @@
       }
     </style>
 
-
-    <!-- alert -->
-    <!-- <% if(locals.alert){%>
-      <div class="alert alert-warning text-center mb-0">
-        <%=locals.alert%>
-      </div>
-      <% } %> -->
-
-
     <!-- SEARCH BOX -->
     <div class="mt-5 text-center container pb-4 mb-4">
       <form action="/admin/search" method="post" class="d-flex">
@@ -90,7 +81,7 @@
 
         <h3>All users</h3>
 
-        <table class="table table-striped">
+        <table  id="myTable" class="display text-center">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -139,5 +130,11 @@
 
     </div>
           <%- include('../layouts/footerlinks') %>
+          <script>
+                /* Initialization of datatable */
+                $(document).ready(function () {
+                    $('#myTable').DataTable();
+                });
+          </script>
 
             <%- include('../layouts/footer') %>
