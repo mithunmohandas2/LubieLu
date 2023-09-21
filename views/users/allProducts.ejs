@@ -80,7 +80,7 @@
                 <div class="container">
                     <div class="col-sm-2 my-3">
                         <label for="perPage" class="form-label">Product per page</label>
-                        <select name="perPage" class="form-select w-50" id="perPage">
+                        <select name="perPage" class="form-select w-50" id="perPage" onchange="productFilter()">
                             <% if (locals.queryData) { %>
                                 <option value="<%= locals.queryData.perPage %>">
                                     <%= locals.queryData.perPage %>
@@ -170,9 +170,14 @@
                         for (i=0; i<end ; i++){ %>
                        
                         <!-- no query data present -->
-                            <% if(i==0 ) { %>
+                        <% if(i==0 && !locals.queryData ) { %>
+                            <li class="page-item">
+                                <button type="button" class="page-link" >Previous</button>
+                            </li>
+                            <% } %>
+                            <% if(i==0 && locals.queryData ) { %>
                                 <li class="page-item">
-                                    <button type="button" class="page-link" onclick="productFilter('<%= +locals.queryData.page-1 %>')">Previous</button>
+                                    <button type="button" class="page-link" onclick="productFilter('<%= +locals.queryData.page-1 %>')" >Previous</button>
                                 </li>
                                 <% } %>
     

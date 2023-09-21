@@ -541,7 +541,7 @@ const cancelOrder = async (req, res) => {
         } else throw Error("No order data found")
 
         //if not COD refund to wallet
-        console.log(orderData.method);
+        // console.log(orderData.method);
         if (orderData.method != "Cash-On-Delivery") {
             const transaction = {
                 Order: orderID,
