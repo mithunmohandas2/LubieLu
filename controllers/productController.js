@@ -391,11 +391,11 @@ const deleteProduct = async (req, res) => {
 // ------EDIT PRODUCT------------------
 
 const editSingleProduct = async (req, res) => {
-    // console.log(req.body);
+    // console.log(req.files);
     // console.log(req);
     try {
         const productImages = req.files;
-        const imagePaths = productImages.map(image => image.path);
+        const imagePaths = productImages.map(image => "\\productImages\\" + image.filename);
         const SP = Math.round(req.body.sellingPrice)
 
         const product = {
@@ -423,15 +423,15 @@ const editSingleProduct = async (req, res) => {
             const addImagePath = await Product.updateOne({ _id: req.body.product_id }, { $push: { product_image: imagePaths } });
 
             //Change product image path
-            const Match = await Product.findOne({ _id: req.body.product_id })
+            // const Match = await Product.findOne({ _id: req.body.product_id })
 
-            const imgPaths = Match.product_image
-            let temp2 = []
-            for (i = 0; i < imgPaths.length; i++) {
-                let temp = imgPaths[i].split("\\");
-                temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
-            }
-            const Change = await Product.updateOne({ _id: req.body.product_id }, { $set: { product_image: temp2 } })
+            // const imgPaths = Match.product_image
+            // let temp2 = []
+            // for (i = 0; i < imgPaths.length; i++) {
+            //     let temp = imgPaths[i].split("\\");
+            //     temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
+            // }
+            // const Change = await Product.updateOne({ _id: req.body.product_id }, { $set: { product_image: temp2 } })
         }
 
         if (productData) {  // editing to database success?
