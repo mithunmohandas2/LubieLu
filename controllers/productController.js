@@ -336,9 +336,9 @@ const deleteFile = async (req, res) => {
     try {
         const imageIndex = req.body.index;
         const product = await Product.findOne({ _id: req.body.product_id })
-        const filePath = `\public` + product.product_image[imageIndex]
         const isDelete = await Product.updateOne({ _id: req.body.product_id }, { $pull: { product_image: product.product_image[imageIndex] } })
-
+        
+        // const filePath = `\public` + product.product_image[imageIndex]
         // fs.unlink(filePath, async (err) => {  // delete image file
         //     if (err) {
         //         throw Error("Failed to delete image")
@@ -352,6 +352,7 @@ const deleteFile = async (req, res) => {
         //     }
         // })
         res.json()
+        
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })

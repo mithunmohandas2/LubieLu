@@ -43,9 +43,9 @@ const deleteBanner = async (req, res) => {
         const imageIndex = await Banner.findOne({ imageType: "Banner" })
         const imgPath = imageIndex.banners[req.body.index]
         // console.log(imgPath);
-        const filePath = `\public` + imgPath
         const isDelete = await Banner.updateOne({ imageType: "Banner" }, { $pull: { banners: imgPath } })
-
+        
+        // const filePath = `\public` + imgPath
         // fs.unlink(filePath, async (err) => {  // delete image file
         //     if (err) {
         //         throw Error("Failed to delete image")
@@ -58,7 +58,6 @@ const deleteBanner = async (req, res) => {
         //         else throw Error("Failed to update delete in database")
         //     }
         // })
-        res.json()
 
     } catch (error) {
         console.log(error.message)
