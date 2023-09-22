@@ -339,18 +339,19 @@ const deleteFile = async (req, res) => {
         const filePath = `\public` + product.product_image[imageIndex]
         const isDelete = await Product.updateOne({ _id: req.body.product_id }, { $pull: { product_image: product.product_image[imageIndex] } })
 
-        fs.unlink(filePath, async (err) => {  // delete image file
-            if (err) {
-                throw Error("Failed to delete image")
-            } else {
+        // fs.unlink(filePath, async (err) => {  // delete image file
+        //     if (err) {
+        //         throw Error("Failed to delete image")
+        //     } else {
 
-                if (isDelete.modifiedCount >= 1) {
-                    // console.log('File has been successfully deleted.');
-                    res.json()
-                }
-                else throw Error("Failed to update delete in database")
-            }
-        })
+        //         if (isDelete.modifiedCount >= 1) {
+        //             // console.log('File has been successfully deleted.');
+        //             res.json()
+        //         }
+        //         else throw Error("Failed to update delete in database")
+        //     }
+        // })
+        res.json()
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
