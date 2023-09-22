@@ -21,31 +21,26 @@
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
                         <input type="email" name="email" class="form-control" id="emailForOTP"
-                            onchange="emailOTPUpdate()" placeholder="Enter email ID" required>
+                            onchange="emailOTPUpdate()" value="<%= locals.email %>" required>
 
                         <% if(!locals.message){%>
                             <button class="btn p-1 mt-2 btn-light" id="sendOTPbutton" type="submit">send OTP</button>
                             <% } else { %>
-                                <button class="btn p-1 mt-2 btn-light" id="sendOTPbutton" type="submit">Re-send
-                                    OTP</button>
+                                <button class="btn p-1 mt-2 btn-danger" id="ResendOTPbutton" type="submit" disabled>Re-send OTP</button> 
+                                    <span id="timer"></span>
                                 <% } %>
-
-
                 </form>
 
             </div>
             <form class="formData" action="/otpLoginVerify" method="post">
 
             <label for="otp" class="form-label">OTP</label>
-            <input type="email" name="email" class="form-control" id="emailOTPFill" placeholder="Enter email ID" hidden
-                required>
-
+                <input type="email" name="email" class="form-control" id="emailOTPFill" value="<%= locals.email %>" hidden required>
             <div class="mb-3">
                 <input type="string" name="otp" class="form-control" id="otp" placeholder="Enter email OTP" required>
             </div>
             <br>
             <% if(locals.message){%>
-
                 <div class="alert alert-warning text-center">
                     <%=locals.message%>
                 </div>
@@ -55,11 +50,32 @@
                     </div>
                     </form>
                     <p>Don't have an account? <a href="/register">Signup</a></p>
-
                     <a href="/login">Login with Password</a></p>
-
         </div>
+    </div>
+    </div>
+    <script>
+            const OTPButton = document.getElementById("ResendOTPbutton")
+            let timerOn = true;
+            function timer(remaining) {
+            var m = Math.floor(remaining / 60);
+            var s = remaining % 60;
+            m = m < 10 ? '0' + m : m;
+            s = s < 10 ? '0' + s : s;
 
-    </div>
-    </div>
+            document.getElementById('timer').innerHTML = m + ':' + s;
+            remaining -= 1;
+            
+            if(remaining >= 0 && timerOn) {
+                setTimeout(function() {
+                    timer(remaining);
+                }, 1000);
+                return;
+            }
+
+            // after timeout
+            OTPButton.disabled = false
+            }
+            timer(60);
+    </script>
     <%- include('../layouts/footer') %>

@@ -39,6 +39,7 @@ const requestOTP = async (req, res) => {
         })
         res.render('otpLogin', {
             message: "OTP send to Email",
+            email,
         })
         // res.status(200).json(createdOTP);
     } catch (error) {

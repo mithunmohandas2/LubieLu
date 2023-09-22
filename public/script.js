@@ -456,10 +456,16 @@ async function applyDiscount() {
     const walletSelect = document.getElementById('walletSelect');
     walletSelect.checked = false;
     const walletInput = document.getElementById('wallet')
-    walletInput.style.display = "none";
+    walletInput.style.display = "none";   
 
   } else { // if no valid coupon found
-    alert("Invalid Coupon")
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Invalid Coupon',
+      showConfirmButton: false,
+      timer: 1500
+    })
   }
 }
 
