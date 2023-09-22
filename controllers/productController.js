@@ -215,7 +215,7 @@ const addProduct = async (req, res) => {
 const insertProduct = async (req, res) => {
     try {
         const productImages = req.files;
-        const imagePaths = productImages.map(image => image.path);
+        const imagePaths = productImages.map(image => "\\productImages\\"+image.filename);
         const SP = Math.round(req.body.sellingPrice)
 
         const product = new Product({
@@ -235,18 +235,7 @@ const insertProduct = async (req, res) => {
         })
 
         const productData = await product.save();
-        // console.log(productData); 
-
-        // =========Change Product Image path ==========
-        const Match = await Product.findOne({ _id: productData._id })
-        const imgPaths = Match.product_image
-        let temp2 = []
-        for (i = 0; i < imgPaths.length; i++) {
-            let temp = imgPaths[i].split("\\");
-            temp2[i] = "\\productImages\\" + temp.slice(2).join("\\")
-        }
-        const Change = await Product.updateOne({ _id: productData._id }, { $set: { product_image: temp2 } })
-
+        
         if (productData) {  // adding to database success?
             res.redirect('/admin/product_management?alert=Product added successfully')
         } else {
@@ -286,6 +275,7 @@ const productSearch = async (req, res) => {
     }
 }
 // ---------------user search ----------------------------
+
 const userSearchResult = async (req, res) => {
     try {
         // console.log(req.body)
@@ -390,11 +380,11 @@ const deleteProduct = async (req, res) => {
     }
 }
 
-// ------EDIT PRODUCT------------------pending--------------
+// ------EDIT PRODUCT------------------
 
 const editSingleProduct = async (req, res) => {
     // console.log(req.body);
-    // console.log(req.files);
+    console.log(req.files);
     try {
         const productImages = req.files;
         const imagePaths = productImages.map(image => image.path);
