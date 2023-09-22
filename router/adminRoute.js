@@ -37,8 +37,8 @@ admin_route.post('/blockUser/',auth.isLogin, auth.cookieCheck, adminController.b
 admin_route.get('/product_management',auth.isLogin, auth.cookieCheck, productController.productManagement);
 admin_route.post('/productSearch',auth.isLogin, auth.cookieCheck, productController.productSearch);
 admin_route.get('/addProduct',auth.isLogin,productController.addProduct)
+admin_route.get('/editProductLoad',auth.isLogin,productController.editProductLoad)
 admin_route.post('/insertProduct',auth.isLogin, upload.array('product_image', 6),productController.insertProduct)
-admin_route.post('/editProductLoad',auth.isLogin,productController.editProductLoad)
 admin_route.post('/editSingleProduct',auth.isLogin, upload.array('product_image', 6), productController.editSingleProduct)
 admin_route.post('/deleteFile',auth.isLogin, productController.deleteFile)
 admin_route.post('/deleteProduct',auth.isLogin,productController.deleteProduct)

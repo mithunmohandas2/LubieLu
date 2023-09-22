@@ -2,7 +2,7 @@ const Product = require("../models/productModel");
 const Category = require("../models/productCategoryModel");
 const subCategory = require("../models/productSubCategoryModel");
 const Cart = require("../models/cartModel");
-const Wishlist = require ("../models/wishlistModel")
+const Wishlist = require("../models/wishlistModel")
 const { isValidObjectId } = require("mongoose");
 
 const fs = require('fs');
@@ -215,7 +215,7 @@ const addProduct = async (req, res) => {
 const insertProduct = async (req, res) => {
     try {
         const productImages = req.files;
-        const imagePaths = productImages.map(image => "\\productImages\\"+image.filename);
+        const imagePaths = productImages.map(image => "\\productImages\\" + image.filename);
         const SP = Math.round(req.body.sellingPrice)
 
         const product = new Product({
@@ -235,7 +235,7 @@ const insertProduct = async (req, res) => {
         })
 
         const productData = await product.save();
-        
+
         if (productData) {  // adding to database success?
             res.redirect('/admin/product_management?alert=Product added successfully')
         } else {
@@ -308,16 +308,22 @@ const editProductLoad = async (req, res) => {
     try {
         const categoryList = await Category.find({ is_delete: 0 })
         const subCategoryList = await subCategory.find({ isDelete: 0 })
-        const productfill = await Product.find({ _id: req.body.product_id })
-        //    console.log(productfill); 
+        const productfill = await Product.findOne({ _id: req.query.productID })
+
+        const categoryDetails = await Category.findOne({ _id: productfill.category_id })
+        const subCategoryDetails = await subCategory.findOne({ _id: productfill.subCategory_id })
+
         res.render('editProduct', {
             title: "Lubie-Lu : Product Management",
             categories: categoryList,
             subCategories: subCategoryList,
             category_alert: req.query.category_alert,
             subCategory_alert: req.query.subCategory_alert,
-            data: productfill
+            data: productfill,
+            categoryDetails: categoryDetails.category_name,
+            subCategoryDetails: subCategoryDetails.subCategoryName,
         });
+        
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -384,7 +390,7 @@ const deleteProduct = async (req, res) => {
 
 const editSingleProduct = async (req, res) => {
     // console.log(req.body);
-    console.log(req.files);
+    // console.log(req);
     try {
         const productImages = req.files;
         const imagePaths = productImages.map(image => image.path);
@@ -444,7 +450,7 @@ const productDetail = async (req, res) => {
         // console.log(req.query);
         const product = await Product.findOne({ $and: [{ _id: req.query.product_id }, { is_blocked: false }] })
         const otherProducts = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(4)
-        const wishlistCheck = await Wishlist.findOne({userID : req.session._id, products: { $in: [req.query.product_id] } })
+        const wishlistCheck = await Wishlist.findOne({ userID: req.session._id, products: { $in: [req.query.product_id] } })
 
         res.render('productDetail', {
             product: product,
@@ -461,7 +467,7 @@ const productDetail = async (req, res) => {
 // Load sub category in form
 const loadSubCat = async (req, res) => {
     try {
-        const subCat = await subCategory.find({$and :[{ rootCategoryId: req.body.catID },{isDelete : false}]})
+        const subCat = await subCategory.find({ $and: [{ rootCategoryId: req.body.catID }, { isDelete: false }] })
         res.json(subCat);
 
     } catch (error) {

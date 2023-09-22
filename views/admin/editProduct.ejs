@@ -13,17 +13,12 @@
 
         <div class="mt-5 text-center container">
             <div>
-
                 <!-- EDIT PRODUCT -->
                 <h3 class="my-4 py-2">EDIT PRODUCT</h3>
-
-                <!-- Category management -->
-                <%- include('./manageCategory') %>
-
             </div>
 
             <!-- EDIT product section -->
-            <div class="col-md-8 text-start bg-light p-5 mb-4" style="border-radius: 2em;">
+            <div class="text-start bg-light p-5 mb-4" style="border-radius: 2em;">
                 <h5 class="mb-4 pb-2 ">Product Details</h5>
                 <form class="row g-3 text-start" action="/admin/editSingleProduct" method="post"
                     enctype="multipart/form-data">
@@ -31,26 +26,26 @@
                     <div class="col-12 mb-3">
                     <label for="product_id" class="form-label">Product ID</label>
                     <input type="text" class="form-control" name="product_id"
-                        value="<%= locals.data ? locals.data[0]._id : '' %>" readonly required>
+                        value="<%= locals.data ? locals.data._id : '' %>" readonly required>
                     </div>
 
                     <div class="col-12 mb-3">
                         <label for="product_name" class="form-label">Product Name</label>
                         <input type="text" class="form-control" name="product_name"
-                            value="<%= locals.data ? locals.data[0].product_name : '' %>" required>
+                            value="<%= locals.data ? locals.data.product_name : '' %>" required>
                     </div>
 
                     <div class="col-12">
                         <label for="description" class="form-label">Product Description</label>
                         <textarea class="form-control" name="description" id="floatingTextarea2" style="height: 8em"
-                            required> <%= locals.data ? locals.data[0].description : '' %> </textarea>
+                            required> <%= locals.data ? locals.data.description : '' %> </textarea>
                         <label for="floatingTextarea2"></label>
                     </div>
 
-                    <% if (locals.data){ for(i=0;i<data[0].product_image.length;i++){ %>
+                    <% if (locals.data){ for(i=0;i<data.product_image.length;i++){ %>
                         <div class="col-6 col-md-4 col-lg-3 card py-2">
-                            <img class="mb-2" style="height: 8em;" src="<%=data[0].product_image[i]%>" alt="product image"> </img>
-                            <button type="button" onclick="deleteImage('<%= i %>', '<%= locals.data[0]._id %>')" class="btn btn-outline-danger">Delete</button>
+                            <img class="mb-2" style="height: 14em;" src="<%=data.product_image[i]%>" alt="product image"> </img>
+                            <button type="button" onclick="deleteImage('<%= i %>', '<%= locals.data._id %>')" class="btn btn-outline-danger">Delete</button>
                         </div>
                      <% } } %>
 
@@ -59,7 +54,8 @@
 
                         <div class="col-12 mb-4">
                             <label for="product_image" class="form-label">Product Images</label>
-                            <input type="file" class="form-control" accept="image/*"  qname="product_image" multiple id="imageInput">
+                            <input type="file" class="form-control" name="product_image" accept="image/*" multiple id="imageInput">
+    
                         </div>
 
                         <div class="row">
@@ -67,8 +63,11 @@
                                 <label for="category_id" class="form-label">Product Category</label>
                                 <select name="category_id" class="form-select" id="catSelection"
                                     onclick="loadSubCategory(value)"
-                                    value="<%= locals.data ? locals.data[0].category_id : '' %>" required>
+                                    value="<%= locals.data ? locals.data.category_id : '' %>" required>
                                     <!-- array of categories ids -->
+                                    <option value="<%= locals.data ? locals.data.category_id : '' %>">
+                                        <%= locals.categoryDetails ? locals.categoryDetails : '' %></option>
+                                    
                                     <option value="" disabled>Available Categories</option>
                                     <% if (locals.categories){ categories.forEach((name)=>{ %>
 
@@ -85,6 +84,8 @@
                                 <label for="subCategory" class="form-label">Sub Category</label>
                                 <select name="subCategory_id" class="form-select" id="subCat" required>
                                     <!-- array of sub categories ids -->
+                                    <option value="<%= locals.subCategoryDetails ? locals.data.subCategory_id : '' %>">
+                                        <%= locals.subCategoryDetails ? locals.subCategoryDetails : '' %></option>
                                     <option disabled>Available Sub Categories</option>
                                 </select>
 
@@ -92,7 +93,7 @@
                             <div class="col-md-4 mb-4">
                                 <label for="brand" class="form-label">Brand</label>
                                 <input type="text" class="form-control" name="brand"
-                                    value="<%= locals.data ? locals.data[0].brand : '' %>" required>
+                                    value="<%= locals.data ? locals.data.brand : '' %>" required>
                             </div>
                         </div>
 
@@ -101,19 +102,19 @@
                             <div class="col-md-4 mb-4">
                                 <label for="purchasePrice" class="form-label">Purchase price</label>
                                 <input type="number" step="0.01" class="form-control" name="purchasePrice"
-                                    value="<%= locals.data ? locals.data[0].purchasePrice : '' %>" required>
+                                    value="<%= locals.data ? locals.data.purchasePrice : '' %>" required>
                             </div>
 
                             <div class="col-md-4 mb-4">
                                 <label for="stock" class="form-label">Stock</label>
                                 <input type="number" class="form-control w-50" name="stock"
-                                    value="<%= locals.data ? locals.data[0].stock : '' %>" required>
+                                    value="<%= locals.data ? locals.data.stock : '' %>" required>
                             </div>
 
                             <div class="col-md-4 mb-4">
                                 <label for="mrp" class="form-label">MRP</label>
                                 <input type="number" step="0.01" class="form-control" name="mrp"
-                                    value="<%= locals.data ? locals.data[0].mrp : '' %>" required>
+                                    value="<%= locals.data ? locals.data.mrp : '' %>" required>
                             </div>
                         </div>
 
@@ -122,17 +123,18 @@
                             <div class="col-md-4 mb-4">
                                 <label for="basePrice" class="form-label">Base price</label>
                                 <input type="number" step="0.01" class="form-control" id="basePrice" name="basePrice"
-                                    onchange=calculate() value="<%= locals.data ? locals.data[0].basePrice : '' %>"
+                                    onchange=calculate() value="<%= locals.data ? locals.data.basePrice : '' %>"
                                     required>
                             </div>
 
                             <div class="col-md-2 mb-4">
                                 <label for="gst" class="form-label">GST</label>
                                 <select name="gst" id="gst" class="form-select" onchange=calculate()
-                                    aria-valuenow="<%= locals.data ? locals.data[0].gst : '' %>" required>
-                                    <option value="<%= locals.data ? locals.data[0].gst : '' %>">
-                                        <%= locals.data ? locals.data[0].gst : '' %> %
+                                    aria-valuenow="<%= locals.data ? locals.data.gst : '' %>" required>
+                                    <option value="<%= locals.data ? locals.data.gst : '' %>">
+                                        <%= locals.data ? locals.data.gst : '' %> %
                                     </option>
+                                    <option disabled>Select</option>
                                     <option value=0>0%</option>
                                     <option value=3>3%</option>
                                     <option value=5>5%</option>
@@ -145,13 +147,13 @@
                             <div class="col-md-2 mb-4">
                                 <label for="discount" class="form-label">Discount</label>
                                 <input type="number" step="0.01" id="discount" class="form-control" name="discount"
-                                    onchange=calculate() value="<%= locals.data ? locals.data[0].discount : '' %>">
+                                    onchange=calculate() value="<%= locals.data ? locals.data.discount : '' %>">
                             </div>
 
                             <div class="col-md-4 mb-4">
                                 <label for="sellingPrice" class="form-label">Selling Price</label>
                                 <input type="number" step="0.01" class="form-control" id="sellingPrice"
-                                    name="sellingPrice" value="<%= locals.data ? locals.data[0].sellingPrice : '' %>"
+                                    name="sellingPrice" value="<%= locals.data ? locals.data.sellingPrice : '' %>"
                                     onclick=calculate() readonly>
                             </div>
 
@@ -166,13 +168,13 @@
                     <div class="col-12 pt-4 text-start">
 
                         <div class="form-check">
-                            <input type="text" class="form-control" value="<%= locals.data ? locals.data[0]._id : '' %>"
+                            <input type="text" class="form-control" value="<%= locals.data ? locals.data._id : '' %>"
                                 name="product_id" hidden>
                             <label for="delete" class="form-label">please tick to confirm</label>
                             <input class="form-check-input" type="checkbox" name="gridCheck" required>
                         </div>
 
-                        <% if(locals.data){ if(locals.data[0].is_blocked==false){ %>
+                        <% if(locals.data){ if(locals.data.is_blocked==false){ %>
                             <button type="submit" class="btn btn-outline-danger px-2">Delete Product</button>
                             <% } else { %>
                                 <button type="submit" class="btn btn-outline-success px-2">Re-activate Product</button>
@@ -181,9 +183,8 @@
                 </form>
             </div>
         </div>
-        </div>
-        </div>
-        </div>
+    </div>
+       
         <br>
 
         <%- include('../layouts/footerlinks') %>

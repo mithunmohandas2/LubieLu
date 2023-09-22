@@ -166,12 +166,7 @@
                         </td>
 
                         <td>
-                          <form action="/admin/editProductLoad" method="post">
-                            <input type="text" name="product_id" value="<%=locals.products[i]._id%>" hidden required />
-                            <button type="submit" class="btn btn-warning py-0 px-1">Edit </button>
-                          </form>
-
-                          </form>
+                            <a href="/admin/editProductLoad?productID=<%=locals.products[i]._id%>"><button type="button" class="btn btn-warning py-0 px-1">Edit </button></a>
                         </td>
                       </tr>
                       <% } } %>
