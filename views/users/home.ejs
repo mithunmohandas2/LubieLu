@@ -115,12 +115,12 @@
                                 <div class="w-100">
                                     <% if (item.product_image[0]){ %>
                                         <a href="/productDetail?product_id=<%=item._id%>">
-                                            <img class="w-100 curv" src="<%= item.product_image[0]%>"
+                                            <img class="w-100 curv productCard" src="<%= item.product_image[0]%>"
                                                 alt="Product Image">
                                         </a>
                                         <% } else { %>
                                             <a href="/productDetail?product_id=<%=item._id%>">
-                                                <img class="w-100 curv"
+                                                <img class="w-100 curv productCard"
                                                     src="https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg"
                                                     alt="Product Image"></img>
                                             </a>
@@ -148,14 +148,29 @@
                                         </span>
                                     </h6>
                                 </div>
+                            </div>
+                            
+                            <form action="/cart" method="post">   
+                                <div class="text-center my-3" style="position: relative; bottom: 6em;">
+                                    <a href="/productDetail?product_id=<%=item._id%>"><button type="button"
+                                            class="btn btn-outline-danger py-2 w-50">View Details</button></a>
 
-                                <div class="text-center my-3">
-                                    <a href="/productDetail?product_id=<%=item._id%>"><button
-                                            class="btn btn-outline-danger w-50">View Details</button></a>
+                                    <button type="button" class="btn btn-danger mb-1" onclick="addToWishlist('<%=item._id%>')">
+                                        <span class="material-symbols-outlined">
+                                            favorite
+                                        </span></button>
+
+                                        <input type="text" name="product_id" value="<%=item._id%>" hidden />
+                                    <input type="number" name="qty" id="qtyCart" value=1 required hidden>
+
+                                        <button type="submit" class="btn btn-warning mb-1">
+                                                <span class="material-symbols-outlined">
+                                                    add_shopping_cart
+                                                </span></button>
+                                            </form> 
 
                                 </div>
-
-                            </div>
+                                
                         </div>
                         <% }) } %>
                 </div>

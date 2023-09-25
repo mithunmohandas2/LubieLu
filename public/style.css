@@ -1,21 +1,30 @@
-.curv{
-    border-radius: 1em;
+.curv {
+  border-radius: 1em;
 }
 
 .zoomable {
-    transition: transform 0.3s; /* Add a smooth transition effect */
+  transition: transform 0.3s;
+  /* Add a smooth transition effect */
 }
 
 .zoomable:hover {
-    transform: scale(1.3); /* Apply a zoom effect on hover */
+  transform: scale(1.3);
+  /* Apply a zoom effect on hover */
 }
 
 .sticky-div {
-    z-index: 3;
-  }
+  z-index: 3;
+}
+
+
 @media (min-width: 768px) {
-    .sticky-div {
-      position: sticky;
-      top: 0em;
-    }
+  .sticky-div {
+    position: sticky;
+    top: 0em;
   }
+
+  .productCard {
+    aspect-ratio: 1;
+  }
+
+}

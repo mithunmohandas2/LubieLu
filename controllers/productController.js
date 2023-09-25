@@ -451,12 +451,10 @@ const productDetail = async (req, res) => {
     try {
         // console.log(req.query);
         const product = await Product.findOne({ $and: [{ _id: req.query.product_id }, { is_blocked: false }] })
-        const otherProducts = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(4)
         const wishlistCheck = await Wishlist.findOne({ userID: req.session._id, products: { $in: [req.query.product_id] } })
 
         res.render('productDetail', {
             product: product,
-            products: otherProducts,
             username: req.session.user_name,
             wishlistCheck,
         });

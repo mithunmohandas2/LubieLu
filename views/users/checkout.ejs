@@ -122,7 +122,7 @@
                                         <div class="mb-3">
                                             <label for="phone" class="form-label">Phone number</label>
                                             <input type="text" name="phone" class="form-control" id="phone"
-                                                pattern="[0-9]*"  onchange="resetAddressForm()"
+                                                pattern="[0-9]*"  onchange="resetAddressForm()" oninput="setCustomValidity('')" 
                                                 oninvalid="setCustomValidity('Please enter a valid mobile number')"
                                                 placeholder="Enter contact number" required>
                                         </div>
@@ -162,7 +162,7 @@
                                                 <label for="pincode" class="form-label">Pincode</label>
                                                 <input type="string" name="pincode" class="form-control" id="pincode"
                                                     min=100000 max=999999 pattern="[0-9]*"  onchange="resetAddressForm()"
-                                                    oninvalid="setCustomValidity('Please enter a valid Pincode')"
+                                                    oninput="setCustomValidity('')" oninvalid="setCustomValidity('Please enter a valid Pincode')"
                                                     placeholder="Enter pincode" required>
                                             </div>
                                             <div>

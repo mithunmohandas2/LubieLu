@@ -37,15 +37,17 @@
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
-                            <input type="email" name="email" class="form-control" id="email"
-                                placeholder="Enter email ID" required>
+                            <input type="email" name="email" class="form-control" id="email"  
+                            oninvalid="setCustomValidity('Please enter valid email address')"
+                            oninput="setCustomValidity('')" pattern="^(?=.*[@])(?=.*[.]).{5,}$" 
+                            placeholder="Enter email ID" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="number" class="form-label">Phone number</label>
-                            <input type="text" name="phone" class="form-control" id="phone" pattern="[0-9]*" required minlength="10"
-                                oninvalid="setCustomValidity('Please enter a valid mobile number')"
-                                placeholder="Enter contact number" required>
+                            <input type="tel" name="phone" class="form-control" id="phone" pattern="[0-9]*"
+                            minlength="10"   oninvalid="setCustomValidity('Please enter valid mobile number')"
+                            oninput="setCustomValidity('')" placeholder="Enter contact number" required>
                         </div>
 
                         <div class="mb-3">
