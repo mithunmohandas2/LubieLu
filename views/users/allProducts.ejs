@@ -81,6 +81,8 @@
                     <div class="col-sm-2 my-3">
                         <label for="perPage" class="form-label">Product per page</label>
                         <select name="perPage" class="form-select w-50" id="perPage" onchange="productFilter()">
+
+                            
                             <% if (locals.queryData) { %>
                                 <option value="<%= locals.queryData.perPage %>">
                                     <%= locals.queryData.perPage %>

@@ -278,20 +278,33 @@ const productSearch = async (req, res) => {
 
 const userSearchResult = async (req, res) => {
     try {
-        // console.log(req.body)
         const keyword = req.body.search
         const regex = new RegExp(`${keyword}`, 'i');
         const searchProduct = await Product.find({ $and: [{ product_name: { $regex: regex } }, { is_blocked: 0 }] }).sort({ updatedAt: -1 });   //find products with keyword
-
-        // console.log(searchProduct);
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
 
         if (searchProduct) {
-            res.render('searchResult', {
-                title: "Lubie-Lu : Search Result",
-                alert: req.query.alert,
-                username: req.session.user_name,
-                products: searchProduct,
-            });
+            if (req.session._id) {
+                const wishListData = await Wishlist.findOne({ userID: req.session._id })
+                const cartData = await Cart.findOne({ userID: req.session._id })
+                res.render('searchResult', {
+                    title: "Lubie-Lu : Search Result",
+                    alert: req.query.alert,
+                    username: req.session.user_name,
+                    products: searchProduct,
+                    wishListCount: wishListData.products.length,
+                    cartCount: cartData.items.length,
+                });
+
+            } else {
+                res.render('searchResult', {
+                    title: "Lubie-Lu : Search Result",
+                    alert: req.query.alert,
+                    username: req.session.user_name,
+                    products: searchProduct,
+                });
+            }
         } else {
             res.redirect('/searchResult?alert=searched product not found')
         }
@@ -323,7 +336,7 @@ const editProductLoad = async (req, res) => {
             categoryDetails: categoryDetails.category_name,
             subCategoryDetails: subCategoryDetails.subCategoryName,
         });
-        
+
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -337,7 +350,7 @@ const deleteFile = async (req, res) => {
         const imageIndex = req.body.index;
         const product = await Product.findOne({ _id: req.body.product_id })
         const isDelete = await Product.updateOne({ _id: req.body.product_id }, { $pull: { product_image: product.product_image[imageIndex] } })
-        
+
         // const filePath = `\public` + product.product_image[imageIndex]
         // fs.unlink(filePath, async (err) => {  // delete image file
         //     if (err) {
@@ -352,7 +365,7 @@ const deleteFile = async (req, res) => {
         //     }
         // })
         res.json()
-        
+
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -452,12 +465,27 @@ const productDetail = async (req, res) => {
         // console.log(req.query);
         const product = await Product.findOne({ $and: [{ _id: req.query.product_id }, { is_blocked: false }] })
         const wishlistCheck = await Wishlist.findOne({ userID: req.session._id, products: { $in: [req.query.product_id] } })
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
 
-        res.render('productDetail', {
-            product: product,
-            username: req.session.user_name,
-            wishlistCheck,
-        });
+        if (req.session._id) {
+            const wishListData = await Wishlist.findOne({ userID: req.session._id })
+            const cartData = await Cart.findOne({ userID: req.session._id })
+            res.render('productDetail', {
+                product: product,
+                username: req.session.user_name,
+                wishlistCheck,
+                wishListCount: wishListData.products.length,
+                cartCount: cartData.items.length,
+            });
+
+        } else {
+            res.render('productDetail', {
+                product: product,
+                username: req.session.user_name,
+                wishlistCheck,
+            });
+        }
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })

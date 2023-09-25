@@ -1,6 +1,5 @@
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
-const Cart = require("../models/cartModel");
 const Address = require("../models/userAddress");
 const Order = require("../models/ordersModel");
 const Category = require("../models/productCategoryModel");
@@ -8,8 +7,9 @@ const subCategory = require("../models/productSubCategoryModel");
 const Banner = require("../models/bannerModel");
 const Razorpay = require('razorpay');
 const Coupons = require("../models/couponModel");
-const Wallet = require("../models/walletModel");
+const Cart = require("../models/cartModel");
 const Wishlist = require("../models/wishlistModel");
+const Wallet = require("../models/walletModel");
 const dotenv = require("dotenv").config();
 // -----------------------------------------------
 
@@ -121,11 +121,25 @@ const loadHome = async (req, res) => {
     try {
         const products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(6)
         const banners = await Banner.findOne()
-        res.render('home', {
-            products,
-            username: req.session.user_name,
-            banners,
-        });
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
+
+        if (req.session._id) {
+            res.render('home', {
+                products,
+                username: req.session.user_name,
+                banners,
+                wishListCount: wishListData.products.length,
+                cartCount: cartData.items.length,
+            });
+        } else {
+            res.render('home', {
+                products,
+                username: req.session.user_name,
+                banners,
+            });
+        }
+
     } catch (error) {
         console.log(error.message)
         res.render('error', { error: error.message })
@@ -181,15 +195,33 @@ const loadAllProducts = async (req, res) => {
 
             const queryData = { cat, subCat, sort, perPage, page, categoryName, subCatName, }
 
-            res.render('allProducts', {
-                title: "Product Inventory",
-                products: products,
-                categories: categoryList,
-                subCategories: subCategoryList,
-                username: req.session.user_name,
-                totalPage,
-                queryData,
-            });
+            if (req.session._id) {
+                const wishListData = await Wishlist.findOne({ userID: req.session._id })
+                const cartData = await Cart.findOne({ userID: req.session._id })
+                res.render('allProducts', {
+                    title: "Product Inventory",
+                    products: products,
+                    categories: categoryList,
+                    subCategories: subCategoryList,
+                    username: req.session.user_name,
+                    totalPage,
+                    queryData,
+                    wishListCount: wishListData.products.length,
+                    cartCount: cartData.items.length,
+                });
+
+            } else {
+                res.render('allProducts', {
+                    title: "Product Inventory",
+                    products: products,
+                    categories: categoryList,
+                    subCategories: subCategoryList,
+                    username: req.session.user_name,
+                    totalPage,
+                    queryData,
+                });
+
+            }
 
         } else { //no query present
             const productCount = await Product.find({ is_blocked: 0 }).countDocuments()
@@ -197,14 +229,31 @@ const loadAllProducts = async (req, res) => {
 
             const products = await Product.find({ is_blocked: 0 }).sort({ updatedAt: -1 }).limit(12)
 
-            res.render('allProducts', {
-                title: "Product Inventory",
-                products: products,
-                categories: categoryList,
-                subCategories: subCategoryList,
-                username: req.session.user_name,
-                totalPage,
-            });
+            if (req.session._id) {
+                const wishListData = await Wishlist.findOne({ userID: req.session._id })
+                const cartData = await Cart.findOne({ userID: req.session._id })
+                res.render('allProducts', {
+                    title: "Product Inventory",
+                    products: products,
+                    categories: categoryList,
+                    subCategories: subCategoryList,
+                    username: req.session.user_name,
+                    totalPage,
+                    wishListCount: wishListData.products.length,
+                    cartCount: cartData.items.length,
+                });
+
+            } else {
+                res.render('allProducts', {
+                    title: "Product Inventory",
+                    products: products,
+                    categories: categoryList,
+                    subCategories: subCategoryList,
+                    username: req.session.user_name,
+                    totalPage,
+                });
+
+            }
         }
 
     } catch (error) {
@@ -218,6 +267,7 @@ const loadAllProducts = async (req, res) => {
 
 const loadCart = async (req, res) => {
     try {
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
         const cartData = await Cart.findOne({ userID: req.session._id })
         let productData = []
         if (cartData) {
@@ -237,6 +287,8 @@ const loadCart = async (req, res) => {
             cart: cartData,
             products: productData,
             nilStock,
+            wishListCount: wishListData.products.length,
+            cartCount: cartData.items.length,
         });
     } catch (error) {
         console.log(error.message)
@@ -291,6 +343,7 @@ const removeCart = async (req, res) => {
 
 const loadCheckout = async (req, res) => {
     try {
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
         const cartData = await Cart.findOne({ userID: req.session._id })
         let productData = []
         if (cartData) {
@@ -317,6 +370,8 @@ const loadCheckout = async (req, res) => {
             address: userAddress,
             coupon,
             walletData,
+            wishListCount: wishListData.products.length,
+            cartCount: cartData.items.length,
         });
     } catch (error) {
         console.log(error.message)
@@ -470,10 +525,14 @@ const checkout = async (req, res) => {
 const orderSuccess = async (req, res) => {
     try {
         let orderData = await Order.findOne({ _id: req.query.orderID })
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
 
         res.render("orderSuccess", {
             username: req.session.user_name,
             orderData,
+            wishListCount: wishListData.products.length,
+            cartCount: cartData.items.length,
         })
 
     } catch (error) {
@@ -487,9 +546,14 @@ const orderSuccess = async (req, res) => {
 const orderHistory = async (req, res) => {
     try {
         const OrderData = await Order.find({ userID: req.session._id }).sort({ createdAt: -1 })
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
+
         res.render('orderHistory', {
             username: req.session.user_name,
             orders: OrderData,
+            wishListCount: wishListData.products.length,
+            cartCount: cartData.items.length,
         });
 
     } catch (error) {
@@ -502,6 +566,8 @@ const orderHistory = async (req, res) => {
 
 const orderDetails = async (req, res) => {
     try {
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
         const orders = await Order.findOne({ _id: req.query.orderID })
         const address = await Address.findOne({ _id: orders.shippingAddress })
         let productData = []
@@ -515,6 +581,8 @@ const orderDetails = async (req, res) => {
             orders,
             address,
             productData,
+            wishListCount: wishListData.products.length,
+            cartCount: cartData.items.length,
         });
 
     } catch (error) {
@@ -647,9 +715,14 @@ const refundReturn = async (req, res) => {
 const loadWallet = async (req, res) => {
     try {
         const walletData = await Wallet.findOne({ userID: req.session._id })
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
+
         res.render('wallet', {
             username: req.session.user_name,
             walletData,
+            wishListCount: wishListData.products.length,
+            cartCount: cartData.items.length,
         });
     } catch (error) {
         console.log(error.message)
@@ -661,7 +734,8 @@ const loadWallet = async (req, res) => {
 
 const loadWishlist = async (req, res) => {
     try {
-        // const wishlist = await Wishlist.findOne({ userID: req.session._id })
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
         const wishlist = await Wishlist.findOne({ userID: req.session._id })
             .populate("products", "_id product_image product_name sellingPrice")
             .exec();
@@ -669,6 +743,9 @@ const loadWishlist = async (req, res) => {
         res.render('wishlist', {
             username: req.session.user_name,
             wishlist,
+            wishListCount: wishListData.products.length,
+            cartCount: cartData.items.length,
+
         });
     } catch (error) {
         console.log(error.message)
@@ -735,11 +812,16 @@ const userProfile = async (req, res) => {
         const userMatch = await User.findOne({ _id: req.session._id })
         const defaultAddress = await Address.findOne({ _id: userMatch.defaultAddress })
         const userAddress = await Address.find({ $and: [{ userID: req.session._id }, { disabled: false }] }).sort({ updatedAt: -1 }).limit(4)
+        const wishListData = await Wishlist.findOne({ userID: req.session._id })
+        const cartData = await Cart.findOne({ userID: req.session._id })
+
         res.render('userProfile', {
             username: req.session.user_name,
             user: userMatch,
             address: userAddress,
             defaultAddress,
+            wishListCount: wishListData.products.length,
+            cartCount: cartData.items.length,
         });
     } catch (error) {
         console.log(error.message)
@@ -772,7 +854,7 @@ const editProfile = async (req, res) => {
 const changePassword = async (req, res) => {
     try {
         const update = await User.updateOne({ _id: req.session._id }, { $set: { password: req.body.password } })
-        if(!update) throw Error ("unable to change password")
+        if (!update) throw Error("unable to change password")
         res.json({ msg: "Success" })
     } catch (error) {
         res.json({ msg: error.message })

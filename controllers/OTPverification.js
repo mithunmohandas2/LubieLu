@@ -103,7 +103,7 @@ const otpLoginVerify = async (req, res) => {
         const userMatch = await User.findOne({ email: req.body.email })
         if (userMatch) { // if email exists
             if (userMatch.is_blocked === true) {
-               return res.render('otpLogin', { message: 'User Blocked by admin' }); // blocked user
+                return res.render('otpLogin', { message: 'User Blocked by admin' }); // blocked user
             } else {
                 const OtpRecord = await OTP.findOne({ email: req.body.email })
                 const enteredOTP = req.body.otp
@@ -123,7 +123,7 @@ const otpLoginVerify = async (req, res) => {
 
                     // console.log(req.session)
                     console.log(userMatch.firstName + " (user) logged in")     //
-                    res.redirect("/home");
+                    res.redirect("/userProfile");
                 } else {
                     res.render('otpLogin', { message: 'Incorrect OTP' });
                 }
