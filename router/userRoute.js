@@ -39,7 +39,7 @@ user_route.post('/otpLoginVerify', auth.isLogout,OTPVerification.otpLoginVerify)
 user_route.get('/allProducts', userController.loadAllProducts);
 user_route.post('/loadSubCat',productController.loadSubCat)  
 user_route.get('/productDetail', productController.productDetail);
-user_route.post('/searchResult', productController.userSearchResult);
+user_route.get('/searchResult', productController.userSearchResult);
 
 user_route.get('/cart', auth.isLogin, userController.loadCart);
 user_route.post('/cart', auth.isLogin, userController.addToCart);

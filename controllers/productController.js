@@ -278,11 +278,25 @@ const productSearch = async (req, res) => {
 
 const userSearchResult = async (req, res) => {
     try {
-        const keyword = req.body.search
+        const keyword = req.query.search
         const regex = new RegExp(`${keyword}`, 'i');
-        const searchProduct = await Product.find({ $and: [{ product_name: { $regex: regex } }, { is_blocked: 0 }] }).sort({ updatedAt: -1 });   //find products with keyword
+        let searchProduct = await Product.find({ $and: [{ product_name: { $regex: regex } }, { is_blocked: 0 }] }).sort({ updatedAt: -1 });   //find products with keyword
         const wishListData = await Wishlist.findOne({ userID: req.session._id })
         const cartData = await Cart.findOne({ userID: req.session._id })
+        const categoryList = await Category.find({ is_delete: 0 })
+        const categoryDetail = categoryList.filter((prd) => prd._id == req.query.CatID)
+
+        let queryData;
+        if (categoryDetail.length) {
+            queryData = {
+                catID: req.query.CatID,
+                categoryName: categoryDetail[0].category_name,
+            }
+        }
+
+        if (req.query.CatID && searchProduct) {
+            searchProduct = searchProduct.filter((prd) => prd.category_id == req.query.CatID)
+        }
 
         if (searchProduct) {
             if (req.session._id) {
@@ -295,6 +309,9 @@ const userSearchResult = async (req, res) => {
                     products: searchProduct,
                     wishListCount: wishListData.products.length,
                     cartCount: cartData.items.length,
+                    searchKeyword: keyword,
+                    categories: categoryList,
+                    queryData,
                 });
 
             } else {
@@ -303,6 +320,9 @@ const userSearchResult = async (req, res) => {
                     alert: req.query.alert,
                     username: req.session.user_name,
                     products: searchProduct,
+                    searchKeyword: keyword,
+                    categories: categoryList,
+                    queryData,
                 });
             }
         } else {

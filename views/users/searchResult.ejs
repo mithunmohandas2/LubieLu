@@ -9,6 +9,25 @@
                 </h2>
             </div>
 
+            <select name="category_id" class="form-select" id="CatID"
+            onchange="searchWithCategory()">
+            <!-- array of categories ids -->
+            <% if (locals.queryData) { %>
+                <option value="<%= locals.queryData.catID %>">
+                    <%= locals.queryData.categoryName %>
+                </option>
+                <% } %>
+                    <option value="All">All Categories</option>
+                    <% if (locals.categories){ categories.forEach((name)=>{ %>
+
+                        <option value="<%=name._id%>">
+                            <%=name.category_name%>
+                        </option>
+
+                        <% }) } %>
+
+        </select>
+
             <div class="row">
                 <% if (locals.products){ products.forEach((item)=>{ %>
                     <div class="col-md-6 col-lg-4 my-3">
@@ -94,4 +113,11 @@
 
         <!-- end shop section -->
         <%- include('../layouts/footerlinks') %>
+        <script>
+            function searchWithCategory(){
+                const keyword = document.getElementById('search').value
+                const CatID = document.getElementById('CatID').value
+                location.href = `/searchResult?search=${keyword}&CatID=${CatID}`
+            }
+        </script>
             <%- include('../layouts/footer') %>
