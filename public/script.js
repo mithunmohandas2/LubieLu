@@ -364,11 +364,13 @@ async function productFilter(selectedPage) {
   const subCategory = document.getElementById("subCat").value;
   const sort = document.getElementById("sortBy").value;
   const perPage = document.getElementById("perPage").value;
-  // const pageNo = document.get
+  
   location.href = `/allProducts?cat=${category}&subCat=${subCategory}&sort=${sort}&perPage=${perPage}&page=${selectedPage}`
 }
+// -------------------------------------------------
 
-// Sub-Category name populate in view all products
+
+//---- Sub-Category name populate in view all products----------
 async function SubCategoryLoad(id) {
   if (id === "All") {
     document.getElementById("subCat").innerHTML = ""
