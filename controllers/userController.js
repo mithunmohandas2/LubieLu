@@ -129,8 +129,8 @@ const loadHome = async (req, res) => {
                 products,
                 username: req.session.user_name,
                 banners,
-                wishListCount: wishListData.products.length,
-                cartCount: cartData.items.length,
+                wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+                cartCount: cartData && cartData.items ? cartData.items.length : 0,
             });
         } else {
             res.render('home', {
@@ -206,8 +206,8 @@ const loadAllProducts = async (req, res) => {
                     username: req.session.user_name,
                     totalPage,
                     queryData,
-                    wishListCount: wishListData.products.length,
-                    cartCount: cartData.items.length,
+                    wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+                    cartCount: cartData && cartData.items ? cartData.items.length : 0,
                 });
 
             } else {
@@ -239,8 +239,8 @@ const loadAllProducts = async (req, res) => {
                     subCategories: subCategoryList,
                     username: req.session.user_name,
                     totalPage,
-                    wishListCount: wishListData.products.length,
-                    cartCount: cartData.items.length,
+                    wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+                    cartCount: cartData && cartData.items ? cartData.items.length : 0,
                 });
 
             } else {
@@ -287,8 +287,8 @@ const loadCart = async (req, res) => {
             cart: cartData,
             products: productData,
             nilStock,
-            wishListCount: wishListData.products.length,
-            cartCount: cartData.items.length,
+            wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+            cartCount: cartData && cartData.items ? cartData.items.length : 0,
         });
     } catch (error) {
         console.log(error.message)
@@ -370,8 +370,8 @@ const loadCheckout = async (req, res) => {
             address: userAddress,
             coupon,
             walletData,
-            wishListCount: wishListData.products.length,
-            cartCount: cartData.items.length,
+            wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+            cartCount: cartData && cartData.items ? cartData.items.length : 0,
         });
     } catch (error) {
         console.log(error.message)
@@ -531,8 +531,8 @@ const orderSuccess = async (req, res) => {
         res.render("orderSuccess", {
             username: req.session.user_name,
             orderData,
-            wishListCount: wishListData.products.length,
-            cartCount: cartData.items.length,
+            wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+            cartCount: cartData && cartData.items ? cartData.items.length : 0,
         })
 
     } catch (error) {
@@ -552,8 +552,8 @@ const orderHistory = async (req, res) => {
         res.render('orderHistory', {
             username: req.session.user_name,
             orders: OrderData,
-            wishListCount: wishListData.products.length,
-            cartCount: cartData.items.length,
+            wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+            cartCount: cartData && cartData.items ? cartData.items.length : 0,
         });
 
     } catch (error) {
@@ -581,8 +581,8 @@ const orderDetails = async (req, res) => {
             orders,
             address,
             productData,
-            wishListCount: wishListData.products.length,
-            cartCount: cartData.items.length,
+            wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+            cartCount: cartData && cartData.items ? cartData.items.length : 0,
         });
 
     } catch (error) {
@@ -721,8 +721,8 @@ const loadWallet = async (req, res) => {
         res.render('wallet', {
             username: req.session.user_name,
             walletData,
-            wishListCount: wishListData.products.length,
-            cartCount: cartData.items.length,
+            wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+            cartCount: cartData && cartData.items ? cartData.items.length : 0,
         });
     } catch (error) {
         console.log(error.message)
@@ -743,8 +743,8 @@ const loadWishlist = async (req, res) => {
         res.render('wishlist', {
             username: req.session.user_name,
             wishlist,
-            wishListCount: wishListData.products.length,
-            cartCount: cartData.items.length,
+            wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+            cartCount: cartData && cartData.items ? cartData.items.length : 0,
 
         });
     } catch (error) {
@@ -820,8 +820,8 @@ const userProfile = async (req, res) => {
             user: userMatch,
             address: userAddress,
             defaultAddress,
-            wishListCount: wishListData.products.length,
-            cartCount: cartData.items.length,
+            wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+            cartCount: cartData && cartData.items ? cartData.items.length : 0,
         });
     } catch (error) {
         console.log(error.message)

@@ -307,8 +307,8 @@ const userSearchResult = async (req, res) => {
                     alert: req.query.alert,
                     username: req.session.user_name,
                     products: searchProduct,
-                    wishListCount: wishListData.products.length,
-                    cartCount: cartData.items.length,
+                    wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+                    cartCount: cartData && cartData.items ? cartData.items.length : 0,
                     searchKeyword: keyword,
                     categories: categoryList,
                     queryData,
@@ -495,8 +495,8 @@ const productDetail = async (req, res) => {
                 product: product,
                 username: req.session.user_name,
                 wishlistCheck,
-                wishListCount: wishListData.products.length,
-                cartCount: cartData.items.length,
+                wishListCount: wishListData && wishListData.products ? wishListData.products.length : 0,
+                cartCount: cartData && cartData.items ? cartData.items.length : 0,
             });
 
         } else {
